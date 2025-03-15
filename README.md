@@ -125,49 +125,49 @@ The Solana Forum MCP server provides the following tools:
 
 #### Most Viewed Posts Queries
 
-"What are the most viewed posts?"
-"Show me popular posts in the Research category"
-"What are the top posts on Solana?"
+1. "What are the most viewed posts?"
+2. "Show me popular posts in the Research category"
+3. "What are the top posts on Solana?"
 
 #### Category Posts Queries
 
-"Give me all posts on Governance"
-"All posts in Research"
-"Posts from Announcements"
+1. "Give me all posts on Governance"
+2. "All posts in Research"
+3. "Posts from Announcements"
 
 #### Post Evaluation Queries
 
-"For this post id 123, give me its evaluation"
-"Evaluate post 456"
-"Post id 789 evaluation"
+1. "Give me all posts on Governance"
+2. "For this post id 123, give me its evaluation"
+3. "Evaluate post 456"
 
 #### Most Commented Posts Queries
 
-"Which posts have the most comments?"
-"Show me the most discussed topics"
-"What are the most active discussions?"
+1. "Which posts have the most comments?"
+2. "Show me the most discussed topics"
+3. "What are the most active discussions?"
 
 #### Statistics Queries
 
-"Show me forum statistics"
-"What are the stats for the Solana forum?"
-"Give me a summary of the forum data"
+1. "Show me forum statistics"
+2. "What are the stats for the Solana forum?"
+3. "Give me a summary of the forum data"
 
 #### Semantic Search Queries
 
-"Tell me about Solana validators"
-"What are people saying about staking?"
-"Find posts about performance improvements"
+1. "Tell me about Solana validators"
+2. "What are people saying about staking?"
+3. "Find posts about performance improvements"
 
 #### Topic-Specific Semantic Search Examples
 
-"How does Solana achieve high throughput?"
-"What are the latest developments in Solana's governance?"
-"Tell me about Solana's approach to smart contracts"
+1. "How does Solana achieve high throughput?"
+2. "What are the latest developments in Solana's governance?"
+3. "Tell me about Solana's approach to smart contracts"
 
 ### 1. get_latest_posts
 
-Get the latest posts from the Solana forum, optionally filtered by category.
+1. Get the latest posts from the Solana forum, optionally filtered by category.
 
 ```python
 async def get_latest_posts(category: Optional[str] = None, limit: int = 5) -> str
@@ -239,7 +239,7 @@ The MCP server can be used with AI assistants that support the MCP specification
    ```
 
 2. Connect your AI assistant to the MCP server using the stdio transport.
-
+1
 3. The AI assistant can now use the MCP tools to query Solana forum data.
 
 
