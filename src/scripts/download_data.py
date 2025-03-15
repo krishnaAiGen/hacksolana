@@ -5,6 +5,7 @@ import csv
 import os
 from datetime import datetime
 import re
+from src.utils import save_json, get_data_directory
 
 class SolanaForumAPIClient:
     def __init__(self, base_url="https://forum.solana.com"):
@@ -237,19 +238,19 @@ class SolanaForumAPIClient:
         
         return True
 
-    def save_to_json(self, filename="../data/processed/solana_forum_posts.json"):
+    def save_to_json(self, filename="solana_forum_posts"):
         """Save scraped data to JSON file"""
-        # Create directory if it doesn't exist
-        os.makedirs(os.path.dirname(filename), exist_ok=True)
-        
-        with open(filename, 'w', encoding='utf-8') as f:
-            json.dump(self.posts_by_category, f, ensure_ascii=False, indent=4)
-        print(f"Data saved to {filename}")
+        # Use the utility function to save JSON data
+        processed_dir = get_data_directory("processed")
+        return save_json(self.posts_by_category, filename, processed_dir)
 
-    def save_to_csv(self, directory="../data/raw"):
+    def save_to_csv(self):
         """Save scraped data to CSV files, one per category"""
+        # Get the raw data directory from environment variables
+        raw_dir = get_data_directory("raw")
+        
         # Create directory if it doesn't exist
-        os.makedirs(directory, exist_ok=True)
+        os.makedirs(raw_dir, exist_ok=True)
         
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         
@@ -259,7 +260,7 @@ class SolanaForumAPIClient:
                 
             # Create safe filename from category name
             safe_category_name = "".join([c if c.isalnum() else "_" for c in category_name])
-            filename = os.path.join(directory, f"{safe_category_name}.csv")
+            filename = os.path.join(raw_dir, f"{safe_category_name}.csv")
             
             fieldnames = [
                 'id', 'title', 'url', 'description', 'comments', 'original_poster',
@@ -279,7 +280,7 @@ class SolanaForumAPIClient:
                     writer.writerow(row_data)
             
             print(f"Saved {len(posts)} posts from category '{category_name}' to {filename}")
-        
+
 # Example usage
 if __name__ == "__main__":
     client = SolanaForumAPIClient()
