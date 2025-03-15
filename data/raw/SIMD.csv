@@ -1,0 +1,177 @@
+id,title,url,description,comments,original_poster,views,reply_count,comment_count,posts_count,created_at,activity,category_name,category_id,last_posted_at
+15,Solana Improvement Documents Info,https://forum.solana.com/t/solana-improvement-documents-info/15,"General Information regarding SIMDs
+How to submit a SIMD
+Tutorial
+Gather feedback on your SIMD idea either here or in the Solana Tech Discord under the core-technology channel.
+Once you get enough discussion on the SIMD where you think it may have a good chance of getting accepted, write your SIMD using the SIMD template
+Create a PR to solana-foundation/solana-improvement-documents
+SIMD maintainers will assign SIMD number to your SIMD
+Notes:
+Do not copy paste the SIMD itself in the forum. Just post an overview and a link to the SIMD itself.
+SIMD Guidelines
+Formal guidelines SIMD-1
+Core Community Call
+Once a month there is a core community call between core developers on the Solana protocol.
+You can propose a topic for the agenda by making a PR to the latest agenda in the core-community-call repository.
+The call is open to the public for viewing! If you’re interested in attending you can add the public calendar to be notified.
+You can find a playlist of all previous core community calls on Youtube.","[jacobcreech]: 
+
+",jacobcreech,1352,0,1,2,2023-02-23T02:18:15.856Z,2023-02-23T02:18:59.533Z,SIMD,5,2023-02-23T02:18:59.533Z
+2890,State growth problem - Accounts Lattice Hash,https://forum.solana.com/t/state-growth-problem-accounts-lattice-hash/2890,"I couldn´t find that proposal here. Does anyone know more about it? New Solana Proposal Advocates Fundamental Scalability Change
+I’d like to understand it better. Specifically:
+How exactly will the Accounts Lattice Hash improve scalability compared to the current system?
+Are there any trade-offs or potential risks associated with this approach?
+Thank you, Solana to the moon!",,solanabigguy12,117,0,0,1,2025-01-09T22:24:12.538Z,2025-01-09T22:24:12.585Z,SIMD,5,2025-01-09T22:24:12.585Z
+2015,Add new Warning and Error fields to JSON RPC results,https://forum.solana.com/t/add-new-warning-and-error-fields-to-json-rpc-results/2015,"The Solana developer ecosystem has evolved to the point where most dApps no longer directly calling JSON RPC endpoints directly. Instead these calls are often obfuscated behind frameworks or protocol-specific libraries that abstract away the raw calls.
+In an ideal world these frameworks and libraries would monitor and manage deprecated RPC calls and update current and previous versions to propagate deprecated and removed methods up to the dApp developer. This would provide a clear signal that the dApp developer should update their library versions to remove deprecated calls.
+However, we all know this isn’t the case. There’s no guarantee that libraries or frameworks will be updated, that developers will pull in the latest patch version, or that libraries will even be maintained. Instead I would like to propose that the endpoint returns on Solana RPCs be updated to include Warning and Error fields to indicate a common interface for signaling deprecation or removed endpoints. This would still require current libraries and frameworks to update to process these fields, but going forward it would provide a simple schema for these to propagate deprecations upwards in the stack. This method would also operate more dynamically with runtime-level checks. Frameworks would be able to detect deprecation and removal as soon as the RPC updates, rather than requiring the framework to be updated with the correct deprecation notices.
+As an example:
+&gt; curl https://api.mainnet-beta.solana.com -X POST -H ""Content-Type: application/json"" -d '
+ { ""jsonrpc"":""2.0"", ""id"": 1, ""method"":""getFees""}
+' | jq
+ % Total % Received % Xferd Average Speed Time Time Time Current
+ Dload Upload Total Spent Left Speed
+100 313 100 262 100 51 626 121 --:--:-- --:--:-- --:--:-- 747
+{
+ ""jsonrpc"": ""2.0"",
+ ""result"": {
+ ""context"": {
+ ""apiVersion"": ""1.18.18"",
+ ""slot"": 320162120
+ },
+ ""value"": {
+ ""blockhash"": ""5xuwdC9NJ5ur8DLXFXVHESnUb74SuwgxQP9wgv9XrJDK"",
+ ""feeCalculator"": {
+ ""lamportsPerSignature"": 5000
+ },
+ ""lastValidBlockHeight"": 308386678,
+ ""lastValidSlot"": 320162420
+ }
+ },
+ ""id"": 1
+}
+A call to the getFees endpoint provides no versioning or notice that the call has been deprecated and will soon be removed.
+curl https://api.devnet.solana.com -X POST -H ""Content-Type: application/json"" -d ' 
+ { ""jsonrpc"":""2.0"", ""id"": 1, ""method"":""getFees""}
+' | jq
+ % Total % Received % Xferd Average Speed Time Time Time Current
+ Dload Upload Total Spent Left Speed
+100 129 100 78 100 51 271 177 --:--:-- --:--:-- --:--:-- 449
+{
+ ""jsonrpc"": ""2.0"",
+ ""error"": {
+ ""code"": -32601,
+ ""message"": ""Method not found""
+ },
+ ""id"": 1
+}
+And as of 2.0 the method is completely gone.
+Under this proposal, the above call would look as follows with the new Warning/Error fields:
+With deprecation
+&gt; curl https://api.mainnet-beta.solana.com -X POST -H ""Content-Type: application/json"" -d '
+ { ""jsonrpc"":""2.0"", ""id"": 1, ""method"":""getFees""}
+' | jq
+ % Total % Received % Xferd Average Speed Time Time Time Current
+ Dload Upload Total Spent Left Speed
+100 313 100 262 100 51 626 121 --:--:-- --:--:-- --:--:-- 747
+{
+ ""jsonrpc"": ""2.0"",
+ ""result"": {
++ ""warning"": {
++ ""message"": ""Deprecated as of 1.9. Removal scheduled for 2.0."",
++ ""replacement"": ""getFeeForMessage""
++ },
+ ""context"": {
+ ""apiVersion"": ""1.18.18"",
+ ""slot"": 320162120
+ },
+ ""value"": {
+ ""blockhash"": ""5xuwdC9NJ5ur8DLXFXVHESnUb74SuwgxQP9wgv9XrJDK"",
+ ""feeCalculator"": {
+ ""lamportsPerSignature"": 5000
+ },
+ ""lastValidBlockHeight"": 308386678,
+ ""lastValidSlot"": 320162420
+ }
+ },
+ ""id"": 1
+}
+After removal
+curl https://api.devnet.solana.com -X POST -H ""Content-Type: application/json"" -d ' 
+ { ""jsonrpc"":""2.0"", ""id"": 1, ""method"":""getFees""}
+' | jq
+ % Total % Received % Xferd Average Speed Time Time Time Current
+ Dload Upload Total Spent Left Speed
+100 129 100 78 100 51 271 177 --:--:-- --:--:-- --:--:-- 449
+{
+ ""jsonrpc"": ""2.0"",
+ ""error"": {
+ ""code"": -32601,
+- ""message"": ""Method not found"",
++ ""message"": ""Method **getFees** not found"",
++ ""replacement"": ""getFeesForMessage""
+ },
+ ""id"": 1
+}
+Frameworks and libraries could then detect these new fields and propagate the associated warning/error upwards to developers and point them to the latest compatible version.",,blockiosaurus,187,0,0,1,2024-08-20T13:51:51.006Z,2024-08-20T13:51:51.059Z,SIMD,5,2024-08-20T13:51:51.059Z
+1956,Create a Cluster SysVar,https://forum.solana.com/t/create-a-cluster-sysvar/1956,"Every once and a while the question comes up of detecting the Solana cluster (mainnet, testnet, devnet) from within a program. As far as I know, this is still impossible. This issue has compounded recently with the explosion of SVM L2s, rollups, and new clusters.
+To prevent the need to fragment codebases, or require additional program configs to be created, I propose the addition of a Cluster System Variable to indicate the SVM blockchain and specific cluster being used. This will allow programs to dynamically determine their execution environment.
+My suggested format would be something like the following:
+#[repr(C)]
+pub enum Cluster: {
+ mainnet,
+ devnet,
+ testnet,
+ other(String),
+}
+#[repr(C)]
+pub struct ClusterDetails {
+ pub blockchain: String,
+ pub cluster: Cluster,
+}",,blockiosaurus,155,0,0,1,2024-08-08T14:09:09.936Z,2024-08-08T14:09:09.993Z,SIMD,5,2024-08-08T14:09:09.993Z
+1111,SIMD-0033 Test Results,https://forum.solana.com/t/simd-0033-test-results/1111,"Hi, I’ve created a write-up of the resuts of the testing that was performed for the Timely Vote Credits implementation (which came out of SIMD-0033). Comments welcome!
+ 
+ 
+ HackMD
+ 
+ 
+ 
+Solana Timely Vote Credits Feature Test Results - HackMD
+ 
+The Timely Vote Credits (TVC) feature is enabled in two stages by two separate features:",,zantetsu,370,0,0,1,2024-02-26T22:15:11.618Z,2024-02-26T22:15:11.670Z,SIMD,5,2024-02-26T22:15:11.670Z
+914,SIMD-48: Secp256r1 Precompile,https://forum.solana.com/t/simd-48-secp256r1-precompile/914,"Summary
+SIMD-48 outlines an implementation of the secp256r1 ECDSA verification routine as a precompile in the Solana runtime.
+A current testing repo for SIMD-48 can be found here
+Since Firedancer is being developed concurrently to the Solana Labs runtime, considerations towards the implementation of the precompile in C need to be made. Specifically towards the reproducibility of the verification operation. Any potential discrepancy would lead to serious security risks as well as a chain fork.
+The OpenSSL implementation of secp256r1 should serve as the underlying reference point, as it’s one of the most well maintained and scrutinised cryptography implementations. As its written in C it can additionally serve as a reference point for the development of the Firedancer implementation.
+Currently the test repo includes programatic analysis of test vector results of both the SIMD-48 implementation as well as the OpenSSL implementation.
+This forum serves as a place to discuss the methodology behind ensuring a safe and reproducible implementation of SIMD-48.","[BasedOrion]: An updated spec is currently under review here
+
+",BasedOrion,643,0,1,2,2024-01-05T19:26:35.303Z,2024-01-05T19:50:54.553Z,SIMD,5,2024-01-05T19:50:54.553Z
+297,SIMD-0052: Add Transaction Proof and Block Merkle for Light Clients,https://forum.solana.com/t/simd-0052-add-transaction-proof-and-block-merkle-for-light-clients/297,"Summary
+We proposed a SIMD that modifies the blockhash to be computed as a Merkle Tree and include transaction statuses , this was originally part of the SPV proposal but wasn’t implemented and is an open issue.
+We would also need to include transaction logs in the Merkle to verify certain state changes.
+Other changes include an RPC call that provides an inclusion proof from the transaction of interest to the bankhash.
+Proposal
+SIMD-0052: https://github.com/solana-foundation/solana-improvement-documents/pull/52","[Anoushk]: Here’s the original SPV proposal, adding it here because I wasn’t allowed more than 2 links
+
+",Anoushk,574,0,1,2,2023-06-08T07:27:38.555Z,2023-06-08T07:28:33.562Z,SIMD,5,2023-06-08T07:28:33.562Z
+48,Bidirectional QUIC communication channel,https://forum.solana.com/t/bidirectional-quic-communication-channel/48,"Bidirectional QUIC channel to track transaction lifecycle
+Summary
+Currently, it is very hard to understand what happens to an individual transaction in the cluster.
+As Solana is a distributed cluster each transaction can be forwarded to different nodes, may be rejected
+without any warning in the sig-verify stage, the connection could be dropped, and much more. As a client
+when I send a transaction to the cluster the only feedback that I have is whether the transaction is
+in the blocks or not. This feedback is insufficient when there is congestion in the network and the
+transactions are dropped without any information about where this process is happening and which
+part of the code the cluster is struggling to keep up.
+As Solana is being developed fast and we have multiple development roadmaps to improve the scheduling
+stage of the cluster. I propose that we add a new notification mechanism to the Solana cluster
+to understand more about the transaction lifecycle.
+This will make it easier to develop, integrate, scale, and understand the Solana cluster.
+Implementation:
+Full proposal : Proposal for quic bidirectional reply by godmodegalactus · Pull Request #30161 · solana-labs/solana · GitHub
+POC: Gmg/bidirectional quic replies (v1.14) by godmodegalactus · Pull Request #29954 · solana-labs/solana · GitHub",,gmgalactus,532,0,0,1,2023-03-20T16:28:05.659Z,2023-03-20T16:28:05.729Z,SIMD,5,2023-03-20T16:28:05.729Z
+12,About the SIMD category,https://forum.solana.com/t/about-the-simd-category/12,"Discussions about specific SIMDs (Solana Improvement Documents), and general proposals that may become SIMDs. If applicable, specify the SIMD issue # in the topic title.","[jacobcreech]: 
+
+",jacobcreech,432,0,1,2,2023-02-23T01:33:35.510Z,2023-02-24T05:13:03.800Z,SIMD,5,2023-02-24T05:13:03.800Z

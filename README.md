@@ -1,232 +1,284 @@
-# Solana Forum Data Scraper
+# Solana Forum MCP Server
 
-A project for the Solana hackathon that scrapes data from the Solana forum and provides a Multiple Context Protocol (MCP) server for querying the data.
+A Multiple Context Protocol (MCP) server for querying Solana forum data. This project implements the MCP specification to provide a flexible interface for AI assistants to interact with Solana forum data.
+
+## What is MCP?
+
+Multiple Context Protocol (MCP) is a specification for building tools that can be used by AI assistants. It provides a standardized way for AI models to interact with external systems and data sources. This project implements an MCP server for Solana forum data, allowing AI assistants to query and analyze forum posts, statistics, and more.
+
+The Model Context Protocol allows applications to provide context for LLMs in a standardized way, separating the concerns of providing context from the actual LLM interaction. The MCP Python SDK implements the full MCP specification, making it easy to:
+
+- Build MCP clients that can connect to any MCP server
+- Create MCP servers that expose resources, prompts and tools
+- Use standard transports like stdio and SSE
+- Handle all MCP protocol messages and lifecycle events
 
 ## Project Structure
 
 ```
 .
-├── data/
-│   ├── raw/           # Raw CSV data files for each forum category
-│   └── processed/     # Processed data in JSON format
-├── docs/              # Documentation
-│   ├── mcp_server.md  # MCP server documentation
-│   └── query.md       # Example queries documentation
-├── examples/          # Example scripts
 ├── src/               # Source code
 │   ├── __init__.py    # Package initialization
-│   ├── scripts/       # Python scripts for data collection and processing
-│   │   └── __init__.py # Scripts package initialization
 │   ├── utils/         # Utility functions
 │   │   └── __init__.py # Utils package initialization
-│   ├── mcp_server.py  # Multiple Context Protocol server
+│   ├── mcp_server.py  # Multiple Context Protocol server implementation
 │   ├── api_server.py  # HTTP API server
 │   └── cli.py         # Command-line interface
-├── .env               # Environment variables (not tracked by Git)
-├── .env.example       # Example environment variables
+├── solana_mcp.py      # MCP server wrapper script
 ├── setup.py           # Package installation script
-├── solana_cli.py      # CLI wrapper script
-├── solana_api.py      # API server wrapper script
-├── solana_download.py # Data scraper wrapper script
 └── requirements.txt   # Project dependencies
+```
+
+## Installation
+
+### Installing uv (Recommended)
+
+[uv](https://github.com/astral-sh/uv) is a fast Python package installer and resolver. To install uv:
+
+```bash
+# Install uv
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+### Installing MCP
+
+Using uv (recommended):
+
+```bash
+# Add MCP to your project
+uv add "mcp[cli]"
+```
+
+Using pip:
+
+```bash
+# Install MCP
+pip install mcp
+```
+
+### Installing Project Dependencies
+
+Using uv:
+
+```bash
+# Install dependencies
+uv pip install -r requirements.txt
+```
+
+Using pip:
+
+```bash
+# Install dependencies
+pip install -r requirements.txt
 ```
 
 ## Getting Started
 
-1. Set up environment variables:
-   ```
-   cp .env.example .env
-   ```
-   Customize the values in `.env` if needed.
-
-2. Install dependencies:
-   ```
-   pip install -r requirements.txt
-   ```
-
-3. Run the data scraper:
+1. Run the MCP server:
+   ```bash
+   # Using uv
+   uv run solana_mcp.py
    
-   There are three ways to run the scraper:
-
-   #### Method 1: Using the wrapper script (recommended)
-   ```bash
-   python solana_download.py
+   # Or using python directly
+   python solana_mcp.py
    ```
 
-   #### Method 2: Install as a package
-   ```bash
-   # Install the package in development mode
-   pip install -e .
+## Using with Claude Desktop
 
-   # Run the scraper
-   solana-download
-   ```
+To use the Solana MCP server with Claude Desktop:
 
-   #### Method 3: Run the script directly
-   ```bash
-   python -m src.scripts.download_data
-   ```
+1. Create a `claude_desktop_config.json` file in your home directory:
 
-## Data Description
-
-This project collects data from the following Solana forum categories:
-- Governance
-- sRFC (Solana Request for Comments)
-- RFP (Request for Proposals)
-- SIMD
-- Releases
-- Research
-- Announcements
-
-The data includes post titles, descriptions, comments, view counts, and other metadata.
-
-## Multiple Context Protocol (MCP) Server
-
-The MCP server provides a flexible interface for querying Solana forum data using different approaches:
-
-1. **Function-based Processing**: For simple queries like getting the latest posts
-2. **SQL-like Queries**: Using Pandas DataFrames for structured queries like finding the most viewed posts
-3. **Vector Search**: For semantic queries and natural language understanding
-4. **Post Evaluation**: For evaluating posts from different perspectives using OpenAI's API
-
-### Running the MCP Server
-
-There are three ways to run the MCP server:
-
-#### Method 1: Using the wrapper scripts (recommended)
-
-```bash
-# Run the CLI
-python solana_cli.py interactive
-
-# Run the API server
-python solana_api.py
+```json
+{
+  "mcpServers": {
+    "solana": {
+      "command": "/path/to/your/uv",
+      "args": [
+        "--directory",
+        "/path/to/your/hacksolana",
+        "run",
+        "solana_mcp.py"
+      ]
+    }
+  }
+}
 ```
 
-#### Method 2: Install as a package
+Replace `/path/to/your/uv` with the path to your uv installation (e.g., `~/.local/bin/uv`) and `/path/to/your/hacksolana` with the absolute path to your project directory.
 
-```bash
-# Install the package in development mode
-pip install -e .
+2. Start Claude Desktop and connect to the Solana MCP server.
 
-# Run the CLI
-solana-cli interactive
+3. You can now use the Solana MCP tools in your conversations with Claude.
 
-# Run the API server
-solana-api
-```
+## MCP Tools
 
-#### Method 3: Run the scripts directly
+The Solana Forum MCP server provides the following tools:
 
-```bash
-# Run the CLI
-python -m src.cli interactive
+### Example Queries
 
-# Run the API server
-python -m src.api_server
-```
+#### Latest Posts Queries
 
-### Using the MCP Server
+1. "What are the latest posts?"
+2. "Show me recent posts in the Governance category"
+3. "What's new in the sRFC category?"
 
-#### Command-Line Interface
+#### Most Viewed Posts Queries
 
-```bash
-# Start interactive mode
-python solana_cli.py interactive
+1. "What are the most viewed posts?"
+2. "Show me popular posts in the Research category"
+3. "What are the top posts on Solana?"
 
-# Process a natural language query
-python solana_cli.py query "What are the latest posts in the Governance category?"
+#### Category Posts Queries
 
-# Get all posts from a specific category
-python solana_cli.py category "Governance"
+1. "Give me all posts on Governance"
+2. "All posts in Research"
+3. "Posts from Announcements"
 
-# Evaluate a post from different perspectives
-python solana_cli.py evaluate 123
-```
+#### Post Evaluation Queries
 
-#### HTTP API
+1. "Give me all posts on Governance"
+2. "For this post id 123, give me its evaluation"
+3. "Evaluate post 456"
 
-```bash
-# Start the API server
-python solana_api.py
-```
+#### Most Commented Posts Queries
 
-Then send requests to the API endpoint:
+1. "Which posts have the most comments?"
+2. "Show me the most discussed topics"
+3. "What are the most active discussions?"
 
-```bash
-# Natural language query (POST method)
-curl -X POST http://localhost:5001/query \
-  -H "Content-Type: application/json" \
-  -d '{"query": "What is the most viewed post on Solana?"}'
+#### Statistics Queries
 
-# Natural language query (GET method)
-curl "http://localhost:5001/query?q=What%20is%20the%20most%20viewed%20post%20on%20Solana?"
+1. "Show me forum statistics"
+2. "What are the stats for the Solana forum?"
+3. "Give me a summary of the forum data"
 
-# Get all posts from a specific category
-curl "http://localhost:5001/query?type=category&category=Governance"
+#### Semantic Search Queries
 
-# Evaluate a post from different perspectives
-curl "http://localhost:5001/query?type=evaluate&post_id=123"
-```
+1. "Tell me about Solana validators"
+2. "What are people saying about staking?"
+3. "Find posts about performance improvements"
 
-The API server now uses a single `/query` endpoint for all types of queries. It analyzes the query content and invokes the appropriate function based on the query type.
+#### Topic-Specific Semantic Search Examples
 
-See [MCP Server Documentation](docs/mcp_server.md) for more details on the server architecture and [Query Examples](docs/query.md) for a comprehensive list of example queries.
+1. "How does Solana achieve high throughput?"
+2. "What are the latest developments in Solana's governance?"
+3. "Tell me about Solana's approach to smart contracts"
 
-## Package Structure
+### 1. get_latest_posts
 
-The project is organized as a Python package, allowing you to import and use its components in other scripts:
+1. Get the latest posts from the Solana forum, optionally filtered by category.
 
 ```python
-# Import utility functions
-from src.utils import load_json, save_json, get_data_directory
-
-# Import the scraper client
-from src.scripts import SolanaForumAPIClient
-
-# Import the MCP server
-from src.mcp_server import SolanaForumMCPServer
+async def get_latest_posts(category: Optional[str] = None, limit: int = 5) -> str
 ```
 
-## Utility Functions
+### 2. get_most_viewed_posts
 
-The project includes utility functions for working with the data:
+Get the most viewed posts from the Solana forum, optionally filtered by category.
 
 ```python
-# Load JSON data
-from src.utils import load_json
-data = load_json('solana_forum_posts')
-
-# Save JSON data
-from src.utils import save_json
-save_json(data, 'processed_data')
-
-# Get data directory paths
-from src.utils import get_data_directory
-raw_dir = get_data_directory('raw')
+async def get_most_viewed_posts(category: Optional[str] = None, limit: int = 5) -> str
 ```
 
-## Examples
+### 3. get_most_commented_posts
 
-Check out the `examples/` directory for sample scripts that demonstrate how to use the package:
+Get the most commented posts from the Solana forum.
 
-```bash
-# Run the example data processing script
-python examples/process_data.py
+```python
+async def get_most_commented_posts(limit: int = 5) -> str
+```
 
-# Run the MCP server example
-python examples/mcp_example.py
+### 4. get_forum_statistics
+
+Get general statistics about the Solana forum.
+
+```python
+async def get_forum_statistics() -> str
+```
+
+### 5. semantic_search
+
+Search for posts semantically related to a query.
+
+```python
+async def semantic_search(query_text: str, limit: int = 5) -> str
+```
+
+### 6. get_posts_by_category
+
+Get posts from a specific category.
+
+```python
+async def get_posts_by_category(category: str, limit: int = 20) -> str
+```
+
+### 7. evaluate_post
+
+Evaluate a specific post for sentiment, quality, and relevance.
+
+```python
+async def evaluate_post(post_id: int) -> str
+```
+
+### 8. universal_query
+
+Process any type of query about Solana forum data.
+
+```python
+async def universal_query(query_text: str) -> str
+```
+
+## Using the MCP Server with AI Assistants
+
+The MCP server can be used with AI assistants that support the MCP specification. Here's how to use it:
+
+1. Start the MCP server:
+   ```bash
+   uv run solana_mcp.py
+   ```
+
+2. Connect your AI assistant to the MCP server using the stdio transport.
+1
+3. The AI assistant can now use the MCP tools to query Solana forum data.
+
+
+## Implementation Details
+
+The Solana Forum MCP server is implemented using the FastMCP library, which provides a simple way to create MCP servers. The server uses a mock implementation of the SolanaForumMCPServer class, which provides methods for querying Solana forum data.
+
+Each MCP tool is implemented as an async function that calls the corresponding method on the SolanaForumMCPServer instance. The results are formatted into a readable string and returned to the AI assistant.
+
+## Extending the MCP Server
+
+You can extend the MCP server by adding new tools or enhancing existing ones. To add a new tool, simply define a new async function and decorate it with `@mcp.tool()`. The function should take the necessary parameters and return a string result.
+
+```python
+@mcp.tool()
+async def new_tool(param1: str, param2: int) -> str:
+    """Tool description.
+    
+    Args:
+        param1: Description of param1
+        param2: Description of param2
+    """
+    # Implement the tool
+    result = solana_server.some_method(param1, param2)
+    
+    # Format the result
+    formatted_result = format_result(result)
+    
+    return formatted_result
 ```
 
 ## Troubleshooting
 
 ### Import Errors
 
-If you encounter an error like `ModuleNotFoundError: No module named 'src'`, it means Python can't find the `src` module. There are three solutions:
+If you encounter an error like `ModuleNotFoundError: No module named 'src'`, it means Python can't find the `src` module. There are two solutions:
 
-1. **Use the wrapper scripts**: Use `solana_cli.py` and `solana_api.py` in the project root
+1. **Use the wrapper script**: Use `solana_mcp.py` in the project root
 2. **Install the package**: Run `pip install -e .` to install the package in development mode
-3. **Use the Python module syntax**: Run `python -m src.cli` instead of `python src/cli.py`
 
 ### OpenAI API Key
 
@@ -241,3 +293,7 @@ Or add it to your `.env` file:
 ```
 OPENAI_API_KEY=your_api_key_here
 ```
+
+## Further Resources
+
+For more information about the Model Context Protocol, visit the [MCP documentation](https://github.com/anthropics/anthropic-tools/tree/main/mcp).
