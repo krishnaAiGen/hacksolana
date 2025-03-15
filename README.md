@@ -1,4 +1,4 @@
-# Solana Forum MCP Server
+#SolForum Pulse
 
 A Multiple Context Protocol (MCP) server for querying Solana forum data. This project implements the MCP specification to provide a flexible interface for AI assistants to interact with Solana forum data.
 
