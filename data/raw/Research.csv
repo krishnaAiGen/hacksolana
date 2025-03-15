@@ -1,0 +1,341 @@
+id,title,url,description,comments,original_poster,views,reply_count,comment_count,posts_count,created_at,activity,category_name,category_id,last_posted_at
+315,About the Research category,https://forum.solana.com/t/about-the-research-category/315,Research on potential future core protocol changes,,jacobcreech,461,0,0,1,2023-06-19T14:47:08.194Z,,Research,9,
+762,Deprecate X.509 certs for P2P connections,https://forum.solana.com/t/deprecate-x-509-certs-for-p2p-connections/762,"In QUIC-TLS in Firedancer, I shared some specifics of the TLS setup in TPU/QUIC. I also proposed a number of protocol changes that sheds some unnecessary complexity.
+In this post, I wanted to share a technique to almost entirely remove X.509 logic from uses of QUIC in Solana, without changing protocol logic. TL;DR It allows validator implementations to
+Eliminate thousands of lines of third party code
+Reduce validator identity key exposure and signing operations
+I’m looking forward to your feedback!
+Background
+The Solana Labs implementation of the Solana peer-to-peer protocols currently produce unnecessary signatures and import thousands of lines of unnecessary dependency code. In the interest of safety, it is worth critically reviewing any line of code exposed to untrusted users, as well as any line of code exposed to sensitive data (such as node private keys).
+Meet QUIC, the transport layer used in some P2P connections. QUIC comes with a great deal of complexity and feature creep.
+Somewhere deep within the connection establishment logic is the target of this post: X.509 certificates. X.509 is an incredibly complex protocol that is mostly useless to the peer-to-peer layer. The only reason it is used is historical: QUIC uses the TLS 1.3 handshake for authentication, and rustls (the TLS library used in Solana Labs) does not support any replacement for it.
+Mutual authentication
+We are actually only interested in one property of the certificate: It holds the peer’s supposed public key.
+When making a connection, peers exchange their public keys and then use a challenge-response mechanism each other to prove that they are in possession of the corresponding private keys. (TLS 1.3 CertificateVerify; RFC 8446, Section 4.4.3)
+TLS connections on the web would typically also use this X.509 certificate to associate an external identity, like a domain name (e.g. forum.solana.com), as well as a signature chain vouching for the certificate’s validity.
+Solana validators, however, are inherently identified by their identity public key. There is no need to associate this key with external information. Consequently, there is no need for these X.509 certificates any signature chain nor any other pieces of data other than the public key itself.
+Notably, validators also have the ability to treat peers as “anonymous” and ignore their identity. This works because the message content is often authenticated by itself, regardless who is the sender. (Such as a gossip message)
+Parsing is useless
+A surprising amount of code is required to encode and decode X.509 certificates. Complex parsers are particularly susceptible to security issues, such invalid memory accesses, infinite loops, and unbounded heap allocations. Even memory safe languages are not enough to prevent these sort of bugs.
+But the only winning move for this game is to not play. If we don’t do complex parsing, we significantly reduce attack surface for these vulnerability classes.
+A commendable effort by ANSSI-FR to write a verified parser weighs in at about 10000 lines of code: GitHub - ANSSI-FR/x509-parser: a RTE-free X.509 parser Unfortunately, I could not get the Frama-C verification tooling to run without errors myself though. No full X.509 parsing verification effort exists for Rust, but some projects have partial coverage through fuzzing.
+To understand how to ditch parsing, let’s look at a hex dump of a minimal certificate that TLS libraries can decode. The ff ff ff ff strings are the public key (SubjectPublicKeyInfo) and the signature placeholders respectively.
+0000: 30 81 f1 30 81 a4 a0 03 02 01 02 02 08 01 01 01 0..0............
+0010: 01 01 01 01 01 30 05 06 03 2b 65 70 30 11 31 0f .....0...+ep0.1.
+0020: 30 0d 06 03 55 04 03 0c 06 53 6f 6c 61 6e 61 30 0...U....Solana0
+0030: 20 17 0d 37 30 30 31 30 31 30 30 30 30 30 30 5a ..700101000000Z
+0040: 18 0f 34 30 39 36 30 31 30 31 30 30 30 30 30 30 ..40960101000000
+0050: 5a 30 00 30 2a 30 05 06 03 2b 65 70 03 21 00 ff Z0.0*0...+ep.!..
+0060: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ................
+0070: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff a3 ................
+0080: 29 30 27 30 17 06 03 55 1d 11 01 01 ff 04 0d 30 )0'0...U.......0
+0090: 0b 82 09 6c 6f 63 61 6c 68 6f 73 74 30 0c 06 03 ...localhost0...
+00a0: 55 1d 13 01 01 ff 04 02 30 00 30 05 06 03 2b 65 U.......0.0...+e
+00b0: 70 03 41 00 ff ff ff ff ff ff ff ff ff ff ff ff p.A.............
+00c0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ................
+00d0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ................
+00e0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ................
+00f0: ff ff ff ff ....
+It is sufficient to replace the bytes of the public key and signature placeholders with the validator’s actual values.
+Similarly, to parse a certificate we could apply this template as a “mask” check that all bytes except for the placeholder match, and then trivially extract the public key. If the mask does not match, we simply consider the peer fully anonymous, or reject the connection.
+This mechanism is also backwards compatible: Validators using a real parser will still be able to decode this template.
+It is admittedly hacky, but also simple to reason about. Considering X.509 should have never been used in the Solana protocol, I find it worth deleting a large amount of pointless code.
+Self-signing is useless
+While tinkering with this, I realized that the signature part of the X.509 certificate is also entirely pointless in the context of peer-to-peer connections. Peer authenticity is proven using a separate signature mechanism in the TLS 1.3 layer. The X.509 signature allows trusted third parties to sign (and thereby certify) someone’s certificate. But as mentioned eariler, we don’t need anyone to certify validator identity keys.
+But don’t take my word for it. Validators do not verify the X.509 signature field, and you can put whatever you want in it.
+The signature field is required nonetheless, so Solana Labs validators used the “self-signed certificate” pattern, by signing their certificate with their own validator identity key. This is more problematic than it sounds: It creates an instance of key reuse, where the same key is used to sign messages of different types.
+Using the CBMC verification system, I was able to prove that this instance of X.509 signing is not ambiguous with regards to any other types. (See here and here). But yet again, it is preferable to not have this risk in the first place.
+Another concern is the exposure of the private key itself. Although unlikely, a supply chain attack in third-party dependency code could compromise the private key.
+So, let’s just simply put a bunch of one bits in the X.509 signature field.
+Conclusion
+In the Firedancer validator, we replaced ~10000 of lines of code with about a dozen.
+FD_IMPORT_BINARY( template, ""cert_template.der"" );
+void
+generate_cert( uchar cert_out[ static 0xf4 ],
+ uchar const pubkey [ static 0x20 ] ) {
+ memcpy( cert_out, template, 0xf4 );
+ memcpy( cert_out+0x5f, pubkey, 0x20 );
+}
+uchar *
+extract_pubkey( uchar pubkey_out[ static 0x20 ],
+ uchar const * cert,
+ ulong cert_sz ) {
+ uchar check[ 0xf4 ];
+ if( cert_sz!=0xf4 ) return NULL;
+ memcpy( pubkey_out, cert+0x5f, 0x20 );
+ memcpy( check, cert, 0xf4 );
+ memset( check+0x5f, 0xff, 0x20 );
+ return 0==memcmp( check, template, 0xf4 ) ? pubkey_out : NULL;
+} 
+A related patch is available for Solana Labs: don't sign X.509 certs by ripatel-fd · Pull Request #34202 · solana-labs/solana · GitHub
+A standard solution to address this problem exists and is also implemented in Firedancer: RFC 7250 - Using Raw Public Keys in Transport Layer Security (TLS) and Datagram Transport Layer Security (DTLS)","[ripatel-jump]: Solana Labs v1.18, which is the majority of testnet, now runs with X.509 dummy certs
+
+[ripatel-jump]: 96% of mainnet validators adopted Solana Labs (now Agave) v1.18.
+10000 lines of Firedancer code perished.
+It was a vendored library to be fair, but it’s still nice to see significant protocol simplifications.
+ 
+ github.com/firedancer-io/firedancer
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ x509: remove parser
+ 
+ 
+ 
+ committed 03:25AM - 21 Jun 24 UTC
+ 
+ 
+ 
+ 
+ riptl
+ 
+ 
+ 
+ 
+ +60
+ -10889
+
+",ripatel-jump,1691,1,2,3,2023-12-01T14:55:46.400Z,2024-06-21T15:24:27.906Z,Research,9,2024-06-21T15:24:27.906Z
+326,QUIC-TLS in Firedancer (fd_tls),https://forum.solana.com/t/quic-tls-in-firedancer-fd-tls/326,"Opportunities to simplify TLS over peer-to-peer connections
+I wanted to share some progress on fd_tls and kick off general discussion about the use of TLS in the Solana protocol.
+Disclaimer: fd_tls is not an officially supported component of Firedancer.
+Background
+Since the adoption of the QUIC protocol, Solana’s peer-to-peer layer depends on the TLS protocol for securing connections. Currently, the Solana Labs client uses the rustls library, and Firedancer uses quictls, a fork of OpenSSL.
+I started fd_tls as an experiment to replace third-party network dependencies in Firedancer, with the intention of making fd_quic entirely self-hosted. It aims to implement the minimum amount of components required to secure peer-to-peer connectivity, while staying compliant with TLS 1.3 (RFC 8446) and QUIC-TLS (RFC 9001).
+TLS is commonly seen as a complex standard due to its lengthy history of bugs and changes, all while maintaining backward-compatibility. Since the deployment of TLS in Solana has no such backwards-compatibility requirements, there is opportunity to shed some complexity and make the handshake logic of the QUIC protocol more robust against various types of attacks.
+The development philosophy for Firedancer thus far has been to own the entire Solana validator stack from OSI Layer 2 upwards. This is a lot of work, but has the advantage of reducing the amount of unknowns. (Such as: “How would our QUIC library behave in a specific edge case?”). It also reveals opportunities for deep optimization. However, all of this new networking code presents additional attack surface and will have to get audited.
+Considering the above, we strongly suggest minimizing code complexity and the amount of cryptographic algorithms in the Solana validator network.
+Protocol
+https://quic.xargs.org/ is a great resource explaining every step of the QUIC-TLS handshake. I will try to summarize it in my own words.
+QUIC-TLS in Solana is a combination of three separate protocols:
+The TLS handshake layer (as the name implies, only active during the handshake)
+X.509 certificates (mostly unused)
+The QUIC record layer, which specifies how QUIC packets get encrypted (comparable to the TLS or DTLS record layers for TLS connections over TCP or UDP)
+In TLS version 1.3, the latest version at the time of writing, creating a connection involves the following high-level steps:
+Negotiate a suite of cryptographic algorithms
+Establish a “handshake-level” symmetric encryption key using X25519, an Elliptic Curve Diffie-Hellman key exchange algorithm
+Exchange and verify X.509 peer certificates containing Ed25519 signatures
+Establish an “application-level” symmetric encryption key
+TLS versions
+An obvious first step is to drop support for legacy TLS versions. TLS 1.3 is more secure and much simpler than older TLS versions. It finds almost ubiquitous support and is currently the default in Solana peer-to-peer connections.
+ 
+ github.com/solana-labs/solana
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ disable rustls tls12 feature
+ 
+ 
+ solana-labs:master ← ripatel-fd:ripatel/no-tls12
+ 
+ 
+ 
+ opened 12:43AM - 25 Nov 22 UTC
+ 
+ 
+ 
+ 
+ ripatel-fd
+ 
+ 
+ 
+ 
+ +2
+ -2
+ 
+ 
+ 
+ 
+ 
+ #### Problem
+Currently, Solana advertises support for legacy TLS 1.2 cipher s…uites (`0xc0??`).
+TLS 1.3 is widely supported at this point -- for security and simplicity, support for TLS 1.2 should be disabled.
+```
+Cipher Suites (10 suites)
+ Cipher Suite: TLS_AES_256_GCM_SHA384 (0x1302)
+ Cipher Suite: TLS_AES_128_GCM_SHA256 (0x1301)
+ Cipher Suite: TLS_CHACHA20_POLY1305_SHA256 (0x1303)
+ Cipher Suite: TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384 (0xc02c)
+ Cipher Suite: TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256 (0xc02b)
+ Cipher Suite: TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256 (0xcca9)
+ Cipher Suite: TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 (0xc030)
+ Cipher Suite: TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256 (0xc02f)
+ Cipher Suite: TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256 (0xcca8)
+ Cipher Suite: TLS_EMPTY_RENEGOTIATION_INFO_SCSV (0x00ff)
+```
+#### Summary of Changes
+Disables the default `tls12` feature on the `rustls` dependency. 
+See https://github.com/solana-foundation/specs/pull/21
+Fixes #
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Cryptographic Algorithms
+TLS 1.3 incorporates a flexible mechanism for negotiating cryptographic algorithms. In early steps of the handshake, the client advertises a list of algorithms it supports. The server then picks a combination of them.
+The main types of algorithms being negotiated are as follows:
+Key Exchange cryptography. Solana Labs validators support X25519, secp256r1, and secp384r1.
+Cipher Suites: Solana Labs validators support the TLS 1.3 recommended Authenticated Encryption suites: AES-128-GCM-SHA256, AES-384-GCM-SHA256, and ChaCha20-Poly1305-SHA256. (Note: This implies HMAC-SHA256, not “pure” SHA)
+Signature Algorithms: Solana Labs validators support 9 signature hash algorithms, including EdDSA (Ed25519), 2x ECDSA-based schemes, and 6x RSA-based schemes.
+Some of the above cryptography is already in use in the Solana protocol.
+SHA-256 (almost everywhere in the Solana protocol)
+Ed25519 (transaction signatures)
+by extension, Curve25519 used in X25519
+The ChaCha20 block function (on-chain randomness)
+Other algorithms were newly introduced by adopting QUIC. Notably, RSA-based signature schemes are considerably slower than the elliptic curve alternatives.
+Luckily, to establish a TLS connection, only one cryptographic algorithm of each type is required. Therefore the first version of fd_tls will only support X25519 KEX, AES-128-GCM-SHA256 AEAD, and Ed25519 signatures. (Potentially also ChaCha20-Poly1305-SHA256)
+X.509
+Another obvious opportunity for reducing complexity is eliminating the use of X.509 certificates. X.509 secures peer identity through a chain of trust, anchored in a set of root CAs. This model does not fit permissionless networks well, in which peers are inherently identified by their public keys, as opposed to a domain name (like the server of the forum.solana.com site you are currently reading).
+Consequently, the use of X.509 certificates in Solana is awkward: Nodes serve auto-generated certificates that are signed by themselves, and their peers verify this useless signature.
+For each connection the validator makes, it then generates an additional “CertificateVerify” proof. It involves using the certificate’s key to sign a hash that is tied to the current connection. This proves that it is in possession of the key advertised by the certificate.
+From the perspective of the verifier, this means the following steps are involved when accepting a new QUIC connection:
+Parse the X.509 certificate (DER serialization over various complex ASN.1 data structures)
+Verify the certificate chain (signature verification)
+Extract the Ed25519 public key of the peer
+Verify the “CertificateVerify” proof
+Raw Public Keys
+RFC 7250 introduces a second certificate type: Raw Public Keys (RPKs)
+RPKs consist of a minimal ASN.1/DER prefix followed by a copy of the serialized public key.
+The new verifier steps then become:
+Negotiate RPK support via the CertificateType extension
+Parse the RPK ASN.1 prefix
+Verify the “CertificateVerify” proof
+Not only is this mechanism much simpler; It also decreases the maximum byte count of a TLS handshake.
+Unfortunately, support for RPKs is sparse. It is currently not supported by stable releases of OpenSSL, GnuTLS, quictls, rustls, nor the Go standard library. OpenSSL and GnuTLS both provide experimental support. My attempt to use an Ed25519 RPK with GnuTLS failed for unknown reasons.
+If time permits, I would like to contribute RFC 7250 support to the Go standard library and rustls. I would greatly appreciate any help with this task.
+fd_tls
+Finally, an update on fd_tls:
+fd_tls is currently able to correctly derive TLS 1.3 decryption keys up to the handshake level when speaking to OpenSSL. So far, my experience with implementing TLS 1.3 has been quite pleasant. There are no obvious blockers to completing self-hosted QUIC-TLS support; it is simply a matter of time. I am currently working on additional TLS extension types and the Certificate/CertificateVerify message types.
+Whether we’ll use fd_tls in production is unclear. Certainly, before attempting to do so, fd_tls needs to pass tlsfuzzer torture and various other conformance tests.
+I hope this post was informative and I’m looking forward to continue discussion on Solana’s network protocols.","[leo]: ripatel-jump:
+An obvious first step is to drop support for legacy TLS versions. TLS 1.3 is more secure and much simpler than older TLS versions. It finds almost ubiquitous support and is currently the default in Solana peer-to-peer connections.
+disable rustls tls12 feature by ripatel-fd · Pull Request #28956 · solana-labs/solana · GitHub
+ Not only is this much easier, it is also considered best practice. Same with restricting cipher suites to the small set of recommended modern suites.
+ ripatel-jump:
+Unfortunately, support for RPKs is sparse. It is currently not supported by stable releases of OpenSSL, GnuTLS, quictls, rustls, nor the Go standard library. OpenSSL and GnuTLS both provide experimental support. My attempt to use an Ed25519 RPK with GnuTLS failed for unknown reasons.
+If time permits, I would like to contribute RFC 7250 support to the Go standard library and rustls. I would greatly appreciate any help with this task.
+Agreed that removing ASN.1 and X509 parsing attack surface is highly desirable.
+But, the big question would be interoperability - as you say, there’s barely any support in third party clients, and it would have to be plumbed all the way up from the TLS library to each QUIC library people might want to use.
+I’m not sure how feasible that is and nobody really knows what third party clients are currently in use (mostly traders and similar users).
+The QUIC TPU is a public interface used by clients other than solana-validator and Firedancer, and there would have to be some period of time where both kinds of credentials would be accepted.
+
+[ripatel-jump]: Agree with all of the above.
+But, the big question would be interoperability - as you say, there’s barely any support in third party clients, and it would have to be plumbed all the way up from the TLS library to each QUIC library people might want to use.
+Once OpenSSL 3.2 and GnuTLS 3.8.0 get released, hopefully a critical mass is reached to drive further adoption of RFC 7250. I consider this an opportunity for the Solana community to introduce RPK support to other TLS libraries.
+My random guess would be that widespread support for RPK takes at least 6 months.
+The QUIC protocol itself is cleanly separated from peer authentication and other QUIC libraries I’ve looked at (quinn, ngtcp2) don’t require plumbing for this feature. Those take an arbitrary TLS config object. Once rustls supports RPKs, adding support to quinn is as easy as bumping the rustls dependency version number.
+The logic to present an X.509 certificate is luckily minimal (a literal memcpy). It is more work to verify a cert, but fd_tls could still call down to the OpenSSL API. So it’s hardly a blocker.
+I’m not sure how feasible that is and nobody really knows what third party clients are currently in use (mostly traders and similar users).
+The improvement document process will give maintainers of custom peer-to-peer clients an opportunity to share their concerns.
+The QUIC TPU is a public interface used by clients other than solana-validator and Firedancer, and there would have to be some period of time where both kinds of credentials would be accepted.
+This is the right way and is straightforward to implement: Negotiate between both certificate types using the CertificateType extension. If the other peer does not recognize the extension, it will fall back to X.509.
+
+[ripatel-jump]: image2794×1095 396 KB
+Server-side key schedule
+
+",ripatel-jump,1859,1,3,4,2023-06-22T12:04:41.020Z,2023-08-26T22:33:35.976Z,Research,9,2023-08-26T22:33:35.976Z
+927,Protocol TODOs 2024,https://forum.solana.com/t/protocol-todos-2024/927,"Here are three protocol changes that I consider important to improve reliability and performance of the Solana network and the Firedancer client. In other words: My Solana-land New Year’s resolution for 2024.
+(Software optimization is a game of whack-a-mole)
+Executable Format Simplification
+Preparing an on-chain program for execution should be as simple as mapping bytecode and data into virtual machine memory. In reality, loading a typical user program often takes longer than actually executing it.
+This is mostly owed to historical choices to allow the protocol to execute the outputs of clang / rustc directly. This was thought to feature better developer experience than requiring some post-processing step.
+What resulted was an error-prone and inefficient format.
+The situation is best explained by Firedancer’s implementation:
+https://github.com/firedancer-io/firedancer/blob/main/src/ballet/sbpf/fd_sbpf_loader.c
+A 1200 line code footprint in this context is not only slow, but also complicates cross-client compatibility testing.
+Designing a replacement binary format is a trivial exercise. It is mostly a social issue, as it will require approval from all contributors to the virtual machine and compiler toolchain.
+Once the new format is implemented, the old format should be retired.
+My preferred solution thus far is a one-time sweep over the account database that converts all existing deployed programs. Any VM bytecode would be kept strictly identical, such that immutability of program code is preserved.
+Limiting State Growth
+The state size of the Solana network is gradually approaching a point where it is no longer practical to keep in DRAM. In fact, it is technically unbounded due to an overly simplistic storage cost model.
+One obvious solution is to spilling over to accounts to cheaper storage such as NVMe. But unless done very carefully, would kill any prospect of greatly increasing network performance.
+Solana is DRAM-heavy for reasons that this Intel technical paper neatly summarizes: https://www.intel.com/content/www/us/en/developer/articles/technical/memory-performance-in-a-nutshell.html
+Keeping account state in-memory allows on-chain programs to access arbitrary account data with consistently low latency. More importantly, current generation x86 systems can achieve total memory bandwidth of hundreds of gigabytes per second.
+When operating in a storage environment with highly asymmetric latency and bandwidth, a blockchain runtime will certainly become limited by I/O capabilities unless fee models become aware of account locality.
+For example, writing ten 1MB accounts 1 million times each is going to be significantly faster than writing (10^6)x10MB accounts once, even though both cases write 10TB of data. The former would operate at a bandwidth of ~hundreds GB/s via L3 cache, the latter at least 100x slower)
+With the goal of staying in DRAM territory in mind, let’s instead take measures to reduce state growth rate.
+An effective first step to improve cost modeling is to dynamically increase storage fees as free space decreases. Currently, storage fees are implemented via a “minimum account balance” that can be fully reclaimed.
+I don’t expect that it is possible to achieve negative state growth with this dynamic alone, though. At least, not until exceedingly high fees make the network unusable.
+Which leads us to the next research item.
+Generic Account Compression
+Did you know that 76% of Solana accounts have not been accessed in the last 6 months? (Credit to @andrewhong5297 for this data point)
+Continuing from the above, there is significant opportunity to reduce the in-memory set of accounts.
+Hash trees have become the de-facto standard approach to provide large amounts of state to on-chain programs (commonly called “compression” within Solana). Compressed program data consists of just the root of a concurrently modifiable hash tree. The original data itself will no longer get replicated across the blockchain network and is stored separately by whoever chooses to (such as in a p2p torrent network). But it can be recovered as needed. Currently, each program would have to include logic for state compression separately.
+@toly has suggested to introduce compression generically by introducing a new storage class of compressed accounts. To reclaim DRAM, the runtime would periodically sweep the database for the oldest accounts and evict them if their balance drops below a dynamic minimum (determined using the aforementioned state growth limiting mechanic).
+To avoid complexities with storage asymmetry, the transactions that attempt to access compressed accounts would fail. Users can decompress their accounts at any time be re-uploading all data fragments, along with a cryptographic proof that the data was not tampered with.
+The main difficulties lie in client/wallet “RPC” infrastructure and choosing an appropriate storage solution. Failure to do so risks data loss. Storage networks like Filecoin and Arweave are of particular interest.
+Closing Thoughts
+Preliminary design work for all of the above is under way at the Solana Labs and Firedancer. I hope to publish detailed designs and technical proposals for all three items in the coming weeks. As always, I’d love to invite the wider community for discussion. I’m curious what you think.",,ripatel-jump,1667,0,0,1,2024-01-09T09:31:03.996Z,2024-01-09T09:31:04.056Z,Research,9,2024-01-09T09:31:04.056Z
+829,BLAKE3 slower than SHA-256 for small inputs,https://forum.solana.com/t/blake3-slower-than-sha-256-for-small-inputs/829,"Summary
+As of 2023-Dec, when comparing the fastest widely available BLAKE3 and SHA-256 implementations, BLAKE3 features worse throughput on x86_64 for message sizes up to ~4kB.
+This is due to the fact that libraries for multi-message (batch) hashing exist for SHA-256, but not for BLAKE3. Multi-message hashing is possible on BLAKE3, but requires non-trivial scheduling of operations due to BLAKE3’s tree hash construction.
+Theory
+SHA-256 and BLAKE3 are hash functions used in the Solana protocol.
+BLAKE3 is used for account hashes, SHA-256 for virtually everything else.
+Hash functions are commonly compared in single-message benchmarks, which are single-core tests in which one message is hashed at a time. The BLAKE3 paper claims to feature better throughput than SHA-256 for all input sizes in this setting. I could reproduce this result when comparing the BLAKE3 C reference implementation against SHA-256.
+Solana, however, uses both hash functions in a way that allows for a high degree of message-level SIMD and ILP parallelism, i.e. hashing multiple messages simultaneously on a single CPU core. In a multi-message benchmark, the hash implementation is given an asymptotically infinite number of messages that can be processed in parallel. We then measure the peak throughput of input bytes per second processed.
+Multi-message hashing is the fastest approach for both hash functions for small message sizes (up to ~4kB).
+Practice
+Usually, the fastest approach is to store each hash state in one or more SIMD registers. The multi-block function executes SIMD instructions that applies each step of the computation to all in-flight hash states.
+Ascending to the next layer, the multi-message engine then schedules inputs to the multi-block function. This scheduler can get more complicated than it seems, especially with variable-length messages. It involves initialization of new hash states, appending pieces of message inputs, finalizing output values, and so on.
+The relatively simple Merkle–Damgård construction powering SHA-256 makes scheduling manageable. The block function is invoked exactly once per 64 bytes of input data, plus optionally one additional time during finalization.
+Indeed, there exist open-source implementations of multi-message SHA-256: minio/sha256-simd in Go, and fd_sha256 in C. Both feature AVX2 and AVX512 backends, in the realm of ~10 Gbps (Zen 2, AVX2) and ~20 Gbps (Icelake Server, AVX512) per-core peak throughput respectively on recent x86_64 CPUs. Peak throughput is reached for message sizes (64*(n-1))+55.
+The BLAKE3 hash function is implemented C, Rust, and Go. All three are highly optimized toward large message hashing. But currently, none support parallel hashing of small independent messages.
+The following compares fd_sha256 vs BLAKE3-C throughput for multi-message hashing in AVX512 mode. The input size is (64*n)-9 for SHA-256 and 64*n for BLAKE3 (to account for SHA’s padding).
+n
+SHA-256 (Gbps)
+BLAKE3 (Gbps)
+Delta
+1
+7.6
+3.8
+-50%
+2
+8.9
+5.1
+-43%
+4
+9.7
+6.1
+-37%
+8
+10.1
+6.8
+-33%
+16
+10.3
+7.2
+-30%
+32
+10.5
+7.0
+-33%
+64
+10.5
+12.3
++17%
+128
+10.5
+22.5
++114%
+Plans
+BLAKE3 is a core part of the Solana runtime and this is unlikely to change soon.
+I will attempt to introduce multi-message hashing for BLAKE3 and will post findings in this thread. The scheduling required for multi-message mode is much more complicated in BLAKE3 due to its hash tree construction, so I don’t expect a linear speedup.","[ripatel-jump]: Python PoC of multi-message parallel scheduling: blake3-parallel-scheduler/batch.py at main · ripatel-fd/blake3-parallel-scheduler · GitHub
+
+[ripatel-jump]: The work was worth it, it seems. First results show that fd_blake3 is 3.4x faster for the 1024 byte case.
+image1842×1052 41 KB
+
+",ripatel-jump,1601,0,2,3,2023-12-17T12:57:17.773Z,2023-12-28T01:14:58.569Z,Research,9,2023-12-28T01:14:58.569Z

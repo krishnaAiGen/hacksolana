@@ -1,112 +1,255 @@
-# Solana Forum Data Scraper Usage Guide
+# Solana Forum MCP Server Usage Guide
 
-This document explains how to use the Solana Forum Data Scraper to collect data from the Solana forum.
+This document explains how to use the Solana Forum MCP Server to query Solana forum data using the Multiple Context Protocol (MCP).
 
 ## Prerequisites
 
 - Python 3.6 or higher
 - Required Python packages (install using `pip install -r requirements.txt`):
+  - mcp
+  - httpx
+  - pandas
   - requests
-  - json
-  - csv
-  - datetime
-  - re
 
-## Running the Scraper
+## Installation
 
-There are three ways to run the scraper:
+### Installing uv (Recommended)
 
-### Method 1: Using the wrapper script (recommended)
+[uv](https://github.com/astral-sh/uv) is a fast Python package installer and resolver. To install uv:
 
 ```bash
-python solana_download.py
+# Install uv
+curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 
-### Method 2: Install as a package
+### Installing MCP
+
+Using uv (recommended):
 
 ```bash
-# Install the package in development mode
-pip install -e .
-
-# Run the scraper
-solana-download
+# Add MCP to your project
+uv add "mcp[cli]"
 ```
 
-### Method 3: Run the script directly
+Using pip:
 
 ```bash
-python -m src.scripts.download_data
+# Install MCP
+pip install mcp
 ```
 
-This will:
-1. Fetch categories from the Solana forum
-2. Scrape posts from each category (up to 5 pages per category by default)
-3. Save the data in both JSON and CSV formats
+### Installing Project Dependencies
 
-## Configuration
+Using uv:
 
-You can modify the following parameters in the script:
+```bash
+# Install dependencies
+uv pip install -r requirements.txt
+```
 
-- `max_pages_per_category`: The maximum number of pages to scrape per category (default: 5)
-- `target_categories`: The list of categories to scrape (default: "Governance", "sRFC", "RFP", "SIMD", "Releases", "Research", "Announcements")
+Using pip:
 
-## Output
+```bash
+# Install dependencies
+pip install -r requirements.txt
+```
 
-The scraper generates two types of output:
+## Running the MCP Server
 
-1. **JSON file**: A single JSON file containing all scraped data, saved to `data/processed/solana_forum_posts.json`
-2. **CSV files**: One CSV file per category, saved to the `data/raw/` directory
+To run the MCP server:
 
-## CSV File Structure
+```bash
+# Using uv
+uv run solana_mcp.py
 
-Each CSV file contains the following columns:
+# Or using python directly
+python solana_mcp.py
+```
 
-- `id`: Post ID
-- `title`: Post title
-- `url`: URL to the post
-- `description`: Post content
-- `comments`: Comments on the post
-- `original_poster`: Username of the original poster
-- `views`: Number of views
-- `reply_count`: Number of replies
-- `comment_count`: Number of comments
-- `posts_count`: Total number of posts (including the original post)
-- `created_at`: Creation date
-- `activity`: Last activity date
-- `category_name`: Category name
-- `category_id`: Category ID
-- `last_posted_at`: Date of the last post
+This will start the MCP server using the stdio transport, which allows AI assistants to communicate with the server.
 
-## Example Usage in Python
+## Using with Claude Desktop
+
+To use the Solana MCP server with Claude Desktop:
+
+1. Create a `claude_desktop_config.json` file in your home directory:
+
+```json
+{
+  "mcpServers": {
+    "solana": {
+      "command": "/path/to/your/uv",
+      "args": [
+        "--directory",
+        "/path/to/your/hacksolana",
+        "run",
+        "solana_mcp.py"
+      ]
+    }
+  }
+}
+```
+
+Replace `/path/to/your/uv` with the path to your uv installation (e.g., `~/.local/bin/uv`) and `/path/to/your/hacksolana` with the absolute path to your project directory.
+
+2. Start Claude Desktop and connect to the Solana MCP server.
+
+3. You can now use the Solana MCP tools in your conversations with Claude.
+
+## Available MCP Tools
+
+The Solana Forum MCP server provides the following tools:
+
+### 1. get_latest_posts
+
+Get the latest posts from the Solana forum, optionally filtered by category.
 
 ```python
-# Add the parent directory to the Python path to allow importing the src package
-import os
-import sys
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
-from src.scripts.download_data import SolanaForumAPIClient
-
-# Create a client
-client = SolanaForumAPIClient()
-
-# Fetch only 2 pages from each category
-success = client.scrape_all_categories(max_pages_per_category=2)
-
-if success:
-    # Save data
-    client.save_to_json()
-    client.save_to_csv()
+async def get_latest_posts(category: Optional[str] = None, limit: int = 5) -> str
 ```
 
-## Running the Example Scripts
+Example usage:
+```
+get_latest_posts(category="Development", limit=3)
+```
 
-The package includes example scripts in the `examples` directory:
+### 2. get_most_viewed_posts
+
+Get the most viewed posts from the Solana forum, optionally filtered by category.
+
+```python
+async def get_most_viewed_posts(category: Optional[str] = None, limit: int = 5) -> str
+```
+
+Example usage:
+```
+get_most_viewed_posts(limit=10)
+```
+
+### 3. get_most_commented_posts
+
+Get the most commented posts from the Solana forum.
+
+```python
+async def get_most_commented_posts(limit: int = 5) -> str
+```
+
+Example usage:
+```
+get_most_commented_posts(limit=5)
+```
+
+### 4. get_forum_statistics
+
+Get general statistics about the Solana forum.
+
+```python
+async def get_forum_statistics() -> str
+```
+
+Example usage:
+```
+get_forum_statistics()
+```
+
+### 5. semantic_search
+
+Search for posts semantically related to a query.
+
+```python
+async def semantic_search(query_text: str, limit: int = 5) -> str
+```
+
+Example usage:
+```
+semantic_search(query_text="Solana performance improvements", limit=3)
+```
+
+### 6. get_posts_by_category
+
+Get posts from a specific category.
+
+```python
+async def get_posts_by_category(category: str, limit: int = 20) -> str
+```
+
+Example usage:
+```
+get_posts_by_category(category="Technology", limit=5)
+```
+
+### 7. evaluate_post
+
+Evaluate a specific post for sentiment, quality, and relevance.
+
+```python
+async def evaluate_post(post_id: int) -> str
+```
+
+Example usage:
+```
+evaluate_post(post_id=3)
+```
+
+### 8. universal_query
+
+Process any type of query about Solana forum data.
+
+```python
+async def universal_query(query_text: str) -> str
+```
+
+Example usage:
+```
+universal_query(query_text="What are the latest posts about Solana tokenomics?")
+```
+
+## Using with AI Assistants
+
+The MCP server is designed to be used with AI assistants that support the MCP specification. To use the server with an AI assistant:
+
+1. Start the MCP server:
+   ```bash
+   uv run solana_mcp.py
+   ```
+
+2. Connect your AI assistant to the MCP server using the stdio transport.
+
+3. The AI assistant can now use the MCP tools to query Solana forum data.
+
+## Example Queries
+
+Here are some example queries you can make using the MCP server:
+
+- "What are the latest posts in the Development category?"
+- "Show me the most viewed posts about Solana tokenomics"
+- "Get forum statistics"
+- "Search for posts about smart contracts"
+- "Evaluate post with ID 3"
+
+## Troubleshooting
+
+### Import Errors
+
+If you encounter an error like `ModuleNotFoundError: No module named 'src'`, it means Python can't find the `src` module. There are two solutions:
+
+1. **Use the wrapper script**: Use `solana_mcp.py` in the project root
+2. **Install the package**: Run `pip install -e .` to install the package in development mode
+
+### OpenAI API Key
+
+For the post evaluation functionality, you need to set the OpenAI API key as an environment variable:
 
 ```bash
-# Run the data processing example
-python examples/process_data.py
+export OPENAI_API_KEY=your_api_key_here
+```
 
-# Run the MCP server example
-python examples/mcp_example.py
-``` 
+Or add it to your `.env` file:
+
+```
+OPENAI_API_KEY=your_api_key_here
+```
+
+## Further Resources
+
+For more information about the Model Context Protocol, visit the [MCP documentation](https://github.com/anthropics/anthropic-tools/tree/main/mcp). 

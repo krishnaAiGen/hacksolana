@@ -1,0 +1,506 @@
+id,title,url,description,comments,original_poster,views,reply_count,comment_count,posts_count,created_at,activity,category_name,category_id,last_posted_at
+348,About the RFP category,https://forum.solana.com/t/about-the-rfp-category/348,"RFP, or Request for Proposal, outlines a project that the author is interested in funding. This category is for discussing RFPs created by Solana Foundation.",,jacobcreech,538,0,0,1,2023-06-30T01:45:20.491Z,,RFP,10,
+2249,Solana Historical State Verification Tool,https://forum.solana.com/t/solana-historical-state-verification-tool/2249,"Solana Historical State Verification Tool
+Context
+The Solana ecosystem currently lacks a comprehensive tool for verifying historical state transitions. As we’ve evolved from the Anza Google Bucket instance to more diverse and efficient archival solutions, there’s a growing need for end users to verify the accuracy of data received from various archive providers. While the existing solana-ledger-tool can reproduce transaction execution results, it doesn’t account for historical file formats, previous SVM versions, or past feature sets, leading to potential inaccuracies when verifying older data.
+Please see the following RFP that outlines a request to create an open-source historical state verification tool for Solana. The Solana Foundation has proposed a set of solutions, but the specific implementation details will be finalized during grant negotiation between the grantee and the Solana Foundation.
+Logistics
+Take note of the application deadline (11/15/2024). The maximum grant amount is currently earmarked at $275k in USD-equivalent locked SOL. The final grantee will work with the Solana Foundation to decide on the final terms of the agreement, including negotiation of rigorous but attainable milestones.
+Ground Rules
+This thread can be used for comments, questions, praise, and/or criticism, and is intended to be an open forum for any prospective responders. This thread is also an experiment in increasing the transparency through which RFPs are fielded by the Solana ecosystem, so please be mindful that we’re all here to learn and grow.
+Responses to this RFP are not required to be public (but recommended), but if it is helpful to share notes or combine forces, then please use this thread for such purposes.","[SE7EN]: Hi @laura,
+We’ve submitted our application but haven’t heard back yet. Do you have a timeline for when you’ll be responding to the proposals?
+
+[luke_mlabs]: MLabs (www.mlabs.city) also submitted a bid - was there ever a result announced?
+
+",laura,522,0,2,3,2024-10-14T04:28:11.883Z,2025-01-16T12:10:04.472Z,RFP,10,2025-01-16T12:10:04.472Z
+2059,Indexer tooling,https://forum.solana.com/t/indexer-tooling/2059,"Context
+Geyser, while a great tool, does not provide an ergonomic end-to-end solution for developers to get a full picture of the data created from their programs or desired accounts. While useful for certain use cases, developers in the Solana ecosystem need a simple, yet malleable tool for retrieving live and historical data.
+Please see the following RFP that outlines a request to create an open source indexer framework. The Solana Foundation lays out a list of proposed solutions, but the technology used to build the indexer will be decided during grant negotiation by the grantee and the Solana Foundation.
+Logistics
+Take note of the application deadline (10/04/2024). The maximum grant amount is currently earmarked to $100k in USD-equivalent locked SOL. The final grantee will work with the Solana Foundation to decide on the final terms of the agreement, including negotiation of rigorous but attainable milestones.
+Ground Rules
+This thread can be used for comments, questions, praise, and / or criticism, and is intended to be an open forum for any prospective responders. This thread is also an experiment in increasing the transparency through which RFPs are fielded by the Solana ecosystem too, so please be mindful that we’re all here to learn and grow.
+Responses to this RFP are not required to be public (but recommended), but if it is helpful to share notes or combine forces, then please use this thread for such purposes.
+Link: Airtable - Solana Foundation Active RFPs","[codewithmide]: pkxro:
+This thread is also an experiment in increasing the transparency through which RFPs are fielded by the Solana ecosystem too, so please be mindful that we’re all here to learn and grow.
+I would love to team up on this. Anyone interested?
+
+[dmozhevitin]: Hi!
+The RFP itself doesn’t mention the data sources where the proposed tool should fetch the data from. For me it seems that it should allow integration with existing indexers (or just node RPC) to fetch the data from there, and allow exporting the data about specific accounts directly to developer’s database. Could you please tell if I got the idea of this RFP right, or elaborate a bit more if this is not the case?
+Thank you in advance!
+
+[abba0110]: Have a related question on system design. Is the goal for this tool to interface with the validator via remote procedure call, or parse the state in /accounts/run and /rocksdb?
+Second pass at the requirements.
+
+[pkxro]: The RFP itself doesn’t mention the data sources where the proposed tool should fetch the data from. For me it seems that it should allow integration with existing indexers (or just node RPC) to fetch the data from there, and allow exporting the data about specific accounts directly to developer’s database. Could you please tell if I got the idea of this RFP right, or elaborate a bit more if this is not the case?
+This is up to the RFP applicant, but ideally will be a connection to a geyser stream service that RPC providers already offer. If you can do RPC link or geyser, that would be bonus points.
+
+[pkxro]: Have a related question on system design. Is the goal for this tool to interface with the validator via remote procedure call , or parse the state in /accounts/run and /rocksdb?
+The goal of this RFP is to offer a stack for developers who do not run fullnodes to get realtime (and historical) updates for their program. It is reasonable to say that the access to the data will come from geyser or RCP links that come from RPC providers.
+
+[meowmeowmoew]: Hi,
+Quick question about the grant funds repartition here.
+Is the maximum grant of 100k a fund to build the project in the ~ 4 months delay and thats all, or should applicant consider including the maintenance cost for 2 years part of the grant ?
+warmest,
+meowmeowmeow
+
+[Dsrdrk11a]: Hello! We have aplied for this RFP on the 3rd of Oct, but still didn’t get any reply or info on evaluation on the email, mentioned in the application. In order to understand the workload for the coming months, could someone, please, inform us about the decision-making timeline regarding this RFP?
+
+[luke_mlabs]: Hello,
+We at MLabs are quite interested in this project and are considering applying. As part of our due diligence, we have a few clarifying questions:
+How is the SOL payment determined and unlocked? For instance, upon application acceptance, the spot equivalent of 100K USD in SOL is locked and then unlocked upon project completion? We’re trying to understand better where the currency volatility risk lies.
+While we view this as a minimal risk, could you clarify what happens if the project timeline is exceeded? Is the project considered a failure, is payment reduced, or are there other contingencies?
+What are the expectations regarding progress reports, stakeholder check-ins, and general communication throughout the project duration?
+Thank you for the clarity!
+
+[idontknowhowtospell]: i will start an experiment, I will launch a coin on pump.fun through this forum to see if it gets traction Its gonna contain the Ticker $Apple and will use this TG: Telegram: Contact @apple_on_sol
+no more infos
+Have fun
+
+",pkxro,1138,3,9,10,2024-09-05T10:57:11.925Z,2024-11-04T20:52:48.857Z,RFP,10,2024-11-04T20:52:48.857Z
+2060,Discriminator Database,https://forum.solana.com/t/discriminator-database/2060,"Context
+Teams in the Solana ecosystem regularly face challenges interacting with unknown deployed contracts and parsing unknown instructions. A community discriminator dataset would lead to a public good grouping of IDL discriminators that any developer can pull from when needed, which would lead to an incremental increase in developer productivity and speed of interaction of Solana tooling.
+Please see the following RFP that outlines a request to create an open source discriminator database. The Solana Foundation lays out a list of proposed solutions, but the technology used to build the database will be decided during grant negotiation by the grantee and the Solana Foundation.
+Logistics
+Take note of the application deadline (10/04/2024). The maximum grant amount is currently earmarked to $60k in USD-equivalent locked SOL. The final grantee will work with the Solana Foundation to decide on the final terms of the agreement, including negotiation of rigorous but attainable milestones.
+Ground Rules
+This thread can be used for comments, questions, praise, and / or criticism, and is intended to be an open forum for any prospective responders. This thread is also an experiment in increasing the transparency through which RFPs are fielded by the Solana ecosystem too, so please be mindful that we’re all here to learn and grow.
+Responses to this RFP are not required to be public (but recommended), but if it is helpful to share notes or combine forces, then please use this thread for such purposes.
+Link: Airtable - Solana Foundation Active RFPs","[dmozhevitin]: Hi! Thank you for publishing this RFP, sounds like a really valuable improvement!
+Could you please help with the following questions?
+What kind of collisions/conflicts/duplications is mentioned in the RFP description?
+Should the frontend interface for uploading IDLs require the signature of program authority to upload the IDL for it? For the contract verification tools it isn’t necessary because their main purpose is comparing the uploaded source code with the bytecode deployed to the blockchain, but in this case some 3rd party actor can upload incorrect IDL for a given program intentionally, so it sounds like that this feature is necessary, unless I’m missing something.
+What does “resolve an input given a hash” mean in the RFP description?
+Thank you in advance!
+UPD: as far as I understood from the discussions in Anchor discord, the apr.dev registry is discontinued and no longer working. Is it right that the RFP part about Anchor registry watcher is no longer relevant?
+
+[ludovic]: Hi @pkxro,
+We’re a team of 3 seasoned blockchain engineers, actively working full time on the problem that this spec is describing and we are super excited to see a RFP for this!
+The specs makes sense to us, I have a few questions regarding some specific points:
+A Community dataset that allows developers to upload discriminators and their associated inputs with metadata about program relevance with collision detection
+I’d like to check my understanding here, is the idea helping developers checking the validity of their payloads pre transaction signing?
+Community dataset hosted with chunked and compressed parquet files that developers can download on some regular cadence
+Would it make sense to partition this dataset by protocol author / teams?
+Could you unpack the intention / need driving this requirement?
+Thank you for your help!
+
+[pkxro]: @ludovic
+I’d like to check my understanding here, is the idea helping developers checking the validity of their payloads pre transaction signing?
+Yes exactly that – you should be able to upload an ABI and parse out all of the discriminators, or upload them individually with the sha256 of the 8bytes – note that there is some new yet-to-be upstreamed work that makes discriminators work for arbitrary lengths Support custom discriminators · Issue #3097 · coral-xyz/anchor · GitHub
+Would it make sense to partition this dataset by protocol author / teams?
+Could you unpack the intention / need driving this requirement?
+Generally speaking, it is quite hard for data and monitoring teams to parse instructions cleanly. The goal if this RFP is to offer a UI, an API, and a rate-limited ability to get a full dump of the dataset (apache parquet is just what the data ecosystem converged on). Partitioning is ultimately up to you, but seeing as the output of this is just a set of discriminators/idls and not every parsed instruction ever, this should ideally not be too cumbersome because the footprint is quite small
+
+[pkxro]: @dmozhevitin
+What kind of collisions/conflicts/duplications is mentioned in the RFP description?
+As a result of Support custom discriminators · Issue #3097 · coral-xyz/anchor · GitHub the footprint for collisions increases. You ultimately move from 2^256 to much lower parameters.
+Should the frontend interface for uploading IDLs require the signature of program authority to upload the IDL for it? For the contract verification tools it isn’t necessary because their main purpose is comparing the uploaded source code with the bytecode deployed to the blockchain, but in this case some 3rd party actor can upload incorrect IDL for a given program intentionally, so it sounds like that this feature is necessary, unless I’m missing something.
+Ideally this does not require the program authority to upload a discriminator or IDL. The idea here is to put the dataset in the hands of developers. If someone has previously found an IDL or someone has a discriminator and knows the args, they should be able to upload it. The key here is that the dataset does not attribute an IDL to a program. You can combine this user-generated dataset and scrape all of the anchor PDAs that hold IDLs and create a very comprehensive list that also includes authorized IDLs (we’ve already found indexed all of the anchor IDLs and are happy to share the dataset)
+What does “resolve an input given a hash” mean in the RFP description?
+Reverse mapping of hash → function if the function is already in the dataset
+
+[ludovic]: @pkxro thank you for the details + pointer to 3097!
+I would love to show you what we’re building, will you be Breakpoint?
+
+[dmozhevitin]: Hi @pkxro!
+Thank you for your answers!
+I have one more question regarding this RFP: the RFP mentions the ability to upload/search discriminators/IDL for a given program. I wonder what’s the point of providing the ability to upload the discriminator separately, since uploading the IDL covers all the program discriminators. Does it make sense to make the frontend/API to upload only IDLs?
+As a follow-up question, I also wonder what does the “upload discriminator” mean? It seems that upload the discriminator itself doesn’t make much sense, is it right that “uploading the discriminator” also includes uploading the associated account/instruction data (i.e. the part of the IDL)?
+Thank you in advance!
+
+",pkxro,502,5,6,7,2024-09-05T10:59:08.815Z,2024-09-24T11:16:10.051Z,RFP,10,2024-09-24T11:16:10.051Z
+939,Rustls support for raw public keys,https://forum.solana.com/t/rustls-support-for-raw-public-keys/939,"Proposal
+Sponsor the authors of rustls to add support for the RFC 7250 standard.
+ 
+ 
+ IETF Datatracker
+ 
+ 
+ 
+RFC 7250: Using Raw Public Keys in Transport Layer Security (TLS) and...
+ 
+This document specifies a new certificate type and two TLS extensions for exchanging raw public keys in Transport Layer Security (TLS) and Datagram Transport Layer Security (DTLS). The new certificate type allows raw public keys to be used for...
+ 
+ 
+ 
+ 
+ 
+ 
+Related GitHub issue: Support RawPublicKey (non-X509) certificates, e.g. for P2P · Issue #423 · rustls/rustls · GitHub
+The maintainers of rustls are (according to the README):
+Joe Birr-Pixton (@ctz, Project Founder - full-time funded by Prossimo)
+Dirkjan Ochtman (@djc, Co-maintainer)
+Daniel McCarney (@cpu, Co-maintainer - full-time funded by Prossimo)
+Sponsorship links:
+Rustls - Prossimo
+Sponsor @djc on GitHub Sponsors · GitHub
+Motivation
+The Solana Labs client uses the rustls open-source library to establish secure peer-to-peer connections.
+Considerable tech debt has been caused by lack of support for “raw public keys”, a TLS extension that simplifies authentication.
+rustls only supports heavy web PKI/X.509 authentication, which is primarily designed for the web. The Solana Labs client has had to resort to hacks to get X.509 to work in peer-to-peer networks.
+In Firedancer, 10255 lines of code are currently dedicated to supporting these X.509 mock certificates.
+Support for RFC 7250 will improve network security and reduce code footprint by tens of thousands of lines of code across Solana peer-to-peer libraries.
+See the following related forum posts:
+QUIC-TLS in Firedancer (fd_tls) - #4 by ripatel-jump
+Deprecate X.509 certs for P2P connections","[aochagavia]: I’m working on this right now (see this PR) and have a question: would it be all right to implement this only for TLS 1.3, or do we also need it for TLS 1.2? The maintainers mentioned they’d prefer a TLS1.3 -only implementation, that’s why I’m asking.
+
+",ripatel-jump,749,0,1,2,2024-01-11T05:21:03.995Z,2024-08-29T14:30:48.903Z,RFP,10,2024-08-29T14:30:48.903Z
+667,Generalized State Compression,https://forum.solana.com/t/generalized-state-compression/667,"Context
+State Compression is a technical primitive for verifying data secured in the Solana ledger, allowing that data to be used in smart contracts and drastically reducing the cost of state on the Solana network.
+State Compression is most prominently used by Metaplex’s Bubblegum program, which powers Compressed NFTs. NFTs have stable data structures and thus are easily parsed by multiple parties. However, generalized state compression would allow the same cost savings being used for NFTs to work for any piece of state on Solana.
+There’s an assortment of standards, specifications, tools, and workflows needed to make this a reality on Solana. This RFP is intended to be completed by one (or many) parties, and prospective submissions can address one or many of the milestones.
+Please apply for the RFP here for consideration.
+Logistics
+Take note of the end date (1/1/2024) and be sure to make sure all criteria is met prior to sending in an application.
+Ground Rules
+This thread can be used for comments, questions, praise, and / or criticism, and is intended to be an open forum for any prospective responders. This thread is also an experiment in increasing the transparency through which RFPs are fielded by the Solana ecosystem too, so please be mindful that we’re all here to learn and grow.
+Responses to this RFP are not required to be public, but if it is helpful to share notes or combine forces, then please use this thread for such purposes.","[jnwng]: note—the submission deadline has been extended to 12/1/2023 due to slippage (me procrastinating due to Breakpoint)
+also a note on milestones: since the milestones are somewhat inter-related but not entirely dependent, submissions for the 1st and 2nd milestones will be reviewed after the submission deadline, and submissions for the 3rd milestone may be accepted on a rolling basis because that milestone is broadly applicable to compressed NFTs, not just generalized state compression.
+
+[jnwng]: this RFP has been completed, and all teams with submissions have been (personally) evaluated as well as notified regarding their status. we’re looking forward to the continued development of technologies to help scale Solana to new heights- more to come as work proceeds.
+
+[Gabynto]: I would keep my hands crossed in anticipation to more of such RFPs.
+
+",jnwng,1076,0,3,4,2023-11-07T16:28:52.022Z,2024-08-02T10:58:39.615Z,RFP,10,2024-08-02T10:58:39.615Z
+1031,Post-Deployment Monitoring Tooling,https://forum.solana.com/t/post-deployment-monitoring-tooling/1031,"Context
+There exists a lack of post-deployment monitoring tooling that allow for program developers to extract realtime and actionable insights. Developers should look to use continuous monitoring or observability tools to manage active threats and achieve actionable data regarding their programs. Most insights require a real time data filtering or analysis workflows and will need to maintain a firehouse of program-specific updates, assessors and instruction calls.
+Please see the following RFP that outlines a request to create program monitoring tooling. The Solana Foundation lays out a list of proposed solutions, but the technology used to monitor (or verify) is at the behest of the applicant.
+Logistics
+Take note of the application deadline (2/29/2024). The maximum grant amount is not included within the request as different monitoring applications will have varying cost factors. The resulting finalist(s) will work with the Solana Foundation to receive an appropriate grant issued in USD-equivalent locked SOL with approachable, but rigorous milestones.
+Ground Rules
+This thread can be used for comments, questions, praise, and / or criticism, and is intended to be an open forum for any prospective responders. This thread is also an experiment in increasing the transparency through which RFPs are fielded by the Solana ecosystem too, so please be mindful that we’re all here to learn and grow.
+Responses to this RFP are not required to be public (but recommended), but if it is helpful to share notes or combine forces, then please use this thread for such purposes
+Link: Airtable - Solana Foundation Public RFP Database","[0xmulch]: Hey @pkxro,
+Thanks for this post and getting the word out. I had this realization a few days ago- there is a huge market gap for tools that monitor contracts post-deployment. I think it is something that has been overlooked to date since it’s not something that a startup really thinks like, and lack of metrics on contracts will be a huge barrier to entry for a lot of tradfi/corps eyeing launching an on-chain product.
+I started working on something that I intend to open source after I get it in working order, and I would love help if anyone is interested!
+
+[SendBlocks]: Hi all, I’m curios to learn what you believe are the most pressing gaps? The RFP Mentions Observability Tools, Live Fuzzing Tools, and Off-chain Alerting and Dispatcher Tools. Prioritization / more specific needs will enable us to bring the best offering to the table.
+
+[pkxro]: Hey @SendBlocks,
+All of these are gaps. This was a deliberate choice to not be prescriptive in the types of applications we were looking for. RFP applicants should define how their tooling best helps the ecosystem.
+
+[pkxro]: Hey @0xmulch if you’re not applying to the RFP track, please reach out! Would love to see where you’re at here. Telegram: Contact @pkxro or dm me directly on the forum
+
+[SendBlocks]: Thank you for your response! We were prioritizing to fit into the requested schedule. We look forward to discussing our proposition further.
+
+[0xmulch]: Hey, would love to chat, I am not familiar with RFP, so if this is something that is grantable/ fundable I would quit my job today to work on this. Let me know how serious you are, I was considering going and trying to pitch it in the Colosseum, but still working on the MVP, value prop, TAM etc
+
+[0xmulch]: Just finished the Colosseum hackathon up and am contemplating which thing I would like to prioritize next, this is still one of my higher priority ideas, @pkxro did you ultimately cancel the RFP or were some submissions accepted? I can produce some preliminary arch docs if this is still on the table
+Update: Disreg-- just located the RFP DB-- glad you guys got something going. Thanks!
+
+[Gabynto]: This RFP is a great opportunity to develop program monitoring tools for real-time insights and threat management. Make sure to review the details and deadlines carefully, and consider collaborating or sharing notes on this thread to strengthen your proposal.
+
+",pkxro,2039,4,8,9,2024-02-07T17:41:18.825Z,2024-07-31T10:41:41.498Z,RFP,10,2024-07-31T10:41:41.498Z
+1030,Pre-Deployment Program Analysis,https://forum.solana.com/t/pre-deployment-program-analysis/1030,"Context
+There exists a lack of Open Source security tooling that allow for Solana developers to alleviate their programs from a wide range of vulnerabilities. Open Source Formal Verification and Symbolic Analysis tooling, Fuzzing Frameworks and other technologies can better assist program developers in the journey of securing their programs before deployment or upgrades.
+Please see the following RFP that outlines a request to create repeatable program analysis tooling. The Solana Foundation lays out a list of proposed solutions, but the technology used to secure programs is at the behest of the applicant.
+Logistics
+Take note of the application deadline (2/29/2024). The maximum grant amount is not included within the request as different security applications will have varying cost factors. The resulting finalist(s) will work with the Solana Foundation to receive an appropriate grant issued in USD-equivalent locked SOL with approachable, but rigorous milestones.
+Ground Rules
+This thread can be used for comments, questions, praise, and / or criticism, and is intended to be an open forum for any prospective responders. This thread is also an experiment in increasing the transparency through which RFPs are fielded by the Solana ecosystem too, so please be mindful that we’re all here to learn and grow.
+Responses to this RFP are not required to be public (but recommended), but if it is helpful to share notes or combine forces, then please use this thread for such purposes
+Link: Airtable - Solana Foundation Public RFP Database","[Coinfabrik]: Bringing Scout to Solana
+Dear Solana community,
+We’re excited to present our proposal for this RFP, Scout, our open-source vulnerability detection tool. Whether you’re an entry-level developer or an expert, Scout is the perfect tool to improve the secure development lifecycle of your smart contract projects. Designed with ease of use in mind, Scout offers a seamless installation process, allowing you to focus on what matters most: creating innovative and secure smart contracts.
+We are CoinFabrik, a leading research, development, and security auditing company specializing in Web3 technologies. This year marks our 10-year anniversary, and for the past 3 years, we’ve added value to the Solana ecosystem. CoinFabrik’s technical team has performed development and auditing for projects like Codigo.AI, Genopets, SmartChain, and Fitchin. Furthermore, we co-hosted the first Solana Hackathon in Argentina (Summer Sol Sessions Buenos Aires) and also had our booth at Breakpoint Amsterdam in 2023, presenting our smart contract testing tool SolBricks. Our commitment is to continue contributing to Solana’s developer growth and retention, and to foster the entry of new talent to help maintain and improve the network.
+Our team has an academic background in computer science and mathematics, adding up to decades of experience in cybersecurity and software development, including academic publications, patents turned into products, and conference presentations. Furthermore, we have an ongoing collaboration on knowledge transfer and open-source projects with the University of Buenos Aires.
+Tool Overview
+Scout is an open-source bug detection tool designed to assist developers and auditors in identifying potential security threats and applying best practices to smart contracts. It enhances contract security by detecting issues and suggesting remediations during development, thus ensuring the security of contracts before deployment.
+Scout is a static analyzer equipped with specialized lints or detectors that pinpoint specific vulnerabilities. These lints are designed for easy integration, enabling contributors to add new detectors seamlessly. Scout includes a command-line interface (CLI) offering various output formats, along with a VSCode extension that highlights vulnerable code segments and provides explanations and remediation suggestions.
+As a security companion, Scout’s comprehensive documentation and open-source approach encourage community contributions, elevating ecosystem security standards and best practices.
+Help us bring Scout to Solana!
+We want to hear from you! We look forward to any feedback the Solana developer community wants to share concerning our proposal to bring Scout into the ecosystem.
+Which types of Solana vulnerabilities would you like our bug detection tool to focus on identifying? Your suggestions will help us refine our tool’s capabilities to better meet the community’s requirements and improve the network’s security.
+
+[maddavid]: The Whale Suite
+Mad Shield is the Premiere Solana auditing and security solutions, providing clients with in-depth code review, design improvement and vulnerability analysis and security tooling. As seasoned security experts in the blockchain industry with a focus on the Solana ecosystem, we are excited to offer a pre-deployment testing tool for Solana smart contracts that help teams and developers to uncover potential vulnerabilities that are hard to detect and uncover through manual code review.
+Our goal is to empower the developers with a comprehensive tool that exhausts most of the categorical Solana vulnerabilities. In addition, our tool is to be used to exhibit emergent exploits that have not been discovered previously and thus potentially revealing new categories of attacks guided by educated guesses and business-logic related guidelines that the auditors suspect to cause critical deviation from program’s functionality.
+The testing tool is meant to be used to monitor new program releases or upgrades before deployment to main-net/production, consistently checking the trust boundary and security guarantees between the incremental development cycles. This is significantly important as many of the programs providing infrastructure in the ecosystem such as SPL/MPL libraries have been extensively supporting user requested features that are honeypots for irregularity within the code to arise.
+Mad Shield team is excited to bring this tool as a primitive for developers and smart contract designers alike to build better and higher quality code to help with the technical intricacies of the Solana smart programming model.
+
+",pkxro,1190,0,2,3,2024-02-07T17:34:19.129Z,2024-02-29T22:01:35.917Z,RFP,10,2024-02-29T22:01:35.917Z
+1032,Program Verification Tooling,https://forum.solana.com/t/program-verification-tooling/1032,"Context
+Solana users and developers should have better insights into the security posture of programs they’re using or invoking. There should exist verification tooling, program scoring and APIs that let wallets, explorers and developers fetch security details about programs they’re interacting with. Additionally, auditors and program developers should be able to post attestations about the incremental audits of programs for ingestion into the tooling requested above.
+Please see the following RFP that outlines a request to create program verification tooling. The Solana Foundation lays out a list of proposed solutions, but the technology used to verify programs is at the behest of the applicant.
+Logistics
+Take note of the application deadline (2/29/2024). The maximum grant amount is not included within the request as different security applications will have varying cost factors. The resulting finalist(s) will work with the Solana Foundation to receive an appropriate grant issued in USD-equivalent locked SOL with approachable, but rigorous milestones.
+Ground Rules
+This thread can be used for comments, questions, praise, and / or criticism, and is intended to be an open forum for any prospective responders. This thread is also an experiment in increasing the transparency through which RFPs are fielded by the Solana ecosystem too, so please be mindful that we’re all here to learn and grow.
+Responses to this RFP are not required to be public (but recommended), but if it is helpful to share notes or combine forces, then please use this thread for such purposes
+Link: Airtable - Solana Foundation Public RFP Database","[0xGeorgii]: Hello, Solana community,
+I’m excited to see that Solana Foundations is interested in formal method application development in this RFP. Before submitting my proposal, I seek clarity on whether it aligns with the Foundations’ expectations for this RFP.
+I represent Inferara, a research group I lead that is focused on automated reasoning. We’re exploring the feasibility of formalizing specifications for blockchain systems within a proof system (e.g., Coq). We aim to create a mathematically grounded framework to aid developers in writing formal specifications and proving the properties of their code.
+Our Team’s Strengths:
+Extensive software engineering experience, including blockchain security and formal language analysis.
+Academic expertise in mathematics, game theory, and distributed systems.
+Project Overview:
+Our research necessitates thorough preliminary studies, adopting an academic approach. For insight into our methodology, consider our article on Program Verification: background and notation.
+The project is phased, starting with theoretical research milestones we are currently progressing in.
+Inquiry to Solana Foundations:
+Would the Foundations be interested in detailed, academically styled papers as deliverables? Additionally, could code examples in Coq and Rust, illustrating the discussed concepts, be valuable?
+Our ultimate goal is to evolve this framework into a practical implementation. This would facilitate formal specifications and proofs for code within both Solana’s core and on-chain DApps.
+I am looking forward to hearing feedback and hoping our proposal can contribute to the Solana ecosystem.
+
+[pkxro]: Hi @0xGeorgii apologies for the late reply here.
+This would better fit under our research initiative, as these security RFPs are focused on production use cases. Please reach out to me at Telegram: Contact @pkxro
+
+",pkxro,893,1,2,3,2024-02-07T17:49:35.234Z,2024-02-29T14:10:26.511Z,RFP,10,2024-02-29T14:10:26.511Z
+389,Alternative Archival Storage Technologies,https://forum.solana.com/t/alternative-archival-storage-technologies/389,"Context
+Archival storage for Solana has historically expensive and centralized from the technology perspective; at the moment, BigTable tends to be the only reasonable choice for RPCs to store historical information back to genesis.
+See this RFP on the development of technologies to enable alternative storage technologies and providers to provide low-cost, high-efficiency access to Solana archival data
+Logistics
+Take note of the end date (8/13) and be sure to make sure all criteria is met prior to sending in an application. The listed grant amount is a maximum allocation and is issued in USD-equivalent locked SOL and gated behind delivery milestones.
+Ground Rules
+This thread can be used for comments, questions, praise, and / or criticism, and is intended to be an open forum for any prospective responders. This thread is also an experiment in increasing the transparency through which RFPs are fielded by the Solana ecosystem too, so please be mindful that we’re all here to learn and grow.
+Responses to this RFP are not required to be public, but if it is helpful to share notes or combine forces, then please use this thread for such purposes.","[JoakimEQ]: Is there some publicly available documentation of the often cited method of using Filecoin for this storage? I see it consistently mentioned by aeyakovenko:
+ 
+ twitter.com
+ 
+ 
+ 
+toly 🇺🇸
+@aeyakovenko
+ 
+ 
+ 
+ @0xMert_ @0xrwu chain is archived to file coin, and probably eventually to arweave. We just need an easy way for indexers to recover a solana:// object from the archives
+ 3:58 AM - 20 Jul 2023
+ 
+ 
+ 
+ 
+ 11
+ 
+ 
+ 
+ 
+ 
+ 1
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Would love to see what the pros and cons of this approach have been so far. Based on my knowledge of Filecoin, the cost might be quite prohibitive.
+
+[anjor]: I am working on this from the filecoin side along with folks from Triton. Triton just released https://old-faithful.net/ which has more details on how data is being onboarded to filecoin. Happy to answer any follow up questions!
+To the point about cost being prohibitive, Filecoin is actually the cheapest option today. See this from messari:
+ 
+ twitter.com
+ 
+ 
+ 
+Messari
+@MessariCrypto
+ Decentralized storage networks range from 70% (@Storj) to 99% (@Filecoin) cheaper than @Amazon S3 🤯
+ 12:00 AM - 17 Jan 2023
+ 
+ 
+ 
+ 
+ 310
+ 
+ 
+ 
+ 
+ 
+ 66
+
+[sven]: Can you elaborate on these requirements?
+Solution should provide relevant connection logic for the Solana RPC client
+Solution must prove equivalence to the Solana ledger as determined by random-sampling of RPC calls
+Does this mean that the solution must include a separate RPC that runs on a subset of the data? (eg. an epoch)
+and
+A complete security audit must be completed prior to production launch.
+who is responsible for this? if the submitter, should this be factored as a cost? (problematic as it’s an unknown)
+
+[jnwng]: Does this mean that the solution must include a separate RPC that runs on a subset of the data? (eg. an epoch)
+no, you can use the existing Solana RPC code. today, that RPC will pack things into BigTable / serve archival requests out of BigTable. the proposed solution needs to plug into that existing code to serve as a suitable replacement, and needs to store data from genesis to tip.
+who is responsible for this? if the submitter, should this be factored as a cost? (problematic as it’s an unknown)
+good point. don’t have a perfect answer for you since this component isn’t security-critical enough to require an audit; probably okay to waive this concern for the time being
+
+[matta]: Hello,
+Was an applicant accepted for this grant or did it just expire?
+I am unable to view the RFP at this time but I am interested in working on this.
+The solution I have mind uses Apache Parquet archived to commodity object storage such as Amazon S3. I am confident that this approach would reduce costs while providing fast RPC access.
+Compared to the Old Faithful approach this would not be decentralized or verifiable but should be a more “plug and play” replacement for RPCs. Parquet has a lot of benefits: great compression, efficient remote queries, and high quality Rust crates, but it’s not a deterministic format. That being said, the lower operational costs would make building your own verified archives from the ledgers much more accessible.
+
+[pkxro]: Hey Matta,
+We closed this RFP about a month ago and are starting the implementation process with the final participants. We had more than 13 applicants across a wide spectrum of tooling choices and will be able to give more details once the details are finalized.
+We will likely have follow-up RFPs as the landscape for archival and the state of RPCs is ever evolving. We’ll be sure to post any new details on the forum.
+
+[ripatel-jump]: The solution I have mind uses Apache Parquet archived to commodity object storage such as Amazon S3. I am confident that this approach would reduce costs while providing fast RPC access.
+Sorry for the late reply – I’m very interested in the Apache Parquet solution. We can make it verifiable for sure. The community needs a ledger data format that is language-agnostic and compact so we can replay Solana Labs data in Firedancer and vice versa. Have you started any work on this? A Parquet format would be easier to work with than Filecoin/CAR (which solves a different problem).
+
+[matta]: Hey there,
+We are doing some work adjacent to this but aren’t working on Parquet specifically at the moment. I’m actually in the process of backporting your patches for Geyser support to old ledger tool versions at the moment 
+I did do some initial research into using Parquet and the most straightforward encoding of the ledger data is not actually that compact. The data Parquet compresses well (slot, block time, etc.) is not what takes up the majority of the space. Here are my notes from when I was researching this: https://gist.github.com/matt-allan/851499ed79ffdd48af3c4949270866fc
+I would love to talk more and see if we can collaborate on something. I will send you a message. If anyone else on this thread is interested in collaborating too please let me know!
+
+",jnwng,1752,4,8,9,2023-07-17T19:24:10.400Z,2023-12-18T17:34:38.433Z,RFP,10,2023-12-18T17:34:38.433Z
+634,Test Validator Plugin Framework,https://forum.solana.com/t/test-validator-plugin-framework/634,"Context
+When developers are building locally using local-test-validator, they often want to build on top of protocols already live on mainnet-beta. They can load each individual program and required account with CLI flags, but it is tedious and takes a lot of time for each developer. Not only that, but some programs require a level of traditional infrastructure to be working properly, which the developer will also be required to learn just to build locally.
+See the RFP outlining a framework that can:
+Load programs from mainnet-beta on start
+Load any account from mainnet-beta on start
+Update an account’s data on start
+Run traditional infrastructure as needed to run the program
+Logistics
+Take note the end date (11/15) and be sure to make sure all criteria is met prior to sending in an application. The listed grant amount is a maximum allocation and is issued in USD-equivalent locked SOL and gated behind delivery milestones.
+Ground Rules
+This thread can be used for comments, questions, praise, and / or criticism, and is intended to be an open forum for any prospective responders. This thread is also an experiment in increasing the transparency through which RFPs are fielded by the Solana ecosystem too, so please be mindful that we’re all here to learn and grow.
+Responses to this RFP are not required to be public, but if it is helpful to share notes or combine forces, then please use this thread for such purposes.","[jimii]: Here is my suggestion for implementing the plugin marketplace.
+Instead of building it from the ground up, I recommend looking into the feasibility of utilizing the APR (Anchor Program Repository) for retrieving programs and their corresponding versions.
+By leveraging the existing APR infrastructure, we can expedite the development process and ensure a more efficient marketplace integration.
+At the moment it is not up but talking to the anchor team should be helpful.
+
+[jacobcreech]: I want this to exist outside of Anchor - the plugins can be built for both Native and Anchor programs.
+
+[SE7EN]: Hi @jacobcreech,
+We have a few questions regarding this RFP:
+Ability to run traditional infrastructure as needed to operate the program
+What do you mean by “traditional” infrastructure?
+The solution must offer a means of discovering different plugins for each program
+Are you suggesting that users should be able to discover plugins by providing the program or account address, similar to docker images discovery or like crates.io homepage?
+One plugin must include traditional infrastructure as part of the load
+Could you provide an example or clarify your specific requirements for this?
+Distribution model of plugins
+Are you looking for a separate application to facilitate the discovery of plugins, similar to something like npm?
+
+[jacobcreech]: What do you mean by “traditional” infrastructure?
+Like cranks. Not going as far to say something like postgres, but I want to make sure something basic like cranks can run. Maybe going as far to make sure something like a bot that can market make to create fake activity in a docker container as well.
+Are you suggesting that users should be able to discover plugins by providing the program or account address, similar to docker images discovery or like crates.io homepage?
+Yes. There needs to be a way for people to both upload and retrieve different plugins.
+One plugin must include traditional infrastructure as part of the load
+Something like create an Openbook plugin and make sure the crank is running when the plugin is installed and local validator is started.
+Are you looking for a separate application to facilitate the discovery of plugins, similar to something like npm?
+Discovery and upload.
+
+[metselder]: Hey @jacobcreech,
+I have couple of questions, I’d be grateful to understand more, so that i can thoroughly look into and send a proposal over for review
+When developers are building locally using local-test-validator, they often want to build on top of protocols already live on mainnet-beta. They can load each individual program and required account with CLI flags, but it is tedious and takes a lot of time for each developer
+In order to comprehensively assess the necessary functionalities, particularly the “Ability to load programs from mainnet-beta on start” and “Ability to load any account from mainnet-beta on start,” providing precise examples of commands for loading individual programs becomes paramount. This would greatly assist in developing a proof of concept (POC) and exploring integration possibilities. Although seemingly straightforward, validation is essential due to the limited descriptive nature of the current documentation regarding the envisioned capabilities. A plausible example command could resemble the following:
+solana program dump -u m 9xQeWvG816bUx9EPjHmaT23yvVM2ZWbrrpZb9PusVFin serum_dex_v3.so &amp;&amp; solana-test-validator --bpf-program 9xQeWvG816bUx9EPjHmaT23yvVM2ZWbrrpZb9PusVFin serum_dex_v3.so --reset
+Solution must support a configuration file for each plugin, denoting how to load each program and plugin - Could you elaborate on the envisioned configurability?
+Solution must have a way of packaging these plugins per program - Could you provide further details on the anticipated outcome? For instance, should a developer possess a configuration file for a program to be cloned from mainnet-beta and initiated with the validator? Subsequently, if the developer wishes to load another program, would the local-test-validator be capable of starting with a distinct configuration file for the latter program, specified as a path argument to the plugin?
+
+[GregoryLibert]: Hi,
+For the RFP’s requirement of a configuration file for each plugin, could you clarify its function?
+Is it meant to:
+Act as a descriptive, recipe-like file for setting up the plugin, or
+Serve as a means to input parameters into the plugin? Additionally, if it’s the latter, should there be an option to modify these parameters via the user interface?
+Also, concerning the requirements for packaging, distributing, and discovering plugins, are you envisioning a system akin to an API marketplace, complete with a website and a CLI tool for searching, acquiring, and uploading plugins? If this is the case, are there any specific hosting constraints or requirements we should be aware of?
+
+[jacobcreech]: The commands you posted are correct. The goal of this is to hide or abstract all of the commands away though so it can load more gracefully. You find a lot of people that just want NFTs locally are rebuilding the same command, but what if they need 100+ accounts? Not scalable anymore.
+Solution must support a configuration file for each plugin, denoting how to load each program and plugin
+Sure. Let’s say you have a config file for a plugin formatted something like this in yml:
+programs:
+- programId1 or programName(as referenced in explorer)
+- programId2
+accounts:
+- account1
+- account2
+overrides:
+- accountAddress: address
+- accountOwner: address
+This is just an example. Programs within the config will get me the full list of programs to load for that specific plugin, same with accounts. Overrides could potentially overwrite the data so that you can get more usefulness out of it locally. For example, you pull a USDC account from mainnet down to local but you’re not the owner, so you update it so you can transfer the USDC around.
+Could you provide further details on the anticipated outcome? For instance, should a developer possess a configuration file for a program to be cloned from mainnet-beta and initiated with the validator? Subsequently, if the developer wishes to load another program, would the local-test-validator be capable of starting with a distinct configuration file for the latter program, specified as a path argument to the plugin?
+Let’s say you have a directory that contains plugins on your local that your local validator plugin framework picks configs from. For the sake of discussion, structured as follows:
+/plugins
+ /mango
+ /drift
+ /openbook
+ /metaplex
+Each plugin would then have a config file like mentioned earlier in this post to give the information about what accounts to load to successfully run the program locally, plug potentially some additional accounts(like USDC) to make developing locally on these programs even easier. Framework would crawl through each directory, grab the account, load validator with the accounts loaded, override any accounts necessary, and then start.
+Ideally there’s an easy way with the distribution to also just “install” these plugins so that devs are not moving folders around as well. That’s in the separate milestone.
+
+[jacobcreech]: Configuration ideally like a recipe for each program that the framework then uses to load on test validator start. It’d be cool to have input parameters, but that would be increased scope of this current rfp.
+Packaging, distributing, discovering - Could be just a website that helps discovery + easy install of plugins. Something like how plugins are discovered and installed for something like minecraft or skyrim mods today.
+
+[SE7EN]: @jacobcreech
+Hi,
+I have attempted to submit our proposal several times, but I consistently encounter the same error. How can I successfully submit our proposal?
+image1392×760 84.9 KB
+
+[jacobcreech]: Hey @SE7EN, I just ran a test submission and it worked. Could you reload and try again?
+
+[SE7EN]: It worked, thank you
+
+[SE7EN]: Hi @jacobcreech,
+We’ve submitted our proposal, but haven’t received any feedback yet. Could you please provide an update on the status of the RFP?
+Thanks,
+
+[jacobcreech]: We should be reaching out to everyone this week. Apologies, holidays in the US got in the way.
+
+[ripatel-jump]: What is local-test-validator? Do you mean the solana-test-validator binary?
+The solana-genesis command already supports a “primordial accounts file” which can be used to deploy programs and accounts from mainnet beta on start. This can then be used with a solana-validator. We do this regularly with Firedancer development.
+I don’t think there are any Solana monorepo changes required to support this, apart from a 100 line shell script maybe to glue things together.
+
+",jacobcreech,1813,7,14,15,2023-10-24T03:18:58.316Z,2023-12-17T17:37:13.259Z,RFP,10,2023-12-17T17:37:13.259Z
+367,The Solana app for Ledger devices,https://forum.solana.com/t/the-solana-app-for-ledger-devices/367,"Context
+The Solana app on Ledger is a crucial part of the self-custody story within the Solana ecosystem. Until now, that app has been faithfully developed by contributors at Solana Labs but we are now looking for a new steward to continue to build out this public good.
+See an RFP for further development on the Ledger app here, starting with:
+support for “off-chain message signing”
+the “ComputeBudget” instruction
+a discovery document for future development across the suite of Ledger devices
+All code is subject to code review from the Solana Labs and Ledger firmware teams.
+Logistics
+Take note of the end date (7/31) and be sure to make sure all criteria is met prior to sending in an application. The listed grant amount is a maximum allocation and is issued in USD-equivalent locked SOL and gated behind delivery milestones. If for whatever reason this isn’t a workable solution, please let us know in the application or reach out to me directly.
+Ground Rules
+This thread can be used for comments, questions, praise, and / or criticism, and is intended to be an open forum for any prospective responders. This thread is also an experiment in increasing the transparency through which RFPs are fielded by the Solana ecosystem too, so please be mindful that we’re all here to learn and grow.
+Submissions to this RFP are not required to be public, but if it is helpful to share notes or combine forces, then please use this thread for such purposes.","[SE7EN]: Hey, I’m from BlockyDevs we have a few questions:
+One of the deliverables is Off-chain message signing support for Ledger devices. However, we noticed that off-chain message signing is already implemented in the Solana Ledger app, specifically in the file handle_sign_offchain_message.c, available at Link. Could you please clarify what additional work should be done regarding this deliverable?
+Regarding the deliverable for ComputeBudget instruction support for Ledger devices, should we enable the user to set their own gas unit limit for each transaction?
+For the Discovery document on memory, could you provide more details about what is expected? Should it be a summary for each Ledger device, or is it more like a research paper that includes analysis, measurements, chart, tests?
+Concerning the section on “proposal on future accommodation for well-known tokens/instructions, including the Token-2022,” are we expected to demonstrate that our example implementation meets all the security requirementsor only lacks memory? How should we interpret this requirement?
+For Off-chain message signing, are we only considering supporting ED25519?
+
+[jnwng]: thank you for the questions!
+ SE7EN:
+One of the deliverables is Off-chain message signing support for Ledger devices. However, we noticed that off-chain message signing is already implemented in the Solana Ledger app, specifically in the file handle_sign_offchain_message.c, available at Link . Could you please clarify what additional work should be done regarding this deliverable?
+offchain messages must adhere to the finalized message signing specification laid out here. see in-progress work to be finalized here
+the Solana CLI support for the same OCMSF needs to be updated with tests
+ SE7EN:
+Regarding the deliverable for ComputeBudget instruction support for Ledger devices, should we enable the user to set their own gas unit limit for each transaction?
+good question. probably unnecessary, i think just the display of the provided ComputeBudget is suitable.
+ SE7EN:
+For the Discovery document on memory, could you provide more details about what is expected? Should it be a summary for each Ledger device, or is it more like a research paper that includes analysis, measurements, chart, tests?
+the discovery document is intended to scaffold future work to support additional Ledger devices in the future, as well as streamline the development pipeline needed to add support for other actions and tokens in the future. this is a “we don’t know what we don’t know” piece but critical to know if there’s low-hanging fruit to improve the application or if its maxxed out.
+ SE7EN:
+Concerning the section on “proposal on future accommodation for well-known tokens/instructions, including the Token-2022,” are we expected to demonstrate that our example implementation meets all the security requirements or only lacks memory? How should we interpret this requirement?
+i’m not fully sure how to answer this, but if you’re asking what i think you’re asking, i really just want to make sure that any future revamp of the app accommodates for the addition of new instructions in the future, not just existing ones
+ SE7EN:
+For Off-chain message signing, are we only considering supporting ED25519?
+yes, i think that would be the only curve that makes sense. but let me know otherwise.
+
+[jnwng]: this RFP has been closed with two submissions, and one winner that has been selected has already begun development. our estimated time of delivery is by the end of the year.
+
+",jnwng,1547,1,3,4,2023-07-11T18:22:15.798Z,2023-11-07T16:29:29.423Z,RFP,10,2023-11-07T16:29:29.423Z
+526,Unified Security Token/RWA Program,https://forum.solana.com/t/unified-security-token-rwa-program/526,"Context
+As discussed in the sRFC section of the forum sRFC 00020: RWA/Security Token Standard, this RFP is for a RWA program that can generalize to many RWA representations.
+RWA RFP application link
+Logistics
+Application deadline is Sept 29th, 2023 and be sure to make sure all criteria is met prior to sending in an application. The listed grant amount is a maximum allocation and is issued in USD-equivalent locked SOL and gated behind delivery milestones. If for whatever reason this isn’t a workable solution, please let us know in the application or reach out to me directly.
+Ground Rules
+This thread can be used for comments, questions, praise, and / or criticism, and is intended to be an open forum for any prospective responders. This thread is also an experiment in increasing the transparency through which RFPs are fielded by the Solana ecosystem too, so please be mindful that we’re all here to learn and grow.
+Responses to this RFP are not required to be public, but if it is helpful to share notes or combine forces, then please use this thread for such purposes.","[jimii]: Off-topic questions,
+When a project is decided on, will there be an announcement?
+Looking at the evaluation criteria, it says that it is ideal for the project to be open source, Does this apply when the team start working on the projects or at a later date after the team has executed its idea?
+
+[eliasi]: It’s not clear what are the expected deliverables.
+(assuming the standard itself doesn’t have a code)
+Is it an example of the standard? Something else?
+May I ask for more details?
+
+[Ves]: Hey @Tamgros, trying to understand whether you are looking explicitly for the development of the Token or also a team to run the program.
+
+[Tamgros]: The deliverable is a Solana Program on mainnet. There are also some milestones including a spec and testing.
+
+[thisisambros]: Hi,
+We have submitted our proposal today as Rubicon Studio SA.
+I am aware that we’re past the deadline, but it would be great if it could be considered
+
+",Tamgros,1080,1,5,6,2023-09-10T15:41:28.646Z,2023-10-06T13:44:13.369Z,RFP,10,2023-10-06T13:44:13.369Z
