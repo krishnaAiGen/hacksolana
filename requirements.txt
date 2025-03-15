@@ -1,0 +1,5 @@
+requests>=2.25.1
+json>=2.0.9
+csv>=1.0
+datetime>=4.3
+re>=2.2.1 
