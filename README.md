@@ -115,6 +115,33 @@ Replace `/path/to/your/uv` with the path to your uv installation (e.g., `~/.loca
 
 The Solana Forum MCP server provides the following tools:
 
+### Example Queries
+
+Here are some example queries you can make using the MCP server:
+
+```
+# Get the latest posts in the Development category
+get_latest_posts(category="Development", limit=3)
+
+# Get the most viewed posts
+get_most_viewed_posts(limit=10)
+
+# Get forum statistics
+get_forum_statistics()
+
+# Search for posts about smart contracts
+semantic_search(query_text="smart contracts", limit=5)
+
+# Get posts from the Technology category
+get_posts_by_category(category="Technology", limit=5)
+
+# Evaluate a specific post
+evaluate_post(post_id=3)
+
+# Ask a general question
+universal_query(query_text="What are the latest posts about Solana tokenomics?")
+```
+
 ### 1. get_latest_posts
 
 Get the latest posts from the Solana forum, optionally filtered by category.
