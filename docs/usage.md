@@ -102,30 +102,53 @@ The Solana Forum MCP server provides the following tools:
 
 ### Example Queries
 
-Here are some example queries you can make using the MCP server:
+#### Latest Posts Queries
 
-```
-# Get the latest posts in the Development category
-get_latest_posts(category="Development", limit=3)
+1. "What are the latest posts?"
+2. "Show me recent posts in the Governance category"
+3. "What's new in the sRFC category?"
 
-# Get the most viewed posts
-get_most_viewed_posts(limit=10)
+#### Most Viewed Posts Queries
 
-# Get forum statistics
-get_forum_statistics()
+"What are the most viewed posts?"
+"Show me popular posts in the Research category"
+"What are the top posts on Solana?"
 
-# Search for posts about smart contracts
-semantic_search(query_text="smart contracts", limit=5)
+#### Category Posts Queries
 
-# Get posts from the Technology category
-get_posts_by_category(category="Technology", limit=5)
+"Give me all posts on Governance"
+"All posts in Research"
+"Posts from Announcements"
 
-# Evaluate a specific post
-evaluate_post(post_id=3)
+#### Post Evaluation Queries
 
-# Ask a general question
-universal_query(query_text="What are the latest posts about Solana tokenomics?")
-```
+"For this post id 123, give me its evaluation"
+"Evaluate post 456"
+"Post id 789 evaluation"
+
+#### Most Commented Posts Queries
+
+"Which posts have the most comments?"
+"Show me the most discussed topics"
+"What are the most active discussions?"
+
+#### Statistics Queries
+
+"Show me forum statistics"
+"What are the stats for the Solana forum?"
+"Give me a summary of the forum data"
+
+#### Semantic Search Queries
+
+"Tell me about Solana validators"
+"What are people saying about staking?"
+"Find posts about performance improvements"
+
+#### Topic-Specific Semantic Search Examples
+
+"How does Solana achieve high throughput?"
+"What are the latest developments in Solana's governance?"
+"Tell me about Solana's approach to smart contracts"
 
 ### 1. get_latest_posts
 
