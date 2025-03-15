@@ -14,10 +14,28 @@ This document explains how to use the Solana Forum Data Scraper to collect data 
 
 ## Running the Scraper
 
-To run the scraper, execute the following command from the project root directory:
+There are three ways to run the scraper:
+
+### Method 1: Using the wrapper script (recommended)
 
 ```bash
-python src/scripts/download_data.py
+python solana_download.py
+```
+
+### Method 2: Install as a package
+
+```bash
+# Install the package in development mode
+pip install -e .
+
+# Run the scraper
+solana-download
+```
+
+### Method 3: Run the script directly
+
+```bash
+python -m src.scripts.download_data
 ```
 
 This will:
@@ -62,6 +80,11 @@ Each CSV file contains the following columns:
 ## Example Usage in Python
 
 ```python
+# Add the parent directory to the Python path to allow importing the src package
+import os
+import sys
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 from src.scripts.download_data import SolanaForumAPIClient
 
 # Create a client
@@ -74,4 +97,16 @@ if success:
     # Save data
     client.save_to_json()
     client.save_to_csv()
+```
+
+## Running the Example Scripts
+
+The package includes example scripts in the `examples` directory:
+
+```bash
+# Run the data processing example
+python examples/process_data.py
+
+# Run the MCP server example
+python examples/mcp_example.py
 ``` 

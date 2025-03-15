@@ -5,10 +5,16 @@ This server exposes the MCP functionality via HTTP endpoints.
 """
 
 import json
+import sys
+import os
 from typing import Dict, Any, Optional
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
+# Add the project root to the Python path
+sys.path.insert(0, os.path.abspath(os.path.dirname(os.path.dirname(__file__))))
+
+# Now import from src
 from src.mcp_server import SolanaForumMCPServer
 
 app = Flask(__name__)
@@ -122,5 +128,9 @@ def get_categories():
         'count': len(categories)
     })
 
+def run_app():
+    """Run the Flask application."""
+    app.run(debug=True, host='0.0.0.0', port=5000)
+
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000) 
+    run_app() 

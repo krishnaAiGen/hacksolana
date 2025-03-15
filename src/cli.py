@@ -8,9 +8,14 @@ This CLI allows users to interact with the MCP server directly from the command 
 import sys
 import json
 import argparse
+import os
 from typing import Dict, Any, List, Optional
 import textwrap
 
+# Add the project root to the Python path
+sys.path.insert(0, os.path.abspath(os.path.dirname(os.path.dirname(__file__))))
+
+# Now import from src
 from src.mcp_server import SolanaForumMCPServer
 
 def format_post(post: Dict[str, Any], index: Optional[int] = None) -> str:

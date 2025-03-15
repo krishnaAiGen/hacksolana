@@ -281,8 +281,8 @@ class SolanaForumAPIClient:
             
             print(f"Saved {len(posts)} posts from category '{category_name}' to {filename}")
 
-# Example usage
-if __name__ == "__main__":
+def main():
+    """Main function to run the scraper."""
     client = SolanaForumAPIClient()
     
     # Fetch categories and their posts
@@ -294,5 +294,15 @@ if __name__ == "__main__":
         
         # Save data in CSV format, one file per category
         client.save_to_csv()
+        
+        print("Data scraping completed successfully!")
+    else:
+        print("Failed to scrape data.")
+        
+    return success
+
+# Example usage
+if __name__ == "__main__":
+    main()
         
         

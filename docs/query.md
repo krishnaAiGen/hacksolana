@@ -2,15 +2,52 @@
 
 This document provides a comprehensive list of example queries you can use with the Solana Forum MCP Server through any of its interfaces (CLI, HTTP API, or Python API).
 
+## Running the MCP Server
+
+There are three ways to run the MCP server:
+
+### Method 1: Using the wrapper scripts (recommended)
+
+```bash
+# Run the CLI
+python solana_cli.py interactive
+
+# Run the API server
+python solana_api.py
+```
+
+### Method 2: Install as a package
+
+```bash
+# Install the package in development mode
+pip install -e .
+
+# Run the CLI
+solana-cli interactive
+
+# Run the API server
+solana-api
+```
+
+### Method 3: Run the scripts directly
+
+```bash
+# Run the CLI
+python -m src.cli interactive
+
+# Run the API server
+python -m src.api_server
+```
+
 ## Natural Language Queries (POST /api/query)
 
 ### Latest Posts Queries
 
 ```bash
 # CLI
-python src/cli.py query "What are the latest posts?"
-python src/cli.py query "Show me recent posts in the Governance category"
-python src/cli.py query "What's new in the sRFC category?"
+python solana_cli.py query "What are the latest posts?"
+python solana_cli.py query "Show me recent posts in the Governance category"
+python solana_cli.py query "What's new in the sRFC category?"
 
 # HTTP API
 curl -X POST http://localhost:5000/api/query \
@@ -35,9 +72,9 @@ server.query("What's new in the sRFC category?")
 
 ```bash
 # CLI
-python src/cli.py query "What are the most viewed posts?"
-python src/cli.py query "Show me popular posts in the Research category"
-python src/cli.py query "What are the top posts on Solana?"
+python solana_cli.py query "What are the most viewed posts?"
+python solana_cli.py query "Show me popular posts in the Research category"
+python solana_cli.py query "What are the top posts on Solana?"
 
 # HTTP API
 curl -X POST http://localhost:5000/api/query \
@@ -62,9 +99,9 @@ server.query("What are the top posts on Solana?")
 
 ```bash
 # CLI
-python src/cli.py query "Which posts have the most comments?"
-python src/cli.py query "Show me the most discussed topics"
-python src/cli.py query "What are the most active discussions?"
+python solana_cli.py query "Which posts have the most comments?"
+python solana_cli.py query "Show me the most discussed topics"
+python solana_cli.py query "What are the most active discussions?"
 
 # HTTP API
 curl -X POST http://localhost:5000/api/query \
@@ -89,9 +126,9 @@ server.query("What are the most active discussions?")
 
 ```bash
 # CLI
-python src/cli.py query "Show me forum statistics"
-python src/cli.py query "What are the stats for the Solana forum?"
-python src/cli.py query "Give me a summary of the forum data"
+python solana_cli.py query "Show me forum statistics"
+python solana_cli.py query "What are the stats for the Solana forum?"
+python solana_cli.py query "Give me a summary of the forum data"
 
 # HTTP API
 curl -X POST http://localhost:5000/api/query \
@@ -116,11 +153,11 @@ server.query("Give me a summary of the forum data")
 
 ```bash
 # CLI
-python src/cli.py query "Tell me about Solana validators"
-python src/cli.py query "What are people saying about staking?"
-python src/cli.py query "Find posts about performance improvements"
-python src/cli.py query "What discussions are there about security?"
-python src/cli.py query "Show me posts related to transaction fees"
+python solana_cli.py query "Tell me about Solana validators"
+python solana_cli.py query "What are people saying about staking?"
+python solana_cli.py query "Find posts about performance improvements"
+python solana_cli.py query "What discussions are there about security?"
+python solana_cli.py query "Show me posts related to transaction fees"
 
 # HTTP API
 curl -X POST http://localhost:5000/api/query \
@@ -147,8 +184,8 @@ server.query("Find posts about performance improvements")
 
 ```bash
 # CLI
-python src/cli.py latest
-python src/cli.py latest --category "Governance" --limit 10
+python solana_cli.py latest
+python solana_cli.py latest --category "Governance" --limit 10
 
 # HTTP API
 curl "http://localhost:5000/api/latest"
@@ -163,8 +200,8 @@ server.get_latest_posts(category="Governance", limit=10)
 
 ```bash
 # CLI
-python src/cli.py most-viewed
-python src/cli.py most-viewed --category "Research" --limit 10
+python solana_cli.py most-viewed
+python solana_cli.py most-viewed --category "Research" --limit 10
 
 # HTTP API
 curl "http://localhost:5000/api/most-viewed"
@@ -179,8 +216,8 @@ server.get_most_viewed_posts(category="Research", limit=10)
 
 ```bash
 # CLI
-python src/cli.py most-commented
-python src/cli.py most-commented --limit 10
+python solana_cli.py most-commented
+python solana_cli.py most-commented --limit 10
 
 # HTTP API
 curl "http://localhost:5000/api/most-commented"
@@ -195,7 +232,7 @@ server.get_most_commented_posts(limit=10)
 
 ```bash
 # CLI
-python src/cli.py stats
+python solana_cli.py stats
 
 # HTTP API
 curl "http://localhost:5000/api/statistics"
@@ -208,8 +245,8 @@ server.get_forum_statistics()
 
 ```bash
 # CLI
-python src/cli.py search "Solana validators"
-python src/cli.py search "staking rewards" --limit 10
+python solana_cli.py search "Solana validators"
+python solana_cli.py search "staking rewards" --limit 10
 
 # HTTP API
 curl "http://localhost:5000/api/search?q=Solana%20validators"
@@ -224,7 +261,7 @@ server.semantic_search("staking rewards", limit=10)
 
 ```bash
 # CLI
-python src/cli.py categories
+python solana_cli.py categories
 
 # HTTP API
 curl "http://localhost:5000/api/categories"
@@ -239,14 +276,14 @@ Here are additional semantic search queries focused on specific Solana topics:
 
 ```bash
 # CLI
-python src/cli.py query "How does Solana achieve high throughput?"
-python src/cli.py query "What are the latest developments in Solana's governance?"
-python src/cli.py query "Tell me about Solana's approach to smart contracts"
-python src/cli.py query "What are the challenges with Solana's consensus mechanism?"
-python src/cli.py query "How does Solana handle network congestion?"
-python src/cli.py query "What are people saying about Solana's developer experience?"
-python src/cli.py query "Find discussions about Solana's token economics"
-python src/cli.py query "What are the recent proposals for Solana improvement?"
+python solana_cli.py query "How does Solana achieve high throughput?"
+python solana_cli.py query "What are the latest developments in Solana's governance?"
+python solana_cli.py query "Tell me about Solana's approach to smart contracts"
+python solana_cli.py query "What are the challenges with Solana's consensus mechanism?"
+python solana_cli.py query "How does Solana handle network congestion?"
+python solana_cli.py query "What are people saying about Solana's developer experience?"
+python solana_cli.py query "Find discussions about Solana's token economics"
+python solana_cli.py query "What are the recent proposals for Solana improvement?"
 
 # HTTP API
 curl -X POST http://localhost:5000/api/query \
@@ -311,7 +348,7 @@ For semantic search queries, each post will also include a `similarity_score` fi
 The interactive mode is the easiest way to explore the data and try different queries:
 
 ```bash
-python src/cli.py interactive
+python solana_cli.py interactive
 ```
 
 This will start a prompt where you can type natural language queries and see the results immediately. Type 'exit', 'quit', or 'q' to exit the interactive mode. 

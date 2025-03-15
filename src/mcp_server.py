@@ -8,6 +8,7 @@ using different approaches based on the query type.
 import json
 import re
 import os
+import sys
 import datetime
 from typing import Dict, List, Any, Optional, Tuple, Union
 from collections import Counter
@@ -17,6 +18,9 @@ from sklearn.metrics.pairwise import cosine_similarity
 import nltk
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
+
+# Add the project root to the Python path
+sys.path.insert(0, os.path.abspath(os.path.dirname(os.path.dirname(__file__))))
 
 # Import utility functions
 from src.utils import load_json, get_data_directory

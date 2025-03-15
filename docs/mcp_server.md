@@ -18,6 +18,43 @@ Install the required dependencies:
 pip install -r requirements.txt
 ```
 
+## Running the MCP Server
+
+There are three ways to run the MCP server:
+
+### Method 1: Using the wrapper scripts (recommended)
+
+```bash
+# Run the CLI
+python solana_cli.py interactive
+
+# Run the API server
+python solana_api.py
+```
+
+### Method 2: Install as a package
+
+```bash
+# Install the package in development mode
+pip install -e .
+
+# Run the CLI
+solana-cli interactive
+
+# Run the API server
+solana-api
+```
+
+### Method 3: Run the scripts directly
+
+```bash
+# Run the CLI
+python -m src.cli interactive
+
+# Run the API server
+python -m src.api_server
+```
+
 ## Usage
 
 ### Command-Line Interface
@@ -26,28 +63,28 @@ The MCP server can be used via a command-line interface:
 
 ```bash
 # Start interactive mode
-python src/cli.py interactive
+python solana_cli.py interactive
 
 # Process a natural language query
-python src/cli.py query "What are the latest posts in the Governance category?"
+python solana_cli.py query "What are the latest posts in the Governance category?"
 
 # Get the latest posts
-python src/cli.py latest --category Governance --limit 10
+python solana_cli.py latest --category Governance --limit 10
 
 # Get the most viewed posts
-python src/cli.py most-viewed
+python solana_cli.py most-viewed
 
 # Get posts with the most comments
-python src/cli.py most-commented
+python solana_cli.py most-commented
 
 # Get forum statistics
-python src/cli.py stats
+python solana_cli.py stats
 
 # Perform semantic search
-python src/cli.py search "Solana validators" --limit 10
+python solana_cli.py search "Solana validators" --limit 10
 
 # List all categories
-python src/cli.py categories
+python solana_cli.py categories
 ```
 
 ### API Server
@@ -56,7 +93,7 @@ The MCP server can also be used via an HTTP API:
 
 ```bash
 # Start the API server
-python src/api_server.py
+python solana_api.py
 ```
 
 #### API Endpoints
@@ -128,4 +165,14 @@ To add new query types:
 1. Add a new method to the `SolanaForumMCPServer` class
 2. Update the `query` method to route to your new method
 3. Add a new endpoint to the API server if needed
-4. Add a new command to the CLI if needed 
+4. Add a new command to the CLI if needed
+
+## Troubleshooting
+
+### Import Errors
+
+If you encounter an error like `ModuleNotFoundError: No module named 'src'`, it means Python can't find the `src` module. There are three solutions:
+
+1. **Use the wrapper scripts**: Use `solana_cli.py` and `solana_api.py` in the project root
+2. **Install the package**: Run `pip install -e .` to install the package in development mode
+3. **Use the Python module syntax**: Run `python -m src.cli` instead of `python src/cli.py` 

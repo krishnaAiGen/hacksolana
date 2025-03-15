@@ -24,6 +24,10 @@ A project for the Solana hackathon that scrapes data from the Solana forum and p
 │   └── cli.py         # Command-line interface
 ├── .env               # Environment variables (not tracked by Git)
 ├── .env.example       # Example environment variables
+├── setup.py           # Package installation script
+├── solana_cli.py      # CLI wrapper script
+├── solana_api.py      # API server wrapper script
+├── solana_download.py # Data scraper wrapper script
 └── requirements.txt   # Project dependencies
 ```
 
@@ -41,8 +45,26 @@ A project for the Solana hackathon that scrapes data from the Solana forum and p
    ```
 
 3. Run the data scraper:
+   
+   There are three ways to run the scraper:
+
+   #### Method 1: Using the wrapper script (recommended)
+   ```bash
+   python solana_download.py
    ```
-   python src/scripts/download_data.py
+
+   #### Method 2: Install as a package
+   ```bash
+   # Install the package in development mode
+   pip install -e .
+
+   # Run the scraper
+   solana-download
+   ```
+
+   #### Method 3: Run the script directly
+   ```bash
+   python -m src.scripts.download_data
    ```
 
 ## Data Description
@@ -66,23 +88,60 @@ The MCP server provides a flexible interface for querying Solana forum data usin
 2. **SQL-like Queries**: Using Pandas DataFrames for structured queries like finding the most viewed posts
 3. **Vector Search**: For semantic queries and natural language understanding
 
+### Running the MCP Server
+
+There are three ways to run the MCP server:
+
+#### Method 1: Using the wrapper scripts (recommended)
+
+```bash
+# Run the CLI
+python solana_cli.py interactive
+
+# Run the API server
+python solana_api.py
+```
+
+#### Method 2: Install as a package
+
+```bash
+# Install the package in development mode
+pip install -e .
+
+# Run the CLI
+solana-cli interactive
+
+# Run the API server
+solana-api
+```
+
+#### Method 3: Run the scripts directly
+
+```bash
+# Run the CLI
+python -m src.cli interactive
+
+# Run the API server
+python -m src.api_server
+```
+
 ### Using the MCP Server
 
 #### Command-Line Interface
 
 ```bash
 # Start interactive mode
-python src/cli.py interactive
+python solana_cli.py interactive
 
 # Process a natural language query
-python src/cli.py query "What are the latest posts in the Governance category?"
+python solana_cli.py query "What are the latest posts in the Governance category?"
 ```
 
 #### HTTP API
 
 ```bash
 # Start the API server
-python src/api_server.py
+python solana_api.py
 ```
 
 Then send requests to the API endpoints:
@@ -139,3 +198,13 @@ python examples/process_data.py
 # Run the MCP server example
 python examples/mcp_example.py
 ```
+
+## Troubleshooting
+
+### Import Errors
+
+If you encounter an error like `ModuleNotFoundError: No module named 'src'`, it means Python can't find the `src` module. There are three solutions:
+
+1. **Use the wrapper scripts**: Use `solana_cli.py` and `solana_api.py` in the project root
+2. **Install the package**: Run `pip install -e .` to install the package in development mode
+3. **Use the Python module syntax**: Run `python -m src.cli` instead of `python src/cli.py`
