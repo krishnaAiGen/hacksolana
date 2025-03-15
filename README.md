@@ -87,6 +87,7 @@ The MCP server provides a flexible interface for querying Solana forum data usin
 1. **Function-based Processing**: For simple queries like getting the latest posts
 2. **SQL-like Queries**: Using Pandas DataFrames for structured queries like finding the most viewed posts
 3. **Vector Search**: For semantic queries and natural language understanding
+4. **Post Evaluation**: For evaluating posts from different perspectives using OpenAI's API
 
 ### Running the MCP Server
 
@@ -135,6 +136,12 @@ python solana_cli.py interactive
 
 # Process a natural language query
 python solana_cli.py query "What are the latest posts in the Governance category?"
+
+# Get all posts from a specific category
+python solana_cli.py category "Governance"
+
+# Evaluate a post from different perspectives
+python solana_cli.py evaluate 123
 ```
 
 #### HTTP API
@@ -144,13 +151,25 @@ python solana_cli.py query "What are the latest posts in the Governance category
 python solana_api.py
 ```
 
-Then send requests to the API endpoints:
+Then send requests to the API endpoint:
 
 ```bash
-curl -X POST http://localhost:5000/api/query \
+# Natural language query (POST method)
+curl -X POST http://localhost:5001/query \
   -H "Content-Type: application/json" \
   -d '{"query": "What is the most viewed post on Solana?"}'
+
+# Natural language query (GET method)
+curl "http://localhost:5001/query?q=What%20is%20the%20most%20viewed%20post%20on%20Solana?"
+
+# Get all posts from a specific category
+curl "http://localhost:5001/query?type=category&category=Governance"
+
+# Evaluate a post from different perspectives
+curl "http://localhost:5001/query?type=evaluate&post_id=123"
 ```
+
+The API server now uses a single `/query` endpoint for all types of queries. It analyzes the query content and invokes the appropriate function based on the query type.
 
 See [MCP Server Documentation](docs/mcp_server.md) for more details on the server architecture and [Query Examples](docs/query.md) for a comprehensive list of example queries.
 
@@ -208,3 +227,17 @@ If you encounter an error like `ModuleNotFoundError: No module named 'src'`, it 
 1. **Use the wrapper scripts**: Use `solana_cli.py` and `solana_api.py` in the project root
 2. **Install the package**: Run `pip install -e .` to install the package in development mode
 3. **Use the Python module syntax**: Run `python -m src.cli` instead of `python src/cli.py`
+
+### OpenAI API Key
+
+For the post evaluation functionality, you need to set the OpenAI API key as an environment variable:
+
+```bash
+export OPENAI_API_KEY=your_api_key_here
+```
+
+Or add it to your `.env` file:
+
+```
+OPENAI_API_KEY=your_api_key_here
+```

@@ -85,6 +85,12 @@ python solana_cli.py search "Solana validators" --limit 10
 
 # List all categories
 python solana_cli.py categories
+
+# Get all posts from a specific category
+python solana_cli.py category "Governance" --limit 20
+
+# Evaluate a post from different perspectives
+python solana_cli.py evaluate 123
 ```
 
 ### API Server
@@ -96,30 +102,62 @@ The MCP server can also be used via an HTTP API:
 python solana_api.py
 ```
 
-#### API Endpoints
+#### API Endpoint
 
-- `POST /api/query`: Process a natural language query
+The API server now uses a single `/query` endpoint for all types of queries. It analyzes the query content and invokes the appropriate function based on the query type.
+
+- `POST /query`: Process a natural language query
   ```json
   {
     "query": "What is the most viewed post on Solana?"
   }
   ```
 
-- `GET /api/latest`: Get the latest posts
-  - Query parameters: `category` (optional), `limit` (default: 5)
+- `GET /query`: Process a query with parameters
+  - Query parameters:
+    - `q`: The query text for natural language processing
+    - `type`: Optional query type (latest, most-viewed, most-commented, stats, search, category, evaluate)
+    - `category`: Optional category name
+    - `post_id`: Optional post ID for evaluation
+    - `limit`: Maximum number of posts to return (default varies by query type)
 
-- `GET /api/most-viewed`: Get the most viewed posts
-  - Query parameters: `category` (optional), `limit` (default: 5)
+#### Examples
 
-- `GET /api/most-commented`: Get posts with the most comments
-  - Query parameters: `limit` (default: 5)
+```bash
+# Natural language query (POST method)
+curl -X POST http://localhost:5001/query \
+  -H "Content-Type: application/json" \
+  -d '{"query": "What is the most viewed post on Solana?"}'
 
-- `GET /api/statistics`: Get forum statistics
+# Natural language query (GET method)
+curl "http://localhost:5001/query?q=What%20is%20the%20most%20viewed%20post%20on%20Solana?"
 
-- `GET /api/search`: Perform semantic search
-  - Query parameters: `q` (required), `limit` (default: 5)
+# Get the latest posts
+curl "http://localhost:5001/query?type=latest"
+curl "http://localhost:5001/query?type=latest&category=Governance&limit=10"
 
-- `GET /api/categories`: Get a list of all categories
+# Get the most viewed posts
+curl "http://localhost:5001/query?type=most-viewed"
+curl "http://localhost:5001/query?type=most-viewed&category=Research&limit=10"
+
+# Get posts with the most comments
+curl "http://localhost:5001/query?type=most-commented&limit=10"
+
+# Get forum statistics
+curl "http://localhost:5001/query?type=stats"
+
+# Perform semantic search
+curl "http://localhost:5001/query?type=search&q=Solana%20validators&limit=10"
+
+# List all categories
+curl "http://localhost:5001/query?type=categories"
+
+# Get all posts from a specific category
+curl "http://localhost:5001/query?type=category&category=Governance&limit=20"
+
+# Evaluate a post from different perspectives
+curl "http://localhost:5001/query?type=evaluate&post_id=123"
+```
 
 ## Example Queries
 
@@ -130,6 +168,8 @@ The MCP server can handle a variety of natural language queries:
 - "Which posts have the most comments?"
 - "Show me forum statistics"
 - "Tell me about Solana validators"
+- "Give me all posts on Governance"
+- "For this post id 123, give me its evaluation"
 
 ## Implementation Details
 
@@ -158,14 +198,25 @@ The semantic search functionality uses:
 2. **Cosine Similarity**: To find the most relevant posts
 3. **NLTK**: For text preprocessing
 
+### Post Evaluation
+
+The post evaluation functionality uses OpenAI's API to evaluate posts from five different perspectives:
+
+1. **Technical Innovation**: How innovative the post is from a technical perspective
+2. **Ecosystem Growth**: How the post contributes to the growth of the Solana ecosystem
+3. **Community Benefit**: How the post benefits the Solana community
+4. **Economic Sustainability**: How the post contributes to economic sustainability
+5. **Decentralization**: How the post impacts decentralization
+
+Each perspective receives a score between 0.0 and 1.0, with an explanation for the score. The overall score is the average of all perspective scores.
+
 ## Extending the MCP Server
 
 To add new query types:
 
 1. Add a new method to the `SolanaForumMCPServer` class
 2. Update the `query` method to route to your new method
-3. Add a new endpoint to the API server if needed
-4. Add a new command to the CLI if needed
+3. Update the API server's `/query` endpoint to handle the new query type
 
 ## Troubleshooting
 
@@ -175,4 +226,20 @@ If you encounter an error like `ModuleNotFoundError: No module named 'src'`, it 
 
 1. **Use the wrapper scripts**: Use `solana_cli.py` and `solana_api.py` in the project root
 2. **Install the package**: Run `pip install -e .` to install the package in development mode
-3. **Use the Python module syntax**: Run `python -m src.cli` instead of `python src/cli.py` 
+3. **Use the Python module syntax**: Run `python -m src.cli` instead of `python src/cli.py`
+
+### OpenAI API Key
+
+For the post evaluation functionality, you need to set the OpenAI API key as an environment variable:
+
+```bash
+export OPENAI_API_KEY=your_api_key_here
+```
+
+Or you can pass it directly to the MCP server constructor:
+
+```python
+from src.mcp_server import SolanaForumMCPServer
+
+server = SolanaForumMCPServer(openai_api_key="your_api_key_here")
+``` 

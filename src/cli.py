@@ -54,39 +54,86 @@ def format_post(post: Dict[str, Any], index: Optional[int] = None) -> str:
     
     return "\n".join(lines)
 
+def format_evaluation(evaluation: Dict[str, Any]) -> str:
+    """
+    Format a post evaluation for display in the terminal.
+    
+    Args:
+        evaluation: The evaluation to format
+        
+    Returns:
+        Formatted evaluation string
+    """
+    lines = []
+    lines.append(f"Post: {evaluation.get('post_title', 'Unknown')}")
+    lines.append(f"URL: {evaluation.get('post_url', '')}")
+    lines.append(f"Category: {evaluation.get('category', 'Unknown')}")
+    lines.append(f"Overall Score: {evaluation.get('overall_score', 0):.2f}/1.00\n")
+    
+    if 'evaluations' in evaluation:
+        lines.append("Evaluation by Perspective:")
+        for perspective, data in evaluation['evaluations'].items():
+            lines.append(f"\n{perspective.title()} - Score: {data.get('score', 0):.2f}/1.00")
+            explanation = data.get('explanation', '')
+            wrapped_explanation = textwrap.fill(explanation, width=80, initial_indent="  ", subsequent_indent="  ")
+            lines.append(wrapped_explanation)
+    
+    return "\n".join(lines)
+
 def display_results(result: Dict[str, Any]):
     """
-    Display query results in the terminal.
+    Display query results in a formatted way.
     
     Args:
         result: The query result to display
     """
-    print(f"\nQuery type: {result['query_type']}")
+    query_type = result.get('query_type', 'unknown')
+    
+    print(f"\nQuery Type: {query_type}")
+    
+    if 'error' in result:
+        print(f"Error: {result['error']}")
+        if 'available_categories' in result:
+            print("\nAvailable categories:")
+            for i, category in enumerate(result['available_categories']):
+                print(f"{i+1}. {category}")
+        return
+    
+    if query_type == 'post_evaluation':
+        print(format_evaluation(result))
+        return
     
     if 'category' in result and result['category']:
         print(f"Category: {result['category']}")
         
-    print(f"Found {result['count']} results")
+    if 'query' in result:
+        print(f"Query: {result['query']}")
+        
+    if 'count' in result:
+        print(f"Found {result['count']} results")
     
-    if 'posts' in result:
+    if 'posts' in result and result['posts']:
+        print("\nResults:")
         for i, post in enumerate(result['posts']):
             print(f"\n{format_post(post, i+1)}")
-            if i < len(result['posts']) - 1:
-                print("-" * 80)
+            
+    elif 'posts_per_category' in result:
+        print("\nPosts per category:")
+        for category, count in result['posts_per_category'].items():
+            print(f"- {category}: {count} posts")
+            
+        if 'most_active_users' in result:
+            print("\nMost active users:")
+            for user, count in result['most_active_users']:
+                print(f"- {user}: {count} posts")
+                
+        if 'total_posts' in result:
+            print(f"\nTotal posts: {result['total_posts']}")
+            print(f"Total views: {result['total_views']}")
+            print(f"Total comments: {result['total_comments']}")
+    
     else:
-        # For statistics or other non-post results
-        for key, value in result.items():
-            if key not in ['query_type', 'count']:
-                if isinstance(value, dict):
-                    print(f"\n{key}:")
-                    for k, v in value.items():
-                        print(f"  {k}: {v}")
-                elif isinstance(value, list):
-                    print(f"\n{key}:")
-                    for item in value:
-                        print(f"  {item}")
-                else:
-                    print(f"{key}: {value}")
+        print(json.dumps(result, indent=2))
 
 def main():
     """Main CLI function."""
@@ -124,6 +171,15 @@ def main():
     # Categories parser
     subparsers.add_parser("categories", help="List all categories")
     
+    # Category posts parser (NEW)
+    category_parser = subparsers.add_parser("category", help="Get all posts from a specific category")
+    category_parser.add_argument("name", help="The category name")
+    category_parser.add_argument("--limit", "-l", type=int, default=20, help="Maximum number of posts to return")
+    
+    # Post evaluation parser (NEW)
+    evaluate_parser = subparsers.add_parser("evaluate", help="Evaluate a post from different perspectives")
+    evaluate_parser.add_argument("post_id", type=int, help="The ID of the post to evaluate")
+    
     # Interactive mode
     subparsers.add_parser("interactive", help="Start interactive mode")
     
@@ -132,7 +188,9 @@ def main():
     
     # Initialize the MCP server
     print("Initializing MCP server...")
-    server = SolanaForumMCPServer()
+    # Get OpenAI API key from environment variable
+    openai_api_key = os.environ.get("OPENAI_API_KEY")
+    server = SolanaForumMCPServer(openai_api_key=openai_api_key)
     
     # Process the command
     if args.command == "query":
@@ -164,6 +222,14 @@ def main():
         print("\nAvailable categories:")
         for i, category in enumerate(categories):
             print(f"{i+1}. {category}")
+    
+    elif args.command == "category":
+        result = server.get_posts_by_category(args.name, args.limit)
+        display_results(result)
+        
+    elif args.command == "evaluate":
+        result = server.evaluate_post(args.post_id)
+        display_results(result)
             
     elif args.command == "interactive":
         print("\nEntering interactive mode. Type 'exit' to quit.")
@@ -173,6 +239,8 @@ def main():
         print("- Which posts have the most comments?")
         print("- Show me forum statistics")
         print("- Tell me about Solana validators")
+        print("- Give me all posts on Governance")
+        print("- For this post id 123, give me its evaluation")
         
         while True:
             try:

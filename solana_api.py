@@ -10,4 +10,5 @@ import sys
 from src.api_server import run_app
 
 if __name__ == "__main__":
+    # Use port 5001 instead of the default 5000 to avoid conflicts
     run_app() 
