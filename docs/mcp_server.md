@@ -1,6 +1,6 @@
 # Solana Forum MCP Server
 
-A Multiple Context Protocol (MCP) server for querying Solana forum data. This project implements the MCP specification to provide a flexible interface for AI assistants to interact with Solana forum data.
+This document explains the architecture and implementation of the Multiple Context Protocol (MCP) server for querying Solana forum data.
 
 ## What is MCP?
 
@@ -12,22 +12,6 @@ The Model Context Protocol allows applications to provide context for LLMs in a 
 - Create MCP servers that expose resources, prompts and tools
 - Use standard transports like stdio and SSE
 - Handle all MCP protocol messages and lifecycle events
-
-## Project Structure
-
-```
-.
-├── src/               # Source code
-│   ├── __init__.py    # Package initialization
-│   ├── utils/         # Utility functions
-│   │   └── __init__.py # Utils package initialization
-│   ├── mcp_server.py  # Multiple Context Protocol server implementation
-│   ├── api_server.py  # HTTP API server
-│   └── cli.py         # Command-line interface
-├── solana_mcp.py      # MCP server wrapper script
-├── setup.py           # Package installation script
-└── requirements.txt   # Project dependencies
-```
 
 ## Installation
 
@@ -56,32 +40,176 @@ Using pip:
 pip install mcp
 ```
 
-### Installing Project Dependencies
+## Architecture
 
-Using uv:
+The Solana Forum MCP server is built using the FastMCP library, which provides a simple way to create MCP servers. The server consists of two main components:
 
-```bash
-# Install dependencies
-uv pip install -r requirements.txt
+1. **MCP Server**: Implemented in `solana_mcp.py`, this component defines the MCP tools and handles communication with AI assistants.
+2. **Data Provider**: Implemented as the `MockSolanaForumMCPServer` class, this component provides methods for querying Solana forum data.
+
+## MCP Tools
+
+The Solana Forum MCP server provides the following tools:
+
+### Example Queries
+
+#### Latest Posts Queries
+
+1. "What are the latest posts?"
+2. "Show me recent posts in the Governance category"
+3. "What's new in the sRFC category?"
+
+#### Most Viewed Posts Queries
+
+"What are the most viewed posts?"
+"Show me popular posts in the Research category"
+"What are the top posts on Solana?"
+
+#### Category Posts Queries
+
+"Give me all posts on Governance"
+"All posts in Research"
+"Posts from Announcements"
+
+#### Post Evaluation Queries
+
+"For this post id 123, give me its evaluation"
+"Evaluate post 456"
+"Post id 789 evaluation"
+
+#### Most Commented Posts Queries
+
+"Which posts have the most comments?"
+"Show me the most discussed topics"
+"What are the most active discussions?"
+
+#### Statistics Queries
+
+"Show me forum statistics"
+"What are the stats for the Solana forum?"
+"Give me a summary of the forum data"
+
+#### Semantic Search Queries
+
+"Tell me about Solana validators"
+"What are people saying about staking?"
+"Find posts about performance improvements"
+
+#### Topic-Specific Semantic Search Examples
+
+"How does Solana achieve high throughput?"
+"What are the latest developments in Solana's governance?"
+"Tell me about Solana's approach to smart contracts"
+
+### 1. get_latest_posts
+
+Get the latest posts from the Solana forum, optionally filtered by category.
+
+```python
+@mcp.tool()
+async def get_latest_posts(category: Optional[str] = None, limit: int = 5) -> str
 ```
 
-Using pip:
+### 2. get_most_viewed_posts
 
-```bash
-# Install dependencies
-pip install -r requirements.txt
+Get the most viewed posts from the Solana forum, optionally filtered by category.
+
+```python
+@mcp.tool()
+async def get_most_viewed_posts(category: Optional[str] = None, limit: int = 5) -> str
 ```
 
-## Getting Started
+### 3. get_most_commented_posts
 
-1. Run the MCP server:
-   ```bash
-   # Using uv
-   uv run solana_mcp.py
-   
-   # Or using python directly
-   python solana_mcp.py
-   ```
+Get the most commented posts from the Solana forum.
+
+```python
+@mcp.tool()
+async def get_most_commented_posts(limit: int = 5) -> str
+```
+
+### 4. get_forum_statistics
+
+Get general statistics about the Solana forum.
+
+```python
+@mcp.tool()
+async def get_forum_statistics() -> str
+```
+
+### 5. semantic_search
+
+Search for posts semantically related to a query.
+
+```python
+@mcp.tool()
+async def semantic_search(query_text: str, limit: int = 5) -> str
+```
+
+### 6. get_posts_by_category
+
+Get posts from a specific category.
+
+```python
+@mcp.tool()
+async def get_posts_by_category(category: str, limit: int = 20) -> str
+```
+
+### 7. evaluate_post
+
+Evaluate a specific post for sentiment, quality, and relevance.
+
+```python
+@mcp.tool()
+async def evaluate_post(post_id: int) -> str
+```
+
+### 8. universal_query
+
+Process any type of query about Solana forum data.
+
+```python
+@mcp.tool()
+async def universal_query(query_text: str) -> str
+```
+
+## Data Provider
+
+The `MockSolanaForumMCPServer` class provides methods for querying Solana forum data. It includes mock data for testing and demonstration purposes. In a production environment, this would be replaced with a real data provider that connects to a database or API.
+
+### Mock Data
+
+The mock data includes:
+
+- 5 sample forum posts with titles, authors, categories, dates, views, comments, and content
+- 5 categories with post counts
+
+### Methods
+
+The data provider implements the following methods:
+
+- `get_latest_posts`: Get the latest posts, optionally filtered by category
+- `get_most_viewed_posts`: Get the most viewed posts, optionally filtered by category
+- `get_most_commented_posts`: Get the most commented posts
+- `get_forum_statistics`: Get general statistics about the forum
+- `semantic_search`: Perform a semantic search for posts related to a query
+- `get_posts_by_category`: Get posts from a specific category
+- `evaluate_post`: Evaluate a specific post for sentiment, quality, and relevance
+- `query`: Process any type of query about Solana forum data
+
+## Running the MCP Server
+
+To run the MCP server:
+
+```bash
+# Using uv
+uv run solana_mcp.py
+
+# Or using python directly
+python solana_mcp.py
+```
+
+This will start the MCP server using the stdio transport, which allows AI assistants to communicate with the server.
 
 ## Using with Claude Desktop
 
@@ -111,127 +239,9 @@ Replace `/path/to/your/uv` with the path to your uv installation (e.g., `~/.loca
 
 3. You can now use the Solana MCP tools in your conversations with Claude.
 
-## MCP Tools
+## Using with AI Assistants
 
-The Solana Forum MCP server provides the following tools:
-
-### Example Queries
-
-#### Latest Posts Queries
-
-1. "What are the latest posts?"
-2. "Show me recent posts in the Governance category"
-3. "What's new in the sRFC category?"
-
-#### Most Viewed Posts Queries
-
-1. "What are the most viewed posts?"
-2. "Show me popular posts in the Research category"
-3. "What are the top posts on Solana?"
-
-#### Category Posts Queries
-
-1. "Give me all posts on Governance"
-2. "All posts in Research"
-3. "Posts from Announcements"
-
-#### Post Evaluation Queries
-
-1. "Give me all posts on Governance"
-2. "For this post id 123, give me its evaluation"
-3. "Evaluate post 456"
-
-#### Most Commented Posts Queries
-
-1. "Which posts have the most comments?"
-2. "Show me the most discussed topics"
-3. "What are the most active discussions?"
-
-#### Statistics Queries
-
-1. "Show me forum statistics"
-2. "What are the stats for the Solana forum?"
-3. "Give me a summary of the forum data"
-
-#### Semantic Search Queries
-
-1. "Tell me about Solana validators"
-2. "What are people saying about staking?"
-3. "Find posts about performance improvements"
-
-#### Topic-Specific Semantic Search Examples
-
-1. "How does Solana achieve high throughput?"
-2. "What are the latest developments in Solana's governance?"
-3. "Tell me about Solana's approach to smart contracts"
-
-### 1. get_latest_posts
-
-1. Get the latest posts from the Solana forum, optionally filtered by category.
-
-```python
-async def get_latest_posts(category: Optional[str] = None, limit: int = 5) -> str
-```
-
-### 2. get_most_viewed_posts
-
-Get the most viewed posts from the Solana forum, optionally filtered by category.
-
-```python
-async def get_most_viewed_posts(category: Optional[str] = None, limit: int = 5) -> str
-```
-
-### 3. get_most_commented_posts
-
-Get the most commented posts from the Solana forum.
-
-```python
-async def get_most_commented_posts(limit: int = 5) -> str
-```
-
-### 4. get_forum_statistics
-
-Get general statistics about the Solana forum.
-
-```python
-async def get_forum_statistics() -> str
-```
-
-### 5. semantic_search
-
-Search for posts semantically related to a query.
-
-```python
-async def semantic_search(query_text: str, limit: int = 5) -> str
-```
-
-### 6. get_posts_by_category
-
-Get posts from a specific category.
-
-```python
-async def get_posts_by_category(category: str, limit: int = 20) -> str
-```
-
-### 7. evaluate_post
-
-Evaluate a specific post for sentiment, quality, and relevance.
-
-```python
-async def evaluate_post(post_id: int) -> str
-```
-
-### 8. universal_query
-
-Process any type of query about Solana forum data.
-
-```python
-async def universal_query(query_text: str) -> str
-```
-
-## Using the MCP Server with AI Assistants
-
-The MCP server can be used with AI assistants that support the MCP specification. Here's how to use it:
+The MCP server is designed to be used with AI assistants that support the MCP specification. To use the server with an AI assistant:
 
 1. Start the MCP server:
    ```bash
@@ -239,15 +249,8 @@ The MCP server can be used with AI assistants that support the MCP specification
    ```
 
 2. Connect your AI assistant to the MCP server using the stdio transport.
-1
+
 3. The AI assistant can now use the MCP tools to query Solana forum data.
-
-
-## Implementation Details
-
-The Solana Forum MCP server is implemented using the FastMCP library, which provides a simple way to create MCP servers. The server uses a mock implementation of the SolanaForumMCPServer class, which provides methods for querying Solana forum data.
-
-Each MCP tool is implemented as an async function that calls the corresponding method on the SolanaForumMCPServer instance. The results are formatted into a readable string and returned to the AI assistant.
 
 ## Extending the MCP Server
 
@@ -296,4 +299,4 @@ OPENAI_API_KEY=your_api_key_here
 
 ## Further Resources
 
-For more information about the Model Context Protocol, visit the [MCP documentation](https://github.com/anthropics/anthropic-tools/tree/main/mcp).
+For more information about the Model Context Protocol, visit the [MCP documentation](https://github.com/anthropics/anthropic-tools/tree/main/mcp). 

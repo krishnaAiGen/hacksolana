@@ -1,0 +1,161 @@
+id,title,url,description,comments,original_poster,views,reply_count,comment_count,posts_count,created_at,activity,category_name,category_id,last_posted_at
+7,Welcome to the Solana Developer Forums,https://forum.solana.com/t/welcome-to-the-solana-developer-forums/7,"Welcome to the Solana Developer Forums
+The Solana Developer forums is a place for the Solana developer community to discuss core protocol proposals(SIMDs), application standards(SRFC), and more. In other words, this forum is a place for developers that want to improve the Solana developer ecosystem.
+What to do on this forum?
+Read and discuss Solana
+Form a team
+Attend discussions
+Share prototypes, code, and ask for feedback","[jacobcreech]: 
+
+[jacobcreech]: 
+
+[jacobcreech]: 
+
+",system,1264,0,3,4,2023-02-09T20:53:25.345Z,2023-02-24T17:39:57.075Z,Announcements,4,2023-02-24T17:39:57.075Z
+3,About the Announcements category,https://forum.solana.com/t/about-the-announcements-category/3,"Announcements from the Solana Foundation related to any of the following:
+Solana Foundation Delegation Program
+Solana Improvement Documents
+Solana Foundation Server Program",,system,432,0,0,1,2023-02-09T20:53:22.797Z,,Announcements,4,
+772,Upcoming SFDP Changes,https://forum.solana.com/t/upcoming-sfdp-changes/772,"Goal: The Solana Foundation wants to provide additional support for validators that participate in the SFDP and help them become self-reliant and sustainable, with the broader goal of maximizing decentralization, network resiliency, and performance of the network.
+Situation: The current SFDP structure does not provide strong enough incentives for validators to sustainably grow stake from outside the program. Additionally, lax performance requirements allows poorly-performing validators to continue to receive stake.
+Proposed solution: Improve Foundation staking to support validators at a higher level early on and less so over time as they grow, while maintaining a high performance requirement.
+What the Solana Foundation will do:
+Cover voting costs for validators in the first year with a tapering amount over time. For the first three months 100% of vote costs will be covered, for the next three months 75%, for the third three months 50% and for the final three months 25%, with vote coverage ending after 12 months
+Why? Start-up vote costs can be prohibitive to new, small validators. Time bounding this support encourages validators to achieve sustainable stake levels before support ends.
+Existing SFDP Participants: 1 year of tapering vote cost coverage starting when the new SFDP goes live. (see FAQ for timing)
+New SFDP Participants: 1 year of tapering vote cost coverage starting from their mainnet onboarding.
+Performance Requirements: Validators must meet the to be defined baseline requirements (see FAQ) for the epoch to be eligible for vote cost coverage.
+Match outside stake 1:1, up to a cap of 100,000 SOL from the Foundation.
+Why? The Foundation wants to assist in amplifying community stake decisions, encourage validators to attract outside stake, and engage with the broader Solana community.
+What is outside stake? Any stake that is not from the Foundation.
+Examples:
+If an SFDP participant has 10,000 SOL stake outside of the Foundation, then they would get 10,000 SOL from the Foundation, for a total of 20,000 SOL plus the base delegation. (see base delegation below)
+If an SFDP participant has 250,000 SOL stake outside of the Foundation, then they would get 100,000 from the matching portion of SFDP, for a total of 350,000 SOL plus the base delegation from the foundation (see base delegation below)
+Performance Requirements: Baseline requirements + acceptable skip rate performance. The Solana Foundation will change how the skip rate is computed and will use averages over a longer period of time to reduce variance when a validator has a low count of leader slots in a given epoch.
+Delegate a base amount of the remaining SOL after the matching portion, divided evenly among program participants.
+Why? Validators in the program need a minimum delegation to get on the leader schedule to be able to produce blocks
+How much will each validator get as a base delegation? Initially the amount split up between all participants will result in roughly 40,000 SOL per participant. This amount will decrease over time as more stake is matched by other participants and more Foundation stake is deposited into stake pools.
+Performance Requirements: Similar to existing baseline requirements outlined here with an increased requirements of vote credits.
+Increase performance targets closer towards the cluster averages.
+Why? High-quality, highly-reliable validators are paramount to a healthy network and the delegation program should only incentivize operators who can meet a high bar of performance
+Who will be impacted?: A vast majority of SFDP participants meet this high bar already, but there are a handful of operators who will have to change their operational strategy to achieve these higher performance standards.
+Deposit stake into stake pools.
+Why? This helps support the liquid staking ecosystem and further assist in amplifying community network orientation while allowing additional entities to decide how stake should be distributed across the network.
+FAQ:
+Do I need to participate in the SFDP to run a validator on Solana? No, the Solana validator set is permissionless and anyone can start a validator at anytime with no minimum delegation.
+When will these changes go live? The target go-live time frame is late January / early February 2024.
+What specifically will the performance requirements be? The Solana Foundation will update solana.org with the new performance requirements in the weeks leading up to the program changes going live and will notify community members through the Discord and email.
+Will I get a delegation even if I have very little outside stake? Yes, participants that have just started out or have not had initial success attracting stake will still get the base delegation.
+Will testnet requirements stay the same? Yes, participants will still be required to run a well-performing node on testnet to be eligible for mainnet delegations.
+Will onboarding change? Onboarding will continue as usual both before and after the roll out of the new SFDP changes.","[diman]: Hello Ben,
+Thank you very much for this forward movement; it has been long awaited (as well as TVC). I only have a question about this particular phrase:
+and more Foundation stake is deposited into stake pools
+So, my question is, will there be clear and transparent criteria announced regarding which pools will be eligible for this, the criteria for making it onto this list, exceptions (especially), frequency of reviewing the size of the stake from the Foundation, and so on?
+I am concerned about the following. I understand that pools are more flexible. However, at the same time, they might have closed delegation policies, and it seems from the foundation’s perspective, this would not be acceptable, as this distribution could entirely go to self-controlled validators (== some groups of validators that exist now might become pools, and then essentially nothing changes).
+Another point is that there might be real parties interested in opening such pools as part of their business, and it seems that in such a case, it would be an excellent entry point for them.
+So, it would be nice if such conditions are clear and transparent, and if the community could discuss them and help you in advance to model potential problems, similar to the issues with the delegation program, from which you are now trying to distance yourself (thank you very much for your hard work in doing so).
+UPD.
+Perhaps, to ensure that the current changes are effective immediately, it might be a good idea to simply remove the ‘and’, carefully reconsider it, and then add it back later.
+It looks like a legal stuff - to leave a clause in the foundation’s program that hypothetically allows for opaque management of funds. Or, alternatively, make amendments in the future through a secondary document.
+My only wish is to move forward without embedding old problems into new implementations.
+With for Solana
+Dim An
+
+[max.kaplan]: Hi Ben,
+Thanks for posting the above changes. I think they are definitely net positive. I wanted to ask a few questions though:
+Is anything going to be done to make firedancer a valid client? Right now, I think many are probably afraid to run it, out of fear of losing stake, because of version differences between firedancer and the labs client. It would be good to get some clarity.
+The voting cost changes you posted above I think assume that no one starts running a mainnet validator until they are onboarded through the delegation program, but I’ve seen people where this is not the case. For example, say Bob runs a testnet validator and signs up for delegation program. He could be earning TdS rewards, but before he is actually “onboarded” onto mainnet, he could still run a mainnet validator, just not receiving any stake from foundation. This could actually be viewed as a good thing because Bob is proactively looking for outside stake before getting some from the foundation. In this case, if he does that, can we get some clarity on how the voting costs would be subsidized? Would it be the first few months of voting costs AFTER he is onboarded to mainnet? Would it be the voting costs he incurred when he actually spun up the mainnet validator before he was onboarded to mainnet via the delegation program? etc.
+If the foundation is going to be supplying stake pools with funds, I think it would be really great if the foundation can incentivize transparency around delegation of stake pools in terms of which validators they delegate to. For example, Marinade does a great job of this with their dashboard. Some stake pools have dashboards, but the formula / delegation strategy isn’t transparent. Some stake pools have no dashboards at all. The easiest way for new validators to get a good chunk of stake is to get delegation from a stake pool. If the foundation is going to be staking more with stake pools, transparency from stake pools is going to be even more important. Imagine how frustrating it would be for a new validator trying to get stake from a stake pool, but having no idea why they aren’t receiving any yet because it’s a black box. I think this would align incentives well.
+Anyway, thanks for posting this and this is definitely net positive IMO!
+Max
+
+[max.kaplan]: Also, If the foundation is going to try to deposit stake into stake pools, I hope there’s something that can be done to ensure that stake pools won’t just default to delegating mostly to validators running with 0% commission. That’s also the most common way to “build stake” for a validator. But if validators are on their own to go and get stake (which I do agree is a good thing), what will likely happen is validators will run at 0% commission while the stake pool makes 2%. Then the program isn’t really supporting validators anymore, it’s supporting stake pools. I don’t really have an answer unfortunately for how to solve this, but it’s something to think about. Ideally, it’s incentivizing stake pools to not just stake with the highest APY validators, rather to stake with well-run validators that are doing good for the network which aligns more with the original post here.
+
+[Ben.Hawkins]: Hello Dim An,
+Thank you for your thoughtful feedback.
+Regarding your query about the foundation’s stake being deposited into stake pools, I want to assure you that we are deeply committed to the overall health of the Solana network. While we will be using our own discretion, our approach to selecting stake pools will be guided by a set of criteria designed to foster decentralization, network resilience, and the engagement of a diverse set of validators.
+Here are some key considerations we will use in our decision-making process:
+Decentralization: We prioritize stake pools that contribute to a more distributed and decentralized network. This includes evaluating the geographical distribution and the diversity of the validators in the pool.
+Staking Criteria Transparency: We expect stake pools to have clear, articulated criteria for staking. This includes their policies for selecting and onboarding validators, which should be openly accessible to the community.
+Number of Validators: The inclusion of a broad range of validators is crucial. We will look favorably upon pools that support a larger number of validators, as this aligns with our goal of broadening participation across the network.
+Willingness to Add New Validators: Pools that demonstrate a commitment to continually adding new, capable validators will be considered more favorably. This is part of our effort to encourage growth and fresh talent within the Solana ecosystem.
+Performance Standards: Consistent with the SFDP’s ethos, stake pools must adhere to high-performance standards. This includes maintaining a validator set with a good track record in terms of uptime, participation, and other key performance metrics.
+Your concerns about the potential for closed delegation policies and self-controlled validators are valid and have been taken into consideration. We will ensure that our process for selecting stake pools discourages these practices and promotes a more open and equitable ecosystem.
+Finally, we welcome ongoing community dialogue and input. Your suggestion to model potential problems and discuss them openly is well-received
+.
+We are committed to revising and adapting our approach as necessary, keeping the community’s best interests at the forefront. Thank you once again for your dedication to Solana and for helping us refine our processes. Your support and constructive criticism are invaluable as we strive to improve and evolve the SFDP.
+With gratitude,
+Ben Hawkins
+
+[Ben.Hawkins]: Hello Max,
+Thank you for your insightful questions and the positive feedback on the recent updates to the Solana Foundation Delegation Program (SFDP). I’m happy to provide some clarity on your queries.
+Firedancer Client Integration: We are actively working towards integrating Firedancer as a robust client in the Solana ecosystem. Once Firedancer is live on mainnet, running either the Firedancer or the Solana Labs client will not only be encouraged but also fully supported within the SFDP framework. We are making necessary adjustments to accommodate a multi-client landscape, ensuring a smooth and efficient operation for validators regardless of their chosen client.
+Voting Cost Subsidy for Early Mainnet Validators: We acknowledge and appreciate the proactive efforts of validators like the example you mentioned. It’s indeed beneficial for validators to begin attracting stake on mainnet as early as they can. Concerning the voting costs, the subsidy will commence from the time a validator is officially onboarded onto mainnet through the delegation program. This means that any voting costs incurred prior to formal onboarding will be the responsibility of the validator. Our aim here is to encourage validators to be self-reliant and proactive, while also providing support once they are part of the mainnet delegation program.
+Stake Pool Transparency and Delegation: Your concerns regarding the transparency of stake pools are well-taken. As I mentioned in my response to Dim An, we are committed to ensuring that stake pools receiving funds from the Foundation operate with a high degree of transparency and fairness. This includes clear disclosure of their delegation strategies and decision-making processes. We believe that such transparency is crucial for the trust and effectiveness of the ecosystem, especially for new validators seeking stake from these pools. We will continue to work towards aligning incentives and ensuring clarity in how these stake pools operate.
+We deeply value the community’s input and are dedicated to continuous improvement. The goal is to create a robust, fair, and thriving Solana network, and your feedback plays a vital role in this journey. Thank you again for your engagement and support.
+Best regards,
+Ben Hawkins
+
+[max.kaplan]: All makes sense to me and sounds great. Thanks!
+
+[cfl0ws]: Thank you for this thoughtful approach, Ben. The suggested changes appear to me to be incremental and beneficial, taking initial steps in the right direction. I’ve personally found iterative approaches like this to be very effective.
+The goal of helping validators become “self-reliant and sustainable” resonated strongly with me. The proposed changes align well with this goal.
+Performance measurement is a key aspect of the plan and I’ll hold additional comments related to it until more details are published. Generally, I’d suggest that any performance measurements should be independent of stake amount. By this I mean a lower-staked validator should be able to achieve the same performance benchmark as a higher-staked validator, all other factors being equal.
+Regarding the matching program, is the match based on direct stake and does it exclude stake received from stake pools like Marinade?
+And to confirm an example -
+ Ben.Hawkins:
+If an SFDP participant has 10,000 SOL stake outside of the Foundation, then they would get 10,000 SOL from the Foundation, for a total of 20,000 SOL plus the base delegation. (see base delegation below)
+In this example the total delegation received would be 20k (match) + 40k (base) = 60k (total), correct?
+Some additional comments -
+Maximum commission at 100% feels high to me and inconsistent with the goal of a validator becoming sustainable. I imagine it’s unlikely for a validator to attract additional stake at 100% commission (unless via backroom deals) and I think allowing a validator to keep all the rewards from a foundation delegation is setting a potentially harmful precedent (or at least doesn’t discourage greed).
+Total stake of 3.5 million or less also feels high to me. I’d be surprised if validators staked at 1 million or more would even really notice the benefit of a max 140k delegation.
+At first I was thinking that the cap should be the lowest staked amount of validators above the halt line, i.e. within the Nakamoto Coefficient. Then I checked and found that number is currently 3.8 million.
+Now I’m thinking that a cap of around 1.5 million makes sense. In this case the maximum foundation delegation would represent at the least 10% of a validator’s total stake.
+Finally a note on categorizing validators as “small”. I’ve been thinking of it more as “low(er)-staked” over the past few months, as some may interpret the term “small” as a negative indicator of capability, commitment and dedication.
+Thanks again for your work here and I look forward to following its evolution!
+
+[Ben.Hawkins]: Hello Chris ,
+I’m glad to hear that the approach resonates with you, and I appreciate your thoughts on performance measurements, the matching program, and the broader aspects of the initiative.
+Matching Program and Stake Calculation: Yes, your understanding of the matching program is correct. For example, if an SFDP participant has 10,000 SOL in stake outside of the Foundation, they would receive an additional 10,000 SOL match from the Foundation, resulting in a total of 20,000 SOL. Plus, with the base delegation, the total would be ~60,000 SOL. Keep in mind that as the more stake is matched through out the participants the base delegation will decrease.
+Commission and Sustainability: Regarding the maximum commission, there seems to be a misunderstanding. We are keeping the maximum commission unchanged at 10% for now. Market forces are expected to naturally encourage lower commissions. The notion of a 100% commission does not align with our policies or the spirit of the SFDP.
+Cap on Total Stake: The current maximum stake threshold is indeed 3.5 million SOL, but we are actively considering a cap of around 1 million SOL. This is still under discussion, and we intend to provide more details closer to the program’s launch. We are carefully evaluating what would be most effective, especially at the boundaries of this threshold.
+Stakepool Stake as Outside Stake: For the time being, stake received from stake pools like Marinade will be considered as outside stake. However, this is an aspect of the program that could evolve over time. We are committed to an incremental and adaptive approach, ensuring that the program remains effective and relevant.
+Thank you once again for your valuable input. It’s through such constructive dialogues that we can refine and enhance the SFDP. We look forward to your continued participation and insights as the program evolves.
+With appreciation,
+Ben Hawkins
+
+[Brian]: This is a huge upgrade. I’m fully supportive of these changes and expect them to have significant and immediate benefits to the health of the cluster. Thank you for all of your work on this project. Looking forward to the rollout of these changes ASAP!
+Brian Smith, Jito contributor
+
+[cfl0ws]: Thank you for the thorough and thoughtful feedback, here are a few additional comments…
+ Ben.Hawkins:
+Matching Program and Stake Calculation: Yes, your understanding of the matching program is correct. For example, if an SFDP participant has 10,000 SOL in stake outside of the Foundation, they would receive an additional 10,000 SOL match from the Foundation, resulting in a total of 20,000 SOL. Plus, with the base delegation, the total would be ~60,000 SOL. Keep in mind that as the more stake is matched through out the participants the base delegation will decrease.
+Please say more about how the base delegation decreases as the matched stake increases. I don’t think I caught that the first time around.
+ Ben.Hawkins:
+Commission and Sustainability: Regarding the maximum commission, there seems to be a misunderstanding. We are keeping the maximum commission unchanged at 10% for now. Market forces are expected to naturally encourage lower commissions. The notion of a 100% commission does not align with our policies or the spirit of the SFDP.
+It looks like I misread the 100% from here, which is intended for testnet.
+ Ben.Hawkins:
+Cap on Total Stake: The current maximum stake threshold is indeed 3.5 million SOL, but we are actively considering a cap of around 1 million SOL. This is still under discussion, and we intend to provide more details closer to the program’s launch. We are carefully evaluating what would be most effective, especially at the boundaries of this threshold.
+Glad to hear it!
+ Ben.Hawkins:
+Stakepool Stake as Outside Stake: For the time being, stake received from stake pools like Marinade will be considered as outside stake. However, this is an aspect of the program that could evolve over time. We are committed to an incremental and adaptive approach, ensuring that the program remains effective and relevant.
+Seems beneficial to me, as the stakepools typically delegate to validators consistent with the values of the SDFP.
+Finally, I like the idea of supporting multi-client infrastructure. For example, we’re currently running and Labs and Firedancer validator on testnet, effectively doubling our cost. It would be fantastic if the SFDP might additionally support validators who choose to run multiple validators using multiple clients on testnet, to further encourage client diversity.
+
+[Bryanzk]: Hi @Ben.Hawkins,
+Thank you for all the previous detailed explanations. As someone eager to join the SFDP, I have a few questions that need your help! I appreciate it in advance!
+Re: voting cost covering and matching program. How exactly are they going to be implemented? When and through which channel will they be done?
+Re: The based delegation. How will it be implemented as well?
+Re: The based delegation and the stake being deposited to the pools. I don’t understand the relationship between these 2. Does it mean that the base delegation will be sent to the pools first, then we, the SFDP newcomers, will get the base delegation from the pools?
+A beginner question: Let’s say I only have one metal server. The proper way to join SFDP is to use this server to pass the testnet performance benchmark first, then switch the same server to the mainnet. And everything starts from there. Am I right?
+If I’m running Jito’s validator node, am I qualified for this program?
+Looking forward to your answers. And wish all the best for the SFDP!!
+
+[7LayerMagik]: Might be nice if the stakeweight aspect isnt a hard cap but rather a curve with an upper bound. Like, if you hit 1 million sol stake you then just lose 100k sol + stake?
+Another thought – personally I’d like to see the Sol going to stakepools only used for algorithmic delegation vs adding to the sub-pools controlled by voting. The Marinade directed stake pools are weirdly weighted these days and imo they’re just being value extracted by parasitic behavior (i.e. people with lots of vote weight and commissions that wouldn’t get them much stake otherwise).
+
+[jorzhik]: This is a very good idea and will allow you to develop, many are just afraid to start
+
+[Gabynto]: The Solana Foundation’s updated SFDP will better support validators by covering their voting costs for the first year and matching outside stake to boost their growth. With stricter performance requirements and a focus on decentralization, these changes aim to strengthen the network and help validators become self-sustaining.
+
+",Ben.Hawkins,7267,6,14,15,2023-12-05T16:40:05.035Z,2024-07-31T10:28:44.119Z,Announcements,4,2024-07-31T10:28:44.119Z

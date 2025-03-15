@@ -1,0 +1,827 @@
+id,title,url,description,comments,original_poster,views,reply_count,comment_count,posts_count,created_at,activity,category_name,category_id,last_posted_at
+484,A Framework for Governance - Introduction,https://forum.solana.com/t/a-framework-for-governance-introduction/484,"Solana has reached a certain level of maturity, with almost 3.5yrs of Mainnet-Beta, the development of an independent validator client (Firedancer), alternative releases of the default client (Jito), a growing distribution of stake (NC of 30) and a vibrant community of validators, developers, NFT communities and more.
+With this in mind, it is proposed to develop a formalized framework and implementation for governance on Solana.
+This is necessary to foster continued decentralization of power in the network, moving away from single decision-making authorities and enabling sustainable collaboration between client teams.
+Governance on Solana currently exists minimally and is used only rarely. Primarily protocol-altering changes go through levels of social consensus with ultimate authority resting with the core engineers at Solana Labs.
+On-chain voting is possible through the feature program, however lacks functionality and visibility and has barely been used in practice.
+A group of interested community members is developing ideas around governance to identify the most suitable path forward.
+Ad-hoc discussion takes place in the Staking Alliance Discord and ideas are being captures on this Gitbook
+This forum will be used for more specific and formulated proposals to be discussed and finalized, with the intention of then putting these to a vote.
+The goal is to develop a framework for governance, with further discussion taking place at Breakpoint 2023 in Amsterdam, and beginning an implementation in Q1 2024.
+To ensure low friction and a smooth transition to an active governance ecosystem the initial scope should be limited in scope to the most critical aspects to maintain focus and avoid governance fatigue amongst participants.","[laine]: 
+
+[cfl0ws]: Thanks for posting these. To help orient those new to the discussions, we’ve been focusing conversations on the following topics -
+Why
+There’s been a general agreement among discussion participants to-date that a more formalized and inclusive governance process is necessary for reasons described in the “Why” section of the Gitbook linked above (I’m limited to only two links as a new user.)
+Who
+“Who” and “What” are the areas we’ve been focused on defining first, as pre-requisites for determining the “How”.
+Currently three “Who” proposals are on the table and can be discussed here
+What
+Currently two “What” proposals are on the table and can be discussed here
+How
+There’s been a general agreement among discussion participants to-date that a more formalized and inclusive governance process.
+
+[Gabynto]: Hey there,
+Thanks for sharing these thoughts on Solana’s governance! It’s exciting to see the community gearing up for more structured decision-making. Moving towards a formalized framework makes a lot of sense given Solana’s growth and diversity of stakeholders.
+It’s clear there’s already a solid foundation with nearly 3.5 years on Mainnet-Beta, alternative client developments like Firedancer and Jito, and a vibrant mix of validators, developers, and NFT communities.
+Your point about decentralizing power and fostering collaboration between client teams is crucial for long-term sustainability. I agree that while on-chain voting exists, it’s not yet fully utilized. Transitioning to a more active governance model could really empower the community and streamline decision-making.
+I’m glad to hear there’s momentum building around this, with discussions happening in places like the Staking Alliance Discord and documented ideas on Gitbook. And planning to finalize proposals at Breakpoint 2023 sounds like a great step forward.
+Starting small and focused makes a lot of sense to avoid overload and keep everyone engaged. This approach will help in laying down a solid foundation without overwhelming participants.
+Looking forward to seeing how these ideas evolve and contribute to Solana’s future. Let’s keep the momentum going!
+
+",laine,1986,0,3,4,2023-08-31T13:04:31.101Z,2024-07-23T11:47:35.494Z,Governance,11,2024-07-23T11:47:35.494Z
+436,About the Governance category,https://forum.solana.com/t/about-the-governance-category/436,"A place for discussion on governance for the Solana network. This can include feature activations, validator voting mechanisms, and more.",,jacobcreech,462,0,0,1,2023-08-07T15:50:19.071Z,,Governance,11,
+3295,Proposal for an In-Protocol Distribution of Block Rewards to Stakers,https://forum.solana.com/t/proposal-for-an-in-protocol-distribution-of-block-rewards-to-stakers/3295,"Summary
+A new mechanism is proposed to allow validators to set a block reward commission and share part of their block revenue with their delegators and to receive their own block rewards to an account of their choice.
+Commission rates from validator vote accounts will be used by the protocol to calculate post-commission rewards that will be automatically distributed to delegated stake accounts at the end of each epoch
+Block rewards after commission will be distributed to an account of the validators choosing. The default will be the validator identity account. If a validator takes no action then block rewards will continue go to the Identity account.
+Motivation
+Delegated stake directly increases the number of blocks that a validator is allocated in an epoch leader schedule but the core protocol doesn’t support diverting any of that extra revenue to stake delegators.
+Due to the lack of core protocol support for distributing block revenue to stakers, validators have developed their own solutions which are not enforced by the core protocol. For example, some validators use NFTs or LSTs to distribute some amount of their block revenue, however this requires trust in the validator’s honesty and accuracy, while making it difficult to surface this information and accurately track resulting yields.
+With the option to specify a collector account validators can improve operational security by diverting their revenue into a multisig or cold wallet rather than the identity hot wallet that sits on their servers.
+Additionally the ability to specify arbitrary collector accounts, including PDAs, means that additional custom functionality and distribution mechanisms can be built on top of this, such as auto-conversion to USDC or a validator LST, or deployment to Defi.
+Changes in the spirit of this proposal
+Should any changes be necessary to ensure a safe and functioning implementation, such changes will be permitted without further governance requirements so long as the spirit of the proposal is maintained.
+Voting Process
+The voting process will proceed as follows:
+Discussion period: Validators are encouraged to participate in discussions to address any concerns.
+Stake weight collection period: Stake weights will be captured and published for voting. Validators will have the opportunity to verify these weights.
+Vote token distribution will require validators to utilize the adapted Jito Merkle Distributor tool (available at GitHub - laine-sa/solgov-distributor: A merkle-based token distributor for the Solana network that allows distributing a combination of unlocked and linearly unlocked tokens.) to claim the vote tokens corresponding to their stake weights.
+Three token destination accounts will be created for voting choices: Yes, No, and Abstain.
+Validators will have a designated period to vote by sending their tokens to the respective addresses.
+After the voting period, if the sum of Yes votes is equal to or greater than 2/3 of the total sum of Yes + No votes, the proposal will pass.
+The proposal has a quorum threshold of 33%, abstentions count towards the quorum.
+All announcements regarding this process will be made in the Governance category of the Solana Developer Forums.
+Stake weights and a tally script will be available at solgov-distributor/votes at master · laine-sa/solgov-distributor · GitHub
+Timeline
+Epoch 747 - 751: Discussion period
+Epoch 752: Stake weights captured and published, discussion/confirmation of stake weights
+Epochs 753 - 755: Voting tokens available to claim, voting completes at the end of epoch 755
+Discussion
+Active participation in discussions about this proposal is crucial. Discussions may also take place on the Solana Developer Forums or on Discord Governance channel. It’s encouraged to consolidate discussions to ensure broad participation and minimize redundancy.
+References
+ 
+ github.com/solana-foundation/solana-improvement-documents
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ SIMD-0123: Block Revenue Distribution
+ 
+ 
+ main ← jstarry:block-fee-distribution
+ 
+ 
+ 
+ opened 08:20AM - 10 Mar 24 UTC
+ 
+ 
+ 
+ 
+ jstarry
+ 
+ 
+ 
+ 
+ +174
+ -0
+ 
+ 
+ 
+ 
+ 
+ Delegated stake directly increases the number of blocks that a validator is allo…cated in an epoch leader schedule but the core protocol doesn't support diverting any of that extra revenue to stake delegators. This proposal introduces a way to set a commission for validator collected block fees and tips and then have the rest of the fees distributed to delegated stake accounts.
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ github.com
+ 
+ 
+ 
+ 
+ GitHub - laine-sa/solgov-distributor: A merkle-based token distributor for the Solana...
+ 
+A merkle-based token distributor for the Solana network that allows distributing a combination of unlocked and linearly unlocked tokens.","[byse]: This change will affect small validators greatly. They will be ineviteably forced by the stake pools to set their share of block rewards to 0 level. The only thing that will be left - side deals like sandwiching.
+At the same time this change does not affect big private validators. They even still charge commission for inflation rewards with no outflow of stake noticed.
+So the outcome for the network will be net bad:
+Stakers possibly get +1% APY max. Which IMO does not matter considering the volatility of an asset.
+No additional competition between stake pools as they will all have the same “selling point”. Nothing special to drive a lot of retail stake there really.
+No effect on big private validators as they have no incentive to share block rewards
+Great decrease in earnings for the validators depending on stake pools. This will cause decrease of number of those validators and their qualuity.
+
+[Leapfrog]: This proposal will no doubtably deter the casual developers / independent technologists / students / enthusiasts etc. from making the jump into Solana Validation (which has a fairly high bar as it stands) and becoming part of the active independent group of validators that run Solana. It will also suffocate existing validators and reduce the validator group to small subset of what it is.
+Validator earnings for an independent who is trying to compete for stake through offering a competitive APY will have no sustainable way of surviving if they are forced to give away even their block rewards from the small amount of stake they obtain. (This leaves no revenue stream other than offering their mempool out to sandwiches)
+New / current Validators already have large running costs. And so making block rewards yet another race to zero competitive game will strangle the network and deter interested small participants who will simply invest their time and money into alternative networks. With them go their social networks too.
+I believe we need every validator we can get, so VOTE NO to this proposal, and so keep and encourage the vitality of Solana!
+
+[meyerbro]: The only goal of this proposal is to make some validators happy with legal implications of holding rewards of stakers for a moment before sending them after every epoch. They never had issues before while holding 50% of block rewards in the past though.
+But the consequences of it will be the end of hundreds or even thousands of small validators as they will lose the last source of income they currently have.
+Stake continues going to whales instead of small validators or pools and there are just a feel pools that currently support a great number of validators in a fair way. And these require all validators to be running on maximum commission of ZERO. If this proposal gets approved, pools will squeeze validators to the maximum and push them to negative income, while pools still enjoy a healthy 5% fee or more.
+This SIMD only came because of SIMD-96 was approved when most validators voted yes to get block rewards that were being burnt! But now, with SIMD-123 we mostly regret this decision as if this gets approved we will not just lose this 50%, but possibly even more.
+The approval of this SIMD-123 will cause great loss to the Solana community and even more centralization of stake and this is one of the reasons big validators (the usual influencers) are keen on getting this approved.
+Please vote NO to this SIMD and keep us alive, everyone deserves to survive.
+
+[bullmoosesystems]: I do think this would be a nice feature, but also agree that it will completely wipe out the independent validator community. If this goes through, I would bet on &lt;300 total validators in the entire Solana ecosystem come the next bear market. Solana already struggles with a decentralization narrative given the performance requirement of machines, and this will make it worse.
+Maybe that’s ok and no one actually cares about decentralization that much, but seems like the risk is pretty high for a pretty small benefit to stakers.
+
+[mariaeverstake]: Hello everyone!
+We would like to emphasize our support for the concerns surrounding this proposal, particularly its potential impact on the validator ecosystem. Implementing this proposal could result in the reduction of many small validators, significantly decreasing the total number of active validators on the network.
+This reduction could, in turn, result in a higher degree of centralization. Such an outcome would contradict Solana’s broader vision of fostering a decentralized and resilient blockchain ecosystem.
+Decentralization is a fundamental principle that ensures the security, censorship resistance, and long-term sustainability of the network. We believe it is crucial to carefully consider the implications of this proposal to avoid unintended consequences that may hinder Solana’s growth and decentralization efforts.
+
+[adi_vb]: We will vote NO!
+As most of other validators already commented this is not going to help the small validators. Currently only 150/1400 validators have more than 300k stake, which means that around 90% are small validators relying on stake pools and SFDP and they will be impacted negatively by this proposal if it goes live.
+It is already hard to survive, very competive stake pools and more and more expensive the hardware.
+
+[dev_null]: While the intent of this SIMD is good, it would be naïve to overlook the potential side effects.
+Several features of this SIMD align with practices I already follow manually, and I support the automation and transparency of that portion. The ability to programmatically direct 5% of block rewards to a collector account would greatly improve our transparency. We donate to animal welfare every month, and this is a manual process that could be improved with this SIMD. Additionally, there’s currently little traceability regarding where the funds ultimately go. This SIMD would allow us to build a front-end to display this in a provable and transparent way.
+There are other pros mentioned that I won’t dive into for the sake of brevity, but I want to emphasize that I understand and appreciate the motives behind this feature.
+Now for the downside. As others have pointed out, this change gives sandwichers and large validators a clear advantage. It also enables a framework for stake pools to squeeze validators harder. While I agree that relying on stake pools is not a sustainable business model, they nonetheless do exist, and we must acknowledge the impact on small/medium-sized validators. I also anticipate that the barrier to entry will rise with this change. It can be tough to break even already without putting block rewards on the table. I guess break even has changed drastically since I last looked so forget that point.
+
+[ily-validator]: I oppose this proposal.
+Currently, many small-scale validators are operating their validator servers at the break-even point and are struggling to cover monthly server costs.
+If SIMD-123 is passed, as was the case with JITO MEV, it will inevitably be added to the SFDP requirements. In that scenario, I believe that any validators other than the major ones will not be able to survive.
+Furthermore, since the same functionality can be achieved with sanctum LST and the Jito tip router, there are no benefits other than from a legal standpoint. Wouldn’t the side effects of SIMD-123 be too great?
+
+[Grigorii]: It is obvious to all validators that this proposal is directed against small and medium-sized validators. The strategies for delegating stakes pools now look like this, so that a stakes gender-dependent validator earns as little as possible with a 0% commission. And they want to take away this earnings from him in the form of priority fees. And it doesn’t seem to matter at all how small and medium-sized validators vote for this proposal, as long as the interest of large validators is obvious. Here are statistics on the number of validators and their total steak in this range.
+100 - 100 000 SOL	-	903 validators, total stake - 28 073 960 SOL
+100 001 - 300 000 SOL	-	288 validators, total stake - 53 675 219 SOL
+300 001 - 1 000 000 SOL	-	67 validators, total stake - 35 556 740 SOL
+1 000 000+ SOL 		-	84 validators, total stake - 266 573 515 SOL
+If the sum of Yes votes is equal to or greater than 2/3 of the total sum of Yes + No votes, the proposal will pass.
+Let’s assume that small and medium-sized validators reasonably vote against according to the size of their stake. That is, 1191 validators disagree with this proposal. But their total stake is less than 82 million SOL. While 151 validators have a total stake of over 300 million SOL. There is no scenario where small and medium validators could reject this proposal if a group of large validators disagrees with their opinion.
+
+[stakerRash]: The proposal may seem appealing on the surface, but in reality, it poses a serious threat to the sustainability of smaller validators and the health of Solana’s validator ecosystem.
+Right now, validators already face pressure to lower commission rates to attract stake. Many small validators set their commissions to 0% to stay competitive. If this proposal passes, it will push them to give up 100% of their block production rewards as well, making it impossible to sustain operations.
+key risks:
+Race to 0% commission on all income – Small validators will have no choice but to forgo earnings from block production just to compete, worsening centralization risks.
+Unfair advantage for larger validators – Those with deep pockets can afford to operate at lower margins, further concentrating stake among the biggest players.
+Long-term validator instability – Without sustainable rewards, many small validators will shut down, reducing network resilience.
+While the proposal brings interesting composability and functionality, the cost is too high.
+Solana needs a robust, decentralized validator set – not an incentive structure that forces validators to operate at unsustainable margins.
+Vote NO on this proposal and protect the future of decentralization on Solana.
+
+[relpmis]: I’m small validator with just SFDP stake. This proposal will kill me.
+
+[zantetsu]: I completely sympathize with the concerns raised in this forum. They are all legitimate concerns. Greasing the wheels on sharing block rewards will serve to increase the competitiveness on block rewards sharing which will make it harder or impossible for small validators to break even and reduce the profitability of all but the private validators and those with institutional stake agreements.
+On the other hand, if a mechanism for sharing block rewards is not implemented, then block reward sharing can (and will) still happen, but in a bespoke manner that is more dangerous for stakers. One example would be that stake pools (like the JITO stake pool especially) could just require validators to deposit half of their block rewards into their JITO tip account every epoch, which will then be distributed to stakers according to the normal JITO tip distribution process. This would be a way to accomplish block rewards sharing but in an objectively worse manner than a well thought out, well implemented, more secure chain native fashion.
+At this point, I can see both sides of the debate here and I can’t say I have a clear answer as to how I will vote. I don’t want Solana to offer technically inferior solutions to stakers; but I also don’t want to create a system which puts even more friction in front of validators just getting started. I will be watching arguments in public forums and making my choice based on the nature of arguments I see there. If I come to a definitive conclusion, I will post my final thoughts in this thread.
+
+[laine]: We have known for a long time that this proposal was coming, and there already exist multitude of manual and out-of-protocol mechanisms for sharing block rewards. This includes LSTs as well as manual airdrops, USDC airdrops, NFTs and most recently Jito’s TipRouter.
+It is inevitable that stakers will demand their fair share of block rewards, and out-of-protocol solutions are universally poorer options, in terms of friction, trust assumptions and transparency.
+While I completely understand the concerns validators have with this (concerns that I share), refusing to implement this kind of mechanism and forcing inefficient side-deals is blatantly worse for stakers and for the overall user experience of the staking product.
+As an ecosystem focused on rapid accelerationism and innovation it is imperative that we continue to innovate and push forward.
+I sincerely hope that the result of this is a moderate and balanced equilibrium of block rewards sharing, where both validators and stakers get to enjoy the fruits of their labour and investments.
+I will be voting in favour of this proposal.
+
+[zantetsu]: I’m curious - if 4% inflation paid out as stake rewards represents capital inefficiency, why doesn’t block rewards paid out to stakers represent the same thing?
+
+[Ben.Hawkins]: @stakerRash @Grigorii @ily-validator @adi_vb @mariaeverstake @Leapfrog
+I understand and share your concerns about the potential impact on small validators. However, these concerns will not be mitigated by rejecting this proposal. Stakers are already demanding block reward sharing, and we’re witnessing rapid growth in off-protocol solutions. Examples include:
+Jito compelling validators in the jitoSOL stake pool to share rewards through their tip router.
+Marinade demanding block rewards via their stake auction market.
+Retail stakers increasingly choosing LSTs that offer reward sharing.
+This trend will inevitably continue, becoming increasingly complex and fragmented. The core protocol needs to address this clear network demand explicitly. If we don’t implement a standardized, transparent solution within the protocol, third parties will define how block rewards are shared—often at the expense of validators, as these entities typically extract their own fees.
+Voting “no” won’t stop reward sharing; it will simply cede control to external parties. Implementing this mechanism within the protocol standardizes the process, enhances transparency, reduces trust requirements, and improves operational security by allowing validators to direct rewards to secure accounts (e.g., multisigs or cold wallets).
+A “no” vote is effectively a vote for third-party intermediaries to control reward distribution, potentially extracting additional fees from validators and stakers alike.
+It’s essential we proactively shape this inevitable outcome rather than leaving it to external actors.
+
+[pico.sol]: I am going to vote “no” at this time.
+I already distribute block rewards through sanctum LST, and also distribute block rewards to native stakers through my own program as well.
+If validators create their own program, they do not have to make extra payments to third parties.
+Also, they can flexibly distribute more block rewards to long-term stakers, and less to short-term stakers, for example.The program is not too difficult to implement.
+For small validators, the SFDP’s delegation rule is practically enforced; Jito MEV reward was initially allowed at 100%. But, due to the adverse effects of Marinade’s SAM, etc.??, 10% was set as the maximum. The same will no doubt happen with block rewards. And other stake pools will also set block reward % criteria.
+If SIMD-123 is applied, validators will become mere commodities. We can only differentiate ourselves by simply setting the less number to a percentage.
+Validators should be able to differentiate ourselves by our own ingenuity; SMD-123 takes away the room for ingenuity. It eliminates diversity and drives us into a fruitless race to 0%.
+It would bring temptation to vicious side deals such as sandwiches. Add to that a reduction in the number of validators, and security concerns increase.
+However, I will make the final vote after listening to the intentions of my stakers.
+
+[laine]: Hey Pico,
+one thing to consider is that you’re already doing this out of protocol, but it makes it difficult for your stakers to see and understand the APY they’re earning.
+At the same time, what you describe using a custom program, relies on trust and manual transfers from your identity account (even if you automate them with a script, you have to first receive the lamports into the identity account), while with this proposal you could specify your custom program as the collector of your block rewards and still use a custom program.
+
+[pico.sol]: Michael, I was not aware that we could use a custom program. Thanks.
+Your two points are good ones. From a technical standpoint I think they are great. I also sympathize with the idea of accelerating innovation.
+If this proposal passes I may use it.
+However, I am still against it because of the increased competition and security risks that remain, and when combined with SIMD-228, the negative impact on small validators is too big. I don’t want to see small validators committing mass suicide towards 0% and disappearing. I don’t want to see users exposed to more sandwich attacks.
+I oppose this because I am proud to be a part of this ecosystem and I really like it and want to protect this Solana community.
+
+[fberreth]: The playing field for validators must be even. Today, large validators have way too much income through block rewards because voting costs are the same no matter how much you stake. This simply should not be. If a validator votes on behalf of 1mil SOL it should pay more for voting then a validator voting for 1 staked SOL. This would level the playing field somewhat because right now with the price of SOL voting costs are the majority of costs for running a validator (the HW costs are probably around 20% of that). Small validators really only have block rewards to cover their costs (no one staked on a validator that keeps X % for themselves) and since they are not leader often don’t receive many block rewards. One could simply say - based on leader schedule - your voting cost is magnified X times based on how often you are leader (someone smart figure out the details :)). You get the ideal - level the playing field. This proposal will just commercialize the opposite. While its true some validators give out block rewards, it is the large validator that does that (as they swim in SOL literally) and can price everyone else out. Do not vote for this. I don’t care that they have to do extra work to give out block rewards, this should only ever be implemented when the playing field is even.
+
+",Ben.Hawkins,1528,6,19,25,2025-02-25T00:30:45.989Z,2025-03-14T00:25:12.002Z,Governance,11,2025-03-14T00:25:12.002Z
+3294,"Proposal For Introducing a Programmatic, Market-Based Emission Mechanism Based on Staking Participation Rate",https://forum.solana.com/t/proposal-for-introducing-a-programmatic-market-based-emission-mechanism-based-on-staking-participation-rate/3294,"This proposal is updated in Epoch 750 to change the full rollout of emissions formula from 10 epochs to 50 epochs based on community feedback. Based on rough consensus achieved on Discord, there won’t be any change to the discussion period and voting will continue as per the original schedule.
+Authors: Tushar Jain, Vishal Kankani, Max Resnick
+Background
+As Solana matures, stakers increasingly earn SOL through mechanisms like MEV. This income stream reduces the network’s historical exclusive reliance on token emissions to attract stake and security. According to Blockworks (https://solana.blockworksresearch.com/), in Q4 2024 MEV, as measured by Jito Tips, was approximately $430M (2.1M SOL),representing massive quarter-over-quarter growth. In Q3 Jito Tips were approximately $86M (562k SOL), Q2 was approximately $117M (747k SOL), and Q1 was approximately $42M (300k SOL).
+Given the level of economic activity the network has achieved and the subsequent revenue earned by stakers from MEV, now is a good time to revisit the network’s emission mechanism and evolve it from a fixed-schedule mechanism to a programmatic, market-driven mechanism.
+The purpose of token emissions in Proof of Stake (PoS) networks is to attract stakers and validators to secure the network. Therefore, the most efficient amount of token issuance is the lowest rate possible necessary to secure the network.
+Solana’s current emission mechanism is a fixed, time-based formula that was activated on epoch 150, a year after genesis on February 10, 2021. The mechanism is not aware of network activity, nor does it incorporate that to determine the emission rate. Simply put, it’s “dumb emissions.” Given Solana’s thriving economic activity, it makes sense to evolve the network’s monetary policy with “smart emissions.”
+There are two major implications of Smart Emissions:
+1. Smart Emissions dynamically incentivizes participation when stake drops to secure the network.
+2. Smart Emissions minimize SOL issuance to the Minimum Necessary Amount (MNA) to secure the network.
+This is good for the Solana network and network stakers for four reasons:
+High inflation can lead to more centralized ownership. To illustrate the point, imagine a network with an exceedingly high inflation rate of 10,000%. People who do not stake are diluted and lose ~99% of their network ownership every year to stakers. The higher the inflation rate, the more network ownership is concentrated in stakers’ hands after compounding for years.
+Reducing inflation spurs SOL usage in DeFi, which is ultimately good for the applications and stimulates new protocol development. Additionally, a high staking rate can be viewed as unhealthy for new DeFi protocols, since it means the implied hurdle rate is the inflation cost. Lowering the “risk free” inflation rate creates stimulative conditions and allows new protocols to grow.
+If Smart Emissions function as designed, they will systematically reduce selling pressure as long as staking participation remains adequate. The inevitable side effect and primary downside to high token inflation is increased selling pressure. This is because some stakers in different jurisdictions have taken the interpretation that staking creates ordinary income, and therefore they must sell a portion of their staking rewards to pay taxes. This selling is a significant detriment to the network and does not benefit the network in any way. At today’s approximate 4.5% annualized inflation, at a $120 billion fully diluted valuation, new emissions amount to ~USD 5.5 billion per year.
+In markets, sometimes perception is as important as reality. While SOL inflation is technically not cost to the network, others think it is, and that belief overall has a negative impact on the network. Inflation causes long-term, continual downward price pressure that negatively distorts the market’s price signal and hinders fair price comparison. To use an analogy from traditional financial markets, PoS inflation is equivalent to a publicly listed company doing a small share split every two days.
+Historically, issuance curves have remained static due to Bitcoin’s immutability ethos—a “Bitcoin Hangover” so to speak. While immutability suits Bitcoin’s mission to become digital gold, it doesn’t map to Solana’s mission to synchronize the world’s state at light speed.
+In summary, the current Solana emissions schedule is suboptimal given the current level of activity and fees on the network because it emits more SOL than is necessary to secure the network. An issuance curve set by diktat is not the right long-term approach for Solana. Markets are the best mechanism in the world to determine prices, and therefore, they should be used to determine Solana’s emissions.
+For the sake of clarity, this proposal for SIMD-0228 is independent of other SIMDs under discussion currently. It can be executed standalone.
+Testing
+Based on our discussions with Anza and with core engineers the community call, there is an understanding that this is a straightforward technical update and poses no technical risks. Upon approval of the proposal, we will collaborate with Anza, the Solana Foundation, and the Jump/Firedancer teams on implementation.
+Proposal
+We propose updating the emissions rate formula to more accurately capture the market dynamics.
+List of variables:
+Fraction of total supply staked: (s)
+Issuance Rate (i)
+Validator returns: v(s) = i/s + MEV
+r is the current emissions curve that automatically goes down every epoch at an annualized rate of 15% every year until it reaches 1.5% where it stops changing.
+The suggested new formula and curve is:
+new formula1044×436 38.3 KB
+new issuance rate1044×614 37.3 KB
+When s &gt; .5 the curve corresponds to just the first term: r(1 - sqrt(s)). This was the curve in the previous version of the SIMD. Based on community feedback, we have added the cmax(1-sqrt(2s),0) term to make the curve more aggressive when a smaller fraction of the network is staked. c is chosen such that the curve starts becoming more aggressive at s =.5, when half of the supply is staked, and surpasses the current static emission schedule of r when s = 1/3.
+The derivation of c is provided in the appendix.
+This yields a vote reward rate for validators with good performance of:
+staking yield1044×166 11.1 KB
+staking returns over time1376×812 62.1 KB
+To ensure that the transition from the old static issuance schedule to this new schedule is smooth, we will interpolate between the old issuance rate and the new issuance rate over 50 epochs using the formula:
+new phase-in formula1040×160 12.6 KB
+where “alpha” is a parameter that controls the speed of the transition, taking the values 1/50, 2/50, …, 49/50, 1, over the first 50 epochs before settling to the new issuance rate at = 1.
+issuance rate during rollout1920×1130 73.4 KB
+Alternatives Considered
+We considered a few alternatives and decided to settle upon the above curve.
+Alternative Design 1: Pick another fixed curve. We rejected it because replacing one arbitrary curve with another arbitrary curve makes little sense.
+Alternative Design 2: Fix Target Staking Yield inclusive of emissions and MEV payments. We rejected this approach because it incentivizes MEV payments to move out of sight of the tracking mechanism, thereby rendering the design completely ineffective, and impossible to implement.
+Alternative Design 3: A controller function that increases or decreases inflation proportional to the magnitude of the difference between the actual staking participation rate and the target rate (for example, 50%). While this approach would have allowed for a more dynamic response to fluctuations in staking participation, it risks putting emissions back to current highs even if staking participation rate organically went below the target rate (for example, 50%)
+Alternative Design 4: We considered only the first term of the proposed formula above. But that left the specific edge case of existing emissions curve unaddressed. That edge case was if at a future date staking rate continues to drop, and the terminal inflation hits 1.5%, then how would the network be secure. Hence, we added the second term to let the inflation increase beyond what is implied by the current curve in such an edge case scenario.
+After considering all these options, we believe the proposed static curve is the most appropriate solution to address our inflation concerns as it is market-based, programmatic, and a function of a market variable.
+Changes in the spirit of this proposal
+Should any changes be necessary to ensure a safe and functioning implementation, such changes will be permitted without further governance requirements so long as the spirit of the proposal is maintained.
+Voting Process
+The voting process will proceed as follows:
+Discussion period: Validators are encouraged to participate in discussions to address any concerns.
+Stake weight collection period: Stake weights will be captured and published for voting. Validators will have the opportunity to verify these weights.
+Vote token distribution will require validators to utilize the adapted Jito Merkle Distributor tool (available at GitHub - laine-sa/solgov-distributor: A merkle-based token distributor for the Solana network that allows distributing a combination of unlocked and linearly unlocked tokens.) to claim the vote tokens corresponding to their stake weights.
+Three token destination accounts will be created for voting choices: Yes, No, and Abstain.
+Validators will have a designated period to vote by sending their tokens to the respective addresses.
+After the voting period, if the sum of Yes votes is equal to or greater than 2/3 of the total sum of Yes + No votes, the proposal will pass.
+The proposal has a quorum threshold of 33%, abstentions count towards the quorum.
+All announcements regarding this process will be made in the Governance category of the Solana Developer Forums.
+Stake weights and a tally script will be available at solgov-distributor/votes at master · laine-sa/solgov-distributor · GitHub
+Timeline
+Epoch 747 - 751: Discussion period
+Epoch 752: Stake weights captured and published, discussion/confirmation of stake weights
+Epochs 753 - 755: Voting tokens available to claim, voting completes at the end of epoch 755
+Discussion
+Active participation in discussions about this proposal is crucial. Discussions may also take place on the Solana Developer Forums or on Discord Governance channel. It’s encouraged to consolidate discussions to ensure broad participation and minimize redundancy.
+References
+SIMD-0228: solana-improvement-documents/proposals/0228-market-based-emission-mechanism.md at patch-1 · tjain-mcc/solana-improvement-documents · GitHub","[Leapfrog]: This proposal will likely have disastrous effects on the confidence of Solana when needed most.
+If inflation were to increase when investment confidence is low ie investors were destaking and selling this will magnify the panic. A volatile asset is no place for long term large investors no matter how great the staking reward … if anything the fundamental idea here should be exactly opposite of what has been proposed.
+As a believer in the future of solana I’d try encourage stability of the asset price and steady market cap growth over staking rewards. There already are additional incentives to staking in solana like the transactional activity (Jito) rewards, so no need to add selling pressure and flight risk by escalating inflation in the moment stability and confidence are required most…
+
+[IceFrosTv2]: The more coins in staking, the more stable and higher the token price and the lower the inflation, and therefore the lower the APY that delegates receive.
+At the same time, this does not affect competition among validators, giving an advantage to some over others, as the APY will be about the same for all.
+As for doubts about capitalization and token price at critical moments, I don’t see a problem with that. Those investors who want to sell their coins in a moment of panic will do so regardless of the inflation rate at the time. But it may stop many other people from selling their coins in favor of staking. After all, if a person believes in the future of blockchain and thinks it will be a success, they are more likely to choose to make money from staking than to sell in the hope that they might be able to buy cheaper.
+
+[Leapfrog]: Your assumption is that when inflation goes up people stake more. I would argue that when the inflation goes up as there is a lot of destaking - those who have yet to stake would rather just sell…
+
+[IceFrosTv2]: To each their own. I’m just speaking from my point of view. If I see 5% APY, I’m more likely to sell to avoid locking up funds. If I see 10-20% APY, I’m more likely to put it in staking, given that I can release the funds and sell within two or three days.
+Besides, there’s nothing stopping me from opening a hedge position. For example, even with an APY of 20%, I can throw coins into staking and open a short with the first leverage. This way I don’t care about the price fluctuations in the market, but I also take my percentage from farming
+
+[Leapfrog]: So I think the main point that we are missing is that as the system currently stands - if 300M sol staked went down to 150M sol staked (ie half) Then the inflation reward (say 5%) would suddenly be distributed to half the stake and so double the staking APY… so as it stands the reward already goes up with less stake.
+The second point is that inflation rewards are often miss interpreted as earnings where as what is actually happening is a devaluing of the currency. So taking your scenario where you see 5% APY lets call it 5% inflation then you see 20%APY ie 10% inflation (as the rest is due to the inflation being distributed to less stake as pointed out above)… all that means is that every sol is decreasing in value by 10% per annum rather than 5% per annum (assuming stable market cap). So your new rewards are actually just there to keep what you had previously. The rest of the sol holders are losing money twice as fast.
+
+[bullmoosesystems]: I’ve been back and forth here, but ultimately I’m against this, mostly because I don’t think there’s a big impact, and the uncertainty created from changing the monetary policy to something that is floating is damaging for institutional investor confidence.
+Additionally, it feels somewhat arbitrary here. Why is 50% stake the “pivot point”? Why not 66% or 75%? The issuance/inflation rate itself doesn’t impact price at all, it’s the 2nd order effect of stakers selling those inflation rewards. On the other hand, higher inflation rates might encourage buyers to step into the market.
+Regarding the tax question, those users (in many jurisdictions) can simply hold an LST to avoid the tax issue. I don’t think we should be optimizing for something that is a moving target and very different globally.
+The market already naturally addresses the aim of Smart Emissions today:
+When activity is low during bear markets, stake % naturally increases. Go look at nearly every major PoS asset during any bear market and you’ll see that. When the bull market arrives, stake % naturally declines because there are more opportunities to do things with your SOL, so the “risk free” inflation rate from staking isn’t as attractive any more.
+We have no clue what the “Minimum Necessary Amount” of stake is to secure the network. This proposal targets 50%, but that feels very arbitrary.
+Ultimately, I think there’s significant value in having stable monetary policy. Once we change monetary policy once, it becomes more likely that we will change it again. Institutional investors do not like the uncertainty. Worse yet, if we change monetary policy to a floating target (albeit algo determined), then it becomes even more difficult for institutional investors to model returns and thus build valuation models. That uncertainty leads to increased discount rates and lower valuations in these valuation models.
+Although the initial, fixed monetary policy may not be “perfect”, there isn’t really a perfect monetary policy out there and there’s a real cost to the change. If we change from one thing that isn’t “perfect” to another thing that isn’t “perfect”, but incur the change cost, is it really worth it?
+
+[kankanivishal]: bullmoosesystems:
+nge monetary policy to a floating target (albeit algo determined), then it becomes even more difficult for institutional investors to model returns and thus build valuation models. That uncertainty leads to increased discount rates and lower valuations in these valuation models.
+Although the initial, fixed monetary policy may not be “perfect”, there isn’t really a perfect monetary policy out there and there’s a real cost to the change. If we change from one thing that isn’t “perfect” to another thing that isn’t “perfect”, but incur the change c
+Hi @bullmoosesystems Thanks for your response. We have updated the emissions formula to a static curve. It does not target 50% staking rate anymore. The updated formula was arrived after consulting many validators and community members in the space. It is updated in SIMD and also is above. Please let us know your thoughts on the new formula.
+
+[0x_zak]: As a Staker, I am completely for this,
+But I also understand that my faith is in the validators approving or rejecting this very important proposal. Given that the validators voted for SIMD 96, I hope this comes to pass as well, or I def. would start to get concerned about the optics and incentive alignment between stakers and validators, and yes I know I can just delegate to another validator who is in favour.
+but just a general sentiment.
+It is very important to not overpay for security, I really hope every validator thinks about that and the overall health of our blockchain.
+Thanks
+
+[kankanivishal]: Main objective of this proposal is to reduce unnecessary emissions, not increase. So long as the staking rate is above 33%, SIMD-0228 proposed emissions are lower than today’s curve. At current staking participation rate of ~65%, they are ~80% lower. This increases investor confidence.
+Only when staking rate starts dropping below 33% for whatever reasons, we have introduced the failsafe of incentivizing stakers. This feedback was directly sourced from community of validators looking out for network risks.
+
+[Leapfrog]: When staking drops below 33% the incentive is already there for the rewards naturally increase as I’ve pointed out above. No need to increase inflation at this point… or any point for that matter.
+
+[kankanivishal]: it is not for just today. say 5-6 years out, if Solana inflation is at 1.5% and stake is at 33%, and activity is mild - in that edge case, it is a boost to stakers/validators to stay onboard.
+
+[Xen]: Those unnecessary emissions are not that unnecessary for validators, as they must pay vote fees in SOL regardless of the network’s total stake. New or smaller validators that need to take a commission to supplement their vote fees are greatly affected.
+I think this will be disastrous for smaller validators and will raise the barrier to entry to a point where it excludes potential new entrants based on stricter criteria, reducing innovation and decentralization. The barrier to entry is already high, and the validator count is already low (in my opinion, of course). We could argue all day about decentralization, but I don’t think the current curve is bad or arbitrary it’s the curve Solana is succeeding on and the one the market has accepted.
+You do not lose to inflation if you stake. And now, there are LSTs that remove the downsides of native staking, which, let’s be honest, are very few. Epochs are getting shorter and shorter as the network becomes faster. I am no math or market expert but I think this has negative effects on the validator ecosystem.
+
+[businessmngr]: SIMD-0228’s dynamic emission model could unintentionally push small validators out of the network by raising the break-even threshold. With only Foundation delegation and stake pools delegation, and limited liquidity from the general public, many small validators may struggle to remain profitable as rewards decrease when staking participation exceeds the target. Unlike larger validators, small ones also lack significant independent delegations, making it even harder to attract stake and sustain operations. This will likely lead to further stake centralization, as larger validators can absorb reward reductions more easily, while smaller ones will be forced to shut down.
+The primary goal of SIMD-0228 is to decrease inflation and adjust the amount of SOL staked to market equilibrium. With SIMD-0123 (sharing block rewards at protocol level), validators will race to zero by competing for the best APY, potentially directing almost all block rewards to stakers. This will concentrate liquidity around those offering the highest APY, making it difficult for smaller validators to cover costs and remain competitive, similar to the current challenge of LSTs competing with JupSOL in terms of APY. We likely won’t see a significant reduction in staking, as the race to zero rewards will keep APY high.
+Also, I think LSTs will lose their edge over pure staking somehow. Right now, only LSTs can distribute premium yield by sharing back block rewards. If this is equalised, the APY will be the same as native staking, and most people will choose native staking since it is more secure and avoids the additional layer of LST risk.
+
+[123test]: Will this result in fewer Validators? Probably yes.
+
+[solanacompass]: One thing I feel problematic about the inflation proposal is this:
+Stakers delegate to us to act in their interests. This means ‘securing the network’ (presumably this includes voting for things that may make it better) but also ‘earning us yield’.
+It’s not really clear how much they are influenced by one concern over the other, but you could argue the high staking rate (~70% of SOL) and low defi usage (~11% of stake is liquid) implies they like the status quo and are not that interested in defi
+Depending on where a validator stands on this SIMD, they may or may not feel it is a vote to improve the network for all users. But a vote in favor is still actively voting to decrease their own staker’s yield. If this is a staker’s main motivation in staking, a validator is voting against their stakers’ own interests.
+
+[c2yptic]: yes. mid-small level validators ( in terms of stake ) will have extreme difficulties operating if this change comes in to place and will likely close shop
+
+[diman]: a copypasta from SIMD-0228: Market-Based Emission Mechanism by tjain-mcc · Pull Request #228 · solana-foundation/solana-improvement-documents · GitHub
+Motivation is very weak. There are questions about many statements.
+I see other issues that concern me more, such as the percentage inflation rate.
+You start the motivation by mentioning MEV payouts, which are not part of the protocol at all. Validators themselves are customers/clients in this case, meaning they depend on a commercial project rather than the protocol, or they can act independently (i.e., validators extract MEV themselves, and it is distributed to stakers without intermediaries), or there is real competition among MEV proxy providers in the market. For me, the way MEV currently works on Solana is already a huge problem. So making protocol changes based on the MEV issue seems like the wrong move to me. The MEV issue needs to be solved first.
+And so on. Brian mentioned several points above and did not receive answers to them. I won’t repeat.
+Also, for example, I see a completely opposite conclusion from the four points in the proposal.
+To me, it is obvious that reducing the APY of native staking will lead to an outflow of small stakers from native staking. This means that the share of large stakers in active staking will increase. And active native staking controls the PoS network. So the network control by large stakers will grow.
+Technically, finding the balance point involves delegating and undelegating. But the problem is that fees in liquid pools and skipping one epoch in native staking make this process less active. Due to restaking (not to be confused with the currently popular marketing term), up to a month of rewards can be lost. All of this combined will cause small stakes to shift under the control of liquid pools with additional yield.
+So, I see why this is bad for the Solana network.
+My conclusion: perhaps this proposal is ahead of its time.
+
+[bullmoosesystems]: Ah I see now. Thank you.
+Regardless, that was only a minor point. I’m mostly not in favor because I don’t like the idea of drastically changing the monetary policy for an unclear set of tradeoffs/advantages/disadvantages and changing it to something that itself is constantly changing. I don’t feel like we have a major issue or imminent threat to address and there are likely to be unforeseen negative consequences to changing the policy.
+
+[MaxSherwoodH2O]: Firstly I want to thank the authors for this well-constructed proposal.
+However, I disagree with this proposal.
+While it’s true that many validators are arguably earning “too much” at the moment, it’s also true that many of us operated at break-even or at a loss during the years of 2022 and 2023. Block rewards and MEV were non-existent, and we depended on commission on voting rewards to survive. When the bull market started, many of us moved to a 0% voting commission fee and a 0% MEV commission fee, earning just the block rewards. But block rewards vary extremely from epoch to epoch depending on volatility in the market day-to-day. MEV is the same. Once the bull market is over, I expect block rewards and MEV to significantly decrease, requiring many validators to raise commissions and once again depend on voting /inflation in order to stay profitable.
+Solana is one of the few networks with a large, permissionless set of validators. However, the distribution of stake is very long-tail.
+image1448×623 78.8 KB
+If you imagine that the break-even point (how much stake does a validator need to break even) depends on the current MEV, block rewards, and inflation / voting rewards, it’s not hard to image a scenerio where this proposal passes, reducing inflation by 80% as stated previously, then a bear market reduces MEV and block rewards by 80% or more, and suddenly we go from 1500+ profitable validators to 150. For me, one of Solana’s strengths is it’s decentralization, (despite what the nay-sayers would have you believe) and it would be hugely bearish for the validator set to reduce by 80% or more in the name of saving 3 or 4% per year in inflation.
+Additionally, I also agree with the previous points that a “dumb” curve is actually much easier to understand and model, whereas a “smart” curve is more complicated and unpredictable.
+I do understand the reasoning behind this proposal, but I think it would be exceptionally poor timing to pass this during the height of the bull market. I am fully supportive of revisiting this in a year’s time when we can see evidence of persistent MEV and block rewards over more than a few quarters.
+
+",kankanivishal,3943,42,19,64,2025-02-25T00:03:16.507Z,2025-03-14T00:24:13.815Z,Governance,11,2025-03-14T00:24:13.815Z
+1179,Proposal for Enabling the Timely Vote Credits Mechanism on Solana Mainnet,https://forum.solana.com/t/proposal-for-enabling-the-timely-vote-credits-mechanism-on-solana-mainnet/1179,"Proposal for Enabling the Timely Vote Credits Mechanism on Solana Mainnet
+Background
+Validators have learned that they can maximize vote credits earned by reducing the likelihood of voting on a dead fork by delaying votes long enough to see which fork is most likely to win (or has already won). This has led to varying strategies employed by a host of validators that induce different degrees of delay (“vote lag”) in voting. This delay in voting results in slower confirmations and finalizations of blocks which directly impacts the speed at which Solana processes transactions. A solution to this problem was devised with the Timely Vote Credits (TVC) feature, which proposes that votes be awarded a variable number of credits, with faster votes receiving more credit than slower votes. This provides an economic incentive to vote quickly, which counterbalances the advantage to waiting to survey forks before voting.
+The Timely Vote Credits feature was proposed in the Solana Improvement Document number 33 (SIMD-033). It is fully implemented by two features:
+7axKe5BTYBDD87ftzWbk5DfzWMGyRvqmWTduuo22Yaqy (“replace Lockout with LandedVote (including vote latency) in vote state #31264”) which upgrades vote accounts to a new structure which has room to record the latency of votes in preparation for using those latencies to determine vote credits. This feature has been enabled on testnet since epoch 586 (22 epochs at the time of this writing), and enabled on mainnet since epoch 585.
+tvcF6b1TRz353zKuhBjinZkKzjmihXmBAHJdjNYw1sQ (“use timeliness of votes in determining credits to award”) which enables the vote program to begin recording the latencies of votes and then use this latency when awarding vote credits, such that votes with latency 1 or 2 earn 16 credits, with each subsequent slot of latency earning 1 fewer credit, down to a minimum of 1 credit awarded for any vote.
+The second feature is only available in the 1.18 Solana Labs/Agave branch and so can only be activated on mainnet-beta after this release is present on a sufficient quorum of stake, as per the normal feature enabling rules.
+Testing
+The following testing has been performed to ensure the safety and correctness of the implementation:
+Unit tests were added to the Solana Labs/Anza node implementation that demonstrate that the feature works as expected in a wide variety of cases, including awarding the expected number of vote credits:
+test_timely_credits
+test_retroactive_voting_timely_credits
+test_process_new_vote_state_replaced_root_vote_credits
+A test cluster was created to test the effects of TVC in operating nodes. A write-up of the results of this test has been created
+Proposal
+It is proposed that the Timely Vote Credits (TVC) feature as described by Solana Improvement Document 33 (SIMD-0033) shall be enabled on the Solana mainnet-beta cluster according to the following steps:
+Feature tvcF6b1TRz353zKuhBjinZkKzjmihXmBAHJdjNYw1sQ shall be enabled on the Solana testnet cluster for a period of no less than 8 epochs, with any issues that are discovered fixed in a way that does not violate the purpose of the feature as described in the SIMD.
+After this point, TVC will have been fully enabled on testnet for no fewer than 8 epochs.
+Feature tvcF6b1TRz353zKuhBjinZkKzjmihXmBAHJdjNYw1sQ shall be enabled on the Solana mainnet cluster.
+After this point, TVC will be fully enabled on mainnet-beta.
+Voting Process
+The vote will be conducted as follows:
+A discussion period will commence, during which all validators should participate to ensure that all concerns are addressed.
+Stake weight collection period will then commence. The stake weights that will be used for voting will be captured and published, and all validators will have an opportunity to verify these weights.
+Voting tokens will be distributed to the validators according to the stake weights gathered in step 2. Each lamport of stake will receive one vote token. Thus a validator who had 125,000 SOL stake, which is 125,000,000,000,000 lamports, will receive 125,000,000,000,000 vote tokens. It is expected that in practice, vote tokens will be referred to after begin divided by 10^9, so a validator will have 513.71625 “vote tokens” if they have 513.71625 SOL stake.
+Three token destination accounts that correspond to three voting choices will be created: a Yes vote account, a No vote account, and an Abstain vote account.
+Validators will have the remainder of the vote token distribution epoch plus 3 additional epochs in which to vote by sending vote tokens to these addresses (there is nothing preventing a validator from sending some of its tokens to more than one address, although this can only serve to reduce the effectiveness of their vote should they choose to do so).
+After the voting period is complete, if the sum of the Yes votes is equal to or greater than 2/3 of the total sum of Yes + No votes, then the proposal has passed.
+All of the announcements about this process, including the announcement of the vote tally account addresses, will occur in both the Governance category of the Solana Developer Forums and the vote-timely-vote-credits channel of the Solana Tech Discord.
+Timeline (each step starts at the beginning of the first indicated epoch and completes at the end of the last indicated epoch):
+Epoch 588 - 594: Discussion period
+Epoch 595: stake weights captured and published, discussion/confirmation of stake weights
+Epoch 596: voting token distribution, vote addresses created, voting begins
+Epochs 596 - 599: voting continues and completes
+Epoch 600: voting is finished and the resulting tally determines the outcome
+Discussion
+It is imperative that validators participate in discussion about this proposal. The best place is on the Solana Tech Discord’s vote-timely-vote-credits channel, where active discussion has occurred already. In addition, discussion may occur on the Solana Developer Forums and also ad-hoc in places like Twitter, Reddit, etc. All discussion wherever it happens is encouraged, but it’s even better if the discussion is kept relatively concentrated in one place so that most participants can see most of the discussion without redundancy. For this reason, the preferred discussion forum is the vote-timely-vote-credits channel on the Solana Tech Discord, and any discussion that starts outside of this forum should ideally be directed to continue in the Discord.
+References
+SIMD-033: https://github.com/solana-foundation/solana-improvement-documents/blob/main/proposals/0033-timely-vote-credits.md
+vote-timely-vote-credits Solana Tech Discord channel: https://discord.gg/solana (and then select the channel)","[laine]: This is a great approach to fixing a loophole in the rewards mechanism on Solana and has gone through a lot of scrutiny showing it works as intended and is safe to enable. I support this feature.
+
+[dev_null]: I participated in the dedicated cluster for testing these features. To my knowledge, the feature is safe and works as intended.
+I also agree with the spirit of this proposal: patching the loophole that is being exploited to gain extra credits by failing to participate in consensus (and simply echoing whatever consensus is reached by the rest of the cluster).
+
+[kernelpanic]: Spectrum Staking fully supports TVC feature and the voting process.
+
+[Knox]: Juicy Stake fully supports this feature. Let’s incentivize network performance and not APY
+
+[nasmithan]: Aurora Validator will vote yes for timely vote credits. Fast confirmations, low fees and high throughput are key to ensuring the success of Solana. Thank you for helping get a fix for this loophole Zantetsu.
+
+[eej]: We at Stronghold Validator fully support this feature
+
+[max.kaplan]: Edgevana is supportive of TVC and will be voting yes.
+
+[LJ-StakeCity]: Great initiative! Stake City will support.
+
+[ripatel-jump]: The Firedancer software includes support for Timely Vote Credits.
+The implementation is not yet public.
+
+[cfl0ws]: Chainflow appreciates the work @zantetsu and others have done to bring this to a point where it can be voted on. We’re also glad to see that testing was done prior to the proposal being posted.
+It seems to us that fully activating Timely Vote Credits on Mainnet is a net positive for the Solana community and for this reason we support it. The proposed timeline feels sufficient as well, i.e. long enough to generate an appropriate level of discussion, while not causing an unnecessary delay.
+We also note that the voting mechanism suggested is the same one used for the first signaling vote. And finally we’re glad to see this vote further aligning the in-development governance process with the more established SIMD process.
+
+[Brian]: Jito Labs is fully supportive of this proposal and will be voting yes once live. Thanks to Zan and others for pushing it for so long.
+Brian
+
+[italoacasas]: The SolDev validator will vote yes once live as well. Thanks to everyone involved.
+
+[mariaeverstake]: Thanks for this important proposal. Everstake will support TVC feature.
+
+[1000X]: Great job man, 1000X.sh fully supports this proposal. LFG
+
+[laine]: The token distribution based on stake weights has been captured. Please review the voting procedure and validate the distribution file here: GitHub - laine-sa/tvc-gov
+
+[Edouard_stakin.com]: Great work, thank you for this proposal.
+We are happy to support it at Stakin.com and have voted Yes.
+We believe Timely Vote Credits will make Solana more efficient and contribute to building a fairer validator ecosystem.
+
+[Tissle_T-STAKE]: Great work! Thanks for all the effort it took to make this proposal. T-STAKE Systems fully supports this proposal. Unfortunatly I cannot vote yet as I just started my mainnet validator, just wanted to show my support
+
+[ayk777]: Very good​:+1:
+
+[laine]: The voting period has ended in the last slot of epoch 599 (slot 259199999) with the following results:
+ YES | 51.7500% | 191499201395655382
+ NO | 0.8400% | 3108403106138704
+ ABSTAIN | 0.7000% | 2596234841182772
+ CAST | 53.2900% | 197203839342976858
+ SUPPLY | 100.0000% | 370034545735897184
+The required threshold for this proposal to pass was 66.66% of all YES + NO votes. The final tally is 98.4% YES, therefore the proposal to approve and enable Timely Vote Credits has passed the governance vote.
+Enabling of the TVC feature gates is subject to final timing by Anza engineers based on network adoption of minimum supported versions and overall network health.
+
+",zantetsu,4440,3,19,25,2024-03-13T20:28:00.882Z,2025-01-16T17:42:24.989Z,Governance,11,2025-01-16T17:42:24.989Z
+2869,Timely Vote Credits -- now even more expensive to run a Solana Validator,https://forum.solana.com/t/timely-vote-credits-now-even-more-expensive-to-run-a-solana-validator/2869,"All the big validators are using private networks like bloXroute… which costs $1250 USD per month, so now it costs $800 + $1250 per month to run a non-lame validator… the small validators cannot afford that, so all this proposal has done is put a MOAT around the big players… previously high performing but smaller validators are now WAY DOWN on the leaderboard, big players with their Private Lanes are all at the top…
+WHY DID YOU DELETE MY LAST POST you dishonest fkrs.","[zantetsu]: Wrong in every way, but OK. Rant on.
+
+[solanabigguy12]: You are right…there is no way for smaller boys to enter. But it is what it is.
+
+[MCF]: This is basically correct.
+
+",123test,147,0,3,4,2025-01-07T07:17:21.588Z,2025-01-16T07:15:17.955Z,Governance,11,2025-01-16T07:15:17.955Z
+1456,Proposal for Enabling the Reward Full Priority Fee to Validator on Solana Mainnet-beta,https://forum.solana.com/t/proposal-for-enabling-the-reward-full-priority-fee-to-validator-on-solana-mainnet-beta/1456,"Background
+The current model of collecting priority fees, with 50% being burnt and 50% rewarded, does not fully align with validator incentives and inadvertently encourages side deals. For example, consider a scenario where a transaction submitter wishes to prioritize their transaction. Under the existing model, they might opt to directly pay the block producer a 75% priority fee to ensure their transaction is processed promptly, rather than paying 100% priority fee where the block producer only receives 50%. This creates an imbalance where the incentives of validators are not adequately aligned with the network’s overall health and security.
+To rectify this issue, it’s proposed to adjust the priority fee structure to reward validators with 100% of the fees collected. This ensures that validators are appropriately incentivized to prioritize network security and efficiency, rather than being incentivized to engage in potentially detrimental side deals.
+This proposal, outlined in Solana Improvement Document number 96 (SIMD-0096), has been fully implemented with the feature:
+Feature Gate 3opE3EzAKnUftUDURkzMgwpNgimBAypW1mNDYH4x4Zg7 : Reward full priority fee to validators #34731: This feature ensures that 100% of the priority fee is awarded to the validator.
+The implementation of this proposal requires the use of a feature gate. While there will be no change to the payment structure for transaction submitters, the software incorporating this proposal will allocate a larger portion of fees to the validator compared to previous versions. Thus, a feature gate is essential to ensure a smooth transition for all validators to the new functionality at the epoch boundary, thereby maintaining consensus.
+This feature is currently available in the Master of Agave repo (minimum version 2.0) and can only be activated on mainnet-beta after the release of a sufficient quorum of stake, following normal feature enabling rules. Additionally, it’s recommended to activate this feature after the implementation of Feature BtVN7YjDzNE6Dk7kTT7YTDgMNUZTNgiSJgsdzAeTg2jF to address potential rounding errors.
+Testing
+The following tests have been conducted to ensure the functionality of the proposed feature:
+Unit tests added to the Agave repo demonstrate the feature’s functionality in various scenarios.
+test_total_fee_rounding
+test_filter_program_errors_and_collect_fee_details
+test_check_execution_status_and_charge_fee
+test_distribute_transaction_fee_details_normal
+test_distribute_transaction_fee_details_zero
+test_distribute_transaction_fee_details_burn_all
+test_distribute_transaction_fee_details_overflow_failure
+Testing performed on a local test cluster with the feature enabled, observed slots advance and bank capitalization change.
+Proposal
+It is proposed that the Reward Full Priority Fee to Validator feature, as described in Solana Improvement Document 96 (SIMD-0096), be enabled on the Solana Mainnet-beta cluster according to the following steps:
+Ensure Feature BtVN7YjDzNE6Dk7kTT7YTDgMNUZTNgiSJgsdzAeTg2jF is enabled to address potential rounding errors.
+Enable Feature 3opE3EzAKnUftUDURkzMgwpNgimBAypW1mNDYH4x4Zg7 on the Solana Mainnet-beta cluster.
+After these steps, validators will receive 100% of the priority fee as part of their reward.
+Voting Process
+The voting process will proceed as follows:
+Discussion period: Validators are encouraged to participate in discussions to address any concerns.
+Stake weight collection period: Stake weights will be captured and published for voting. Validators will have the opportunity to verify these weights.
+Vote token distribution will require validators to utilize the Jito Merkle Distributor tool (available at https://github.com/jito-foundation/distributor) to claim the vote tokens corresponding to their stake weights.
+Three token destination accounts will be created for voting choices: Yes, No, and Abstain.
+Validators will have a designated period to vote by sending their tokens to the respective addresses.
+After the voting period, if the sum of Yes votes is equal to or greater than 2/3 of the total sum of Yes + No votes, the proposal will pass.
+All announcements regarding this process will be made in the Governance category of the Solana Developer Forums.
+Timeline
+Epoch 612 - 615: Discussion period
+Epoch 616: Stake weights captured and published, discussion/confirmation of stake weights
+Epoch 617: Voting token distribution, vote addresses created, voting begins
+Epochs 618 - 620: Voting continues and completes
+Epoch 621: Voting is finished, and the resulting tally determines the outcome
+Discussion
+Active participation in discussions about this proposal is crucial. Discussions may also take place on the Solana Developer Forums or on Discord Governance channel. It’s encouraged to consolidate discussions to ensure broad participation and minimize redundancy.
+References
+SIMD-0096: https://github.com/solana-foundation/solana-improvement-documents/blob/main/proposals/0096-reward-collected-priority-fee-in-entirety.md
+Feature Gate: Reward full priority fee to validators #34731: https://github.com/solana-labs/solana/issues/34731","[laine]: Thanks for putting this proposal together Tao!
+A technical question which maybe should’ve been asked on the SIMD: There is an expectation (at least by some) that this would lead to lower priority fees as the market finds a new equilibrium. This made me wonder if the RPC methods to fetch recent priority fee samples needs to be (or is) adjusted with this change to reflect the changed burn rate?
+Overall I believe this change makes sense, though I’d prefer to have more evidence that side deals are happening and are a problem. At the same time the burn on the base fee should in theory protect the original purpose of the burn.
+There have been some comments in the past relating to this proposal with reference to economics and reduced burn causing a rise in net emissions on the network, while this might be the case I’m not convinced that this is materially significant relative to the inflationary rewards.
+EDIT: On reflection the burn argument doesn’t make sense, as burning prio fees is just a bonus, if prio fees are not burned or prio fees don’t exist at all makes no difference to emission.
+
+[Ben.Hawkins]: though I’d prefer to have more evidence that side deals are happening
+Jito bundles are sort of like side deals on txn inclusion. Not all bundles are MEV specific and some use cases use Jito bundles with a small tip on non MEV txns for better inclusion.
+I don’t see this as a major issue but it is evidence that people are already doing “side deals” in a streamlined way.
+
+[laine]: Agreed, though arguably Jito bundles provide far more utility to users, validators and stakers than priority fees currently can, given they provide for prioritization, rewards to stakers and fee collection by validators. Priority fees currently have no automated, elegant or enforcable mechanism of distribution to stakers, so stakers ultimately should prefer the use of jito bundles.
+Above to be seen in context of SIMD-0123 SIMD-0123: Block Fee Distribution by jstarry · Pull Request #123 · solana-foundation/solana-improvement-documents · GitHub
+
+[buffalu]: I support this SIMD.
+
+[EONpool]: I will vote ‘For’. This will help small validators stay afloat, especially if a block reward sharing system is implemented.
+
+[tao-stones]: laine:
+if the RPC methods to fetch recent priority fee samples needs to be (or is) adjusted with this change to reflect the changed burn rate?
+RPC methods deal with what submitters pay (via set_compute_unit_price), not how much block producers were rewarded. So the change of burn rate should not impact RPC methods.
+
+[Madhatt3r]: How does this proposal benefit stakers? Seems like this proposal helps validators which is great but doesn’t the 50 percent burn help stakers?
+
+[0xMert]: I strongly support this SIMD.
+
+[tao-stones]: Madhatt3r:
+How does this proposal benefit stakers?
+Fair question. Could see the side deals incentivized by 50% burn don’t benefit stakers either.
+
+[0xMert]: It’s more transparent, visible, and allows stakers to hold validators accountable since their stake plays a material role in these rewards. With side deals, they could be doing this and stakers would have no idea. Also means validators have more revenue they make which might incentivize them to lower commission without losing income.
+It also leads nicely into this proposal: SIMD-0123: Block Fee Distribution by jstarry · Pull Request #123 · solana-foundation/solana-improvement-documents · GitHub
+
+[asymmetric-research]: After carefully reviewing SIMD-0096, we would like to express our support for this enhancement. We believe this proposal is a positive step towards improving network efficiency and aligning validator incentives with Solana’s long-term health and security.
+
+[Knox]: Juicy Stake will be voting For in favor of this proposal. This will potentially make it easier to achieve break even or profit for newer or smaller validators, which helps delegators gain confidence in the validator they stake with.
+
+[NFP]: Having just sat in on the tremendous call hosted by Tim and Ben (thank you!), I’d like to express my opinion as someone who is just now trying to break into the validator business.
+I think because priority fees are (also) earned relative to the amount of stake you have, this proposal will put us into a “rich get richer” kind of scenario, and it will make it harder for new validators to compete for stake in the long run (because larger validators can afford to offer kickbacks and other financial incentives with the increased revenue).
+I also don’t see how this precludes validators from making side deals.
+I do agree that this proposal helps aligns validator incentives, but I think maybe I’m hung up on the philosophical debate about which validators are being helped, and whether or not helping them is in the network’s best interest (in terms of decentralization).
+Appreciate the discussion; thank you to everybody who is participating!
+
+[strategichash]: I am for this proposal.
+However, there are a few things to consider.
+a) if this goes through, we will stop seeing out of protocol payments - Good 
+b) Smaller validators will make more - Good 
+c) This does nothing for stakers - 
+To solve for c, we need to seriously look into the exact mechanism of fee sharing, maybe even make the two changes go live together.
+
+[jimmydapizza]: A is 100% false.
+They talked about distribution offchain if they share the reward with stakers. You swapping one thing for exactly the same thing. The irony is ludacris. There is no on chain mechanism to distribute rewards. Therefor its all manipulation and scare tactics acting like its in every users best interest while they pocket this money for themselves and do their own backroom deals. These people can not be trusted. Who is buying into Validators voting to give themselves more money? What makes you believe you are getting any accurate information from them? It’s in their best interest to give themselves more money and thats why they all here talking about it behind their stakers backs and without their inputs.
+
+[jimmydapizza]: Not in favor of giving validators more sol so they can literally do the exact off chain things they say this prevents. One backroom deal vs another is not saving anyone.
+
+[strategichash]: Out of protocol does not mean “off-chain”. Today’s priority fee burn circumvention still happens onchain. They just send it as a different transaction to the block producer, on-chain. This proposal would just make those fee payers pay the same fee as part of the same transaction. So this is a good thing for the network. However, a fee sharing mechanism must be introduced so stakers can capture this fee. It’s also important to note that some validators already share all their fees to the stakers, so your particular concern along with many others in this thread are invalid.
+All that said, my stance is simple - The proposal should go through but the feature should only be activated along with the staker fee share mechanism.
+
+[dev_null]: I agree with the mitigation of side deals, but I think the economic impact of such a change needs to be carefully thought through.
+
+[mariaeverstake]: Everstake fully supports this proposal. By implementing this, we enhance the incentives for validators, thereby reinforcing the network’s security and stability.
+
+",tao-stones,10592,40,19,77,2024-05-08T21:23:34.504Z,2024-12-25T09:45:42.638Z,Governance,11,2024-12-25T09:45:42.638Z
+485,Who votes - three proposals,https://forum.solana.com/t/who-votes-three-proposals/485,"Who votes – three options
+One of the key decision-making points in implementing governance is deciding who governs.
+With this in mind, discussions on Discord have been distilled into three possible scenarios:
+Validators vote, with votes weighted by stake
+Validators and token-holders (stake accounts)
+** In this scenario a token-holder could override their validator’s vote for their share of the validator’s stake-weight
+Validators, token-holders and other stakeholders
+** Other stakeholders might include RPC operators, developers etc.
+This post is intended to permit users to provide their viewpoints in replies - please try to summarize all your points for and against certain options in a single post, avoiding multiple replies to address points made by others, so that we have a concise but complete record of everyone’s view points.
+If possible begin your reply with your preferred option.","[laine]: My opinion: Validators vote
+Reasons: Validators are custodians of the blockchain. They are entrusted with stake to decide on what constitutes the correct view of the chain, they are tasked with staying up to date with technical developments, are generally an active community of a large but manageable size.
+Validators should engage with governance to represent their view points and express assent or dissent to developments. These expressions form part of the larger validator persona that should be taken into consideration by stakers when deciding who to entrust their stake with.
+Governance works best with engaged and knowledgable participants, and ideally has a high rate of participation. A system whereby token-holders vote would likely lead to lower levels of engagement, necessitating a lower quorum and thus overall lover level of security.
+In permitting other stakeholders to vote there is no objective measure of how to weight their votes - this presents further problems.
+Ultimately the chain does what validators (or at least those representing a supermajority of stake) choose to do, for governance to be effective it must be enforceable, which is only possible when those enforcing the chain state are the ones voting.
+
+[0xNallok]: Thanks Laine for getting this started.
+I believe that validators should vote, and that their vote should be representative of the broader ecosystem, thus enriching and surfacing the validators perspective from a simple primitive of vote (eg. Yes, No).
+By exposing the vote details through categorical representation I believe it can incentivize and motivate stake in a much more dynamic and supportive way that a validator simply cannot.
+These layers which exist on top of the chain drive immense value to the base and therefore may be better positioned to direct users to stake with validators which support their perspectives as well.
+Governance works when it works for those it governs. Creating an echelon of sophisticated infrastructure managers doesn’t necessarily mean that the depth of knowledge will suffice for all issues where the vote is cast. I believe there may be issues which require the yielding or the validators may not want to cast their vote, therefore having a more dynamic system may be called for.
+A system of on-chain governance should be strong when engagement is low as well as adaptable for a future where engagement and activity could require the casting of billions of votes (of which I do not have an answer yet, but exploring actively).
+What I would like to avoid is centralization factors (such as LSTs) driving validators to vote for X or lose stake, and by leveraging other representation (not with a vote, but to be represented by a vote) could weigh these factors better.
+
+[MCF]: My opinion: Validators, token-holders and other stakeholders
+Reasons: 1) whatever the governance process is used for initially, I’m pretty sure, it will eventually be used for much more; including funding proposals. 2) validators only really know about validating, I don’t think they have the insight to steer the ecosystem 3) who “owns” the network? is it not the token holders? if only validators vote, we have incentive misalignment.
+When I think “other stake holders”, I’m mainly concerned with dev teams – attracting more dev teams to our chain, is the current issue, we are fighting other chains for those precious projects – so why not give them a seat at the table? I will admit, I don’t know an easy way to implement that directly.
+In Cosmos chains the validator votes, but the token holder can override. The part all Cosmos chains have screwed up, is the interface, it’s very not-obvious for token holders to do it. But in theory I like it.
+I also like the idea of transferable votes that Cardano has. In this scheme the voting tokens can be transferred, so you can give your vote to an expert. For example, if the vote was important to the developmentability of the ecosystem, I could give my votes to a team like Jito, who know more about this than me.
+Summary: I believe token holders need to vote because token holders are the financial owners of the network and therefore will care the most about the network. Validators are typically just handling other peoples tokens not their own bags; yes they have an interest but it is limited. If we had transferable voting, token holders could “give” their vote to whoever they thought knew best for that particular vote.
+These are just my thoughts, I am relaxed about whatever the community decide - however, I do feel that the discussion so far (telegram and discord) has been almost exclusively validators.
+
+[cfl0ws]: For those looking to orient themselves with the discussions that have taken place to-date, you can find the details of the three different proposals here.
+Proposal A - Validators Only
+Proposal B - Validators and Stake Accounts
+Proposal C - Validators, Stake Accounts and Other Stakeholders
+
+[cfl0ws]: My current opinion is that, consistent with Chainflow’s values, the governance process should be inclusive as possible. Recognizing the practical limitations of this open-ended statement, my thinking is that we start with Proposal B and look to move toward Proposal C as the governance process continues to evolve.
+
+[metaproph3t]: Really really cool that you guys are working on this. Here’s my two cents, as a Solana application dev:
+I think it makes most sense for validators and token-holders to govern the Solana protocol.
+As pointed out by @laine, using other stakeholders is subject to sybil problem.
+IMO, we want to avoid as much as possible the ‘shadow governance’ where a small group of core devs end up making the decisions.
+I don’t see any downside to having token-holders in addition to validators. 99% of the time, users wouldn’t care about a vote, and the validators would be de facto in charge, but having the recourse of overriding the validators could prevent validators from exploiting their position for their benefit (and to the public’s detriment), such as passing a proposal that enforces 50% validator staking fees at the proposal level.
+
+[laine]: please join the discord discussion too (Solana Staking Alliance) - I’d like to comment on your post without distracting from the convo here too much, i.e. on Discord
+(in short I believe the best approach to the token-holder voting is to allow them to redelegate to a differently voting validator)
+
+[joebuild]: Validators and token-holders (stake accounts)
+^ is the clear choice IMO
+Agree with statements above that 99% this will default to validators, but there is no reason not to include stake accounts if they would like to cast their vote.
+Also agree that “other stakeholders” would be problematic because they’re difficult to define and weight.
+
+[Freedom]: I think “governance” is highly overrated when it comes to blockchains, most projects that have any kind of governance end up becoming obsolete, and eventually replaced by newer projects with better technology.
+If anything serves as an example, our democracies are a big mess, where citizens are stolen from in the form of inflation in order to finance wars in other parts of the world.
+And I honestly think Solana is so early in its development of what it could be that I would rather keep things running as they’ve been running.
+Here are a couple of my main arguments against creating bureaucracy on blockchains.
+Empirical evidence:
+Most of the well-run organizations don’t have any form of governance mechanism.
+Tesla, Amazon, Facebook, Microsoft.
+These organizations are empirically the ones that have created the most wealth in this planet, what do they all have in common?
+No bureaucratic governance, nor voting democracy, they are simply put run by one guy with a good vision for the most part.
+On the other without doubt the worst run institutions, measured by the amount of resources that they use in unproductive activities, by running deficits, are precisely those institutions in which every decision has to be made through a governance mechanism, Governments.
+Now to be clear, there are well run governments and badly run companies with single founders, but something is very clear, the best run government in the world is not even close as well run as tesla in the creation of wealth for its “citizens” or “stakeholders”. and the worst run companies is not even close to the level of wealth destruction made by badly run governments (Venezuela, Argentina, etc.).
+Blockchains by their nature don’t require a governing mechanism since everyone participating in them is doing so voluntarily, the reason we need governance when it comes to countries is because for the most part when we are born we are automatically part of a group, and are naturally forced to live within that group and in order to do that one has to follow a set of rules, for peaceful living, and the cost of leaving the governing institution is really high, one has to change almost everything in order to leave, for the most part, learn a new language, sell all property, travel, learn new culture, buy new property, etc.
+The price for leaving is so high that it makes sense that everyone has a saying on what set of rules we should be living our lives in order to have a peaceful living, that is not the case in blockchains, the price I have to pay if I don’t like what the blockchain is doing is virtually inexistent, I can with just a couple of clicks leave the “community” as easily as I arrived.
+For this reason having a governing mechanism is just going to end up becoming a dead weight in the development of this technology.
+Blockchains are open source.
+None of the fundamental components of blockchains are private to the public, anyone with enough knowledge of these systems can just as easily fork, or start from scratch with the already developed technology if they don’t agree with the way the tech is being developed.
+Solana already has a governance mechanism, and it’s the best for the task IMHO.
+When Solana labs, jito, or anyone releases a newer version of Solana, all the validators have to upgrade their nodes, and therefore the validators and stakers vote with their actions whether they agree or disagree with with such update, Core developers vote with their actions when they decide on which version to develop (Labs, jito, firedancer), validators vote on what version of the software to run, and stakers vote based on the validator that they delegate, therefore everyone has an opportunity to vote with their actions.
+Anyone in the world can decide if they want to change the protocol by forking the open source code and working on those changes, and anyone can decide if they agree or disagree with them by using their stake as vote. so effectively is the best form of “governance” IMO, it’s effectively a free market of “governance”.
+Tezos.
+Tezos was one of the most promising projects in crypto back in 2017-2019, and one of their main pillars was this idea of upgradeability and governance, because of what had happened with bitcoin, bitcoin cash, eth and eth classic.
+It was top 15 for a long time, but the net result of all these governance mechanisms was a slowdown of their technology development in favor of bureaucracy, now after 7 years of development it has a market cap even lower than what they had back then in 2016-2017.
+And as far as I researched this project back then, they really had good talent, they took top governance mechanisms from swiss institutions.
+Here’s a snippet of 6 minutes of Andrej Karpathy, he was one of the leads engineers at tesla AI division talking about how a well run organization looks like, it’s nowhere close to governance or bureaucracy.
+https://youtu.be/cdiD-9MMpb0?t=5665
+“Show me the incentive and I’ll show you the outcome” - Charlie Munger.
+I Think we naively assume that everybody has the project future in mind when voting, but as countless times evidence has shown for the most part people don’t think beyond their personal interest, and this may not be with bad intentions but it’s usually the case, I myself have seen multiple times, validators within the super minority keep promoting stakers to stake in their validators, since it’s economically beneficial to them, they keep doing it, at the cost of the end goal of decentralization, this is the reason I don’t trust people to put the protocol before their self interest, and IMO, the best way to vote is with your actions.
+The whole point of blockchains at the end of the day is adoption, and users, and users also can vote without the need of a governance mechanism, as a user I am as free to use sol, or eth, or bitcoin, and what I decide to use is effectively my vote, and I can vote whenever I want by moving my resources to the protocol that best aligns with my beliefs.
+In my most sincere opinion governance although an idea with great intentions it seems to me that it only adds bureaucracy, and nothing more, because anyone involved in blockchains can already vote with their actions, and as far as evidence I’ve been able to wrap my head around, free markets are the best form of governance.
+
+[cfl0ws]: Thanks for your input. I’m glad to see a developer perspective here. While it may be tangential to this discussion, I feel that the more infrastructure operators and developers are in sync, the stronger Solana will become.
+Regarding your point, is it fair to say that you support an option where -
+Validators and token holders vote, in which
+The validator votes with the tokenholder’s stake weight
+And the tokenholder can override their validator’s vote by voting for themselves
+
+[metaproph3t]: I’ve actually been redelegate-pilled by Laine in the Discord discussions. The main problem with the ability to override a validator’s votes is that it encourages governance apathy from validators.
+If I as a validator know that any of my stakers that disagree with what I put forth, they will simply override me, I don’t have a strong incentive to either research proposals or explain my opinions.
+On the other hand, if people cannot simply override me and they must move their stake elsewhere, then I am incentivized to research proposals, vote on what I think my stakers will agree with, and explain my votes. Otherwise, those who disagree may decide to park their stake elsewhere.
+There has also been some back and forth on whether we need redelegation. IMO, it’s not a huge sticking point, but I lean towards redelegation because without redelgation, someone who disagrees with their validator on a vote will probably keep their stake parked since at that point it’s a sunk cost. But yeah, there’s probably some implementation cost here, and I’m not in a position to evaluate whether that cost is worth it.
+
+[simpdigit]: Validators vote. Users who want to vote should make an effort to become validators or move their stake based on what Validators propose whenever something needs to be decided and voted.
+
+[dev_null]: Validators vote
+If stakeholders aren’t happy with the validator’s vote, they should redelegate their stake to a validator that supports their position. This seems like a logical extension of the way the network already functions.
+
+[laine]: Hi All,
+I have created an advisory vote to sample validators’ stake-weighted opinions: VOTE! First Governance Advisory Vote by Validators
+
+[denysk]: Currently, there is no option that allows validators to vote with a system where one validator equals one vote. All provided options favor validators with larger stakes, who are primarily funds, investors, and whales, and who may be influenced by other funds and whales. Under the present system, one validator with a 2M stake would have the equivalent voting power of 36 validators on foundation stake.
+To achieve true democracy, we should implement a system where one validator equates to one vote, irrespective of stake.
+Who responded first to the chain restart? Who were the validators attending to restarts in the middle of the night? Predominantly, it was the smaller validators (in terms of count, not stake) who responded, while the entire chain awaited the others to wake up. It is unjust governance to provide unequal voting rights, especially if votes are weighted by stake.
+My 5c.
+
+[laine]: As mentioned on Discord this introduces sybil risk, even if setting an arbitrary min stake amount.
+In your example it also means that the foundation basically controls governance, as foundation validators in absolute numbers account for &gt;80% of all validators, and thus would account for over 80% of all votes in a governance system using this method. All it takes is for the foundation to say “We will no longer stake with validators who vote for this proposal” …
+
+[denysk]: The stake-weighted approach will favour a super minority of validators, many of whom are funds, exchanges, and private validators with 100% fees, among others. How can this be considered fair governance? It is imperative to find a quintessential balance that satisfies all parties involved.
+
+[zantetsu]: To achieve true democracy, we should implement a system where one validator equates to one vote, irrespective of stake.
+This is a Proof of Stake network, not a Proof of Humans network. Implicitly influence in the network is acquired with stake, so stake weight is the only logical way to apportion voting influence.
+Who responded first to the chain restart? Who were the validators attending to restarts in the middle of the night? Predominantly, it was the smaller validators (in terms of count, not stake) who responded, while the entire chain awaited the others to wake up. It is unjust governance to provide unequal voting rights, especially if votes are weighted by stake.
+This is an uninformed opinion to be honest. The loudest participants in restarts are generally a fairly “core” set of validators, along a spectrum of stake-weights, some large and some small. It is true that the largest “institutional” validators are generally the least participatory and only of average at best responsiveness when it comes to actually implementing the agreed-to path of action. But that is also true of most small validators, who have little incentive to be active participants and mostly just follow instructions at whatever rate is most convenient for them.
+
+[Brian]: Jito has now voted option 1. Rationale is validators are best positioned to evaluate these decisions. Option 2 is elegant but more complex to implement and enshrines a specific model. Think option 1 works more cleanly as a first step.
+Validators should explore their own model for communicating with stakers and including that feedback in their decision. Option 1 keeps things as simple as possible to start with room to evolve as tooling and governance matures
+
+",laine,1860,7,19,24,2023-08-31T13:09:15.044Z,2024-07-23T10:19:28.924Z,Governance,11,2024-07-23T10:19:28.924Z
+1209,Open Source Contributors - A promising alternative to idea based funding,https://forum.solana.com/t/open-source-contributors-a-promising-alternative-to-idea-based-funding/1209,"We’ve recently finished a proposal outlining the opportunity to experiment with an open source contributor funding process. This suggested funding process could become a highly effective and scalable approach for Web3 ecosystems to more consistently generate impact.
+The opportunity to experiment with a contributor funding approach is better highlighted by understanding some of the problems that exist with idea based funding:
+For contributors, the proposal submission process can require a large amount of effort and time upfront for contributors to participate and then also handle the ongoing burden of proposal writing and budgeting complexities to get involved in an ecosystem. The structure and incentives of this funding process result in a reduced amount of contribution flexibility and income stability that can deter contributors from participating or limit their ability to easily generate high impact.
+For voters, it is often highly complex to compare and select ideas effectively. Many voters lack the sufficient context, skills and experience required to be well informed and effectively participate in these decisions. The selection process can be highly time consuming and complex for the voters. Voters can rarely express their exact preferences with their voting decisions and also do not have enough accountability or incentives to be expected to spend a meaningful amount of time on voting to make more optimal and well informed decisions.
+For Web3 ecosystems, ideas are often treated as ephemeral yes or no funding decisions rather than being a collaborative process that looks to discuss and explore different solution approaches. In larger funding processes it can also become easier for innovative ideas to be ignored due to being less well understood or known. The allocation of assets can also be more inefficient in situations where the allocated funds are not actively being used to generate contribution outcomes, this can increase the percentage of deadweight assets that are not being fully utilised at a given point in time.
+To understand these problems in more detail you can review our analysis on the current funding landscape - Current funding landscape | Contributors
+The good news is that most of these problems can be either greatly reduced or fully resolved! An open source contributor funding process can help with resolving these problems and also could become a highly reliable and effective process for maintaining and improving Web3 ecosystems over the long term.
+web3-open-source-contributor-funding2020×1070 238 KB
+Our proposal outlines the suggestion of experimenting with directly funding a small number of open source developers that would help with developing any open source initiatives - this could include improving any existing pieces of software used in the ecosystem or creating entirely new tools and libraries.
+The advantages and long term opportunities for adopting a contributor funding approach are numerous. We’ve covered the advantages and opportunities of this suggested funding process in more detail in our proposal - Open source contributor funding | Contributors
+Experimentation in Solana
+Currently a request for proposal based idea funding process is being used in the Solana ecosystem. One way that a open source contributor funding process could be experimented with could be to enable developers to indicate their interest in working in the ecosystem and which areas they are interested in helping with. This could mean just removing the requirement of submitting a company and website information as many individual contributors might not have an existing project or company they are working on.
+The immediate opportunity with using a contributor focused funding approach would be that it would make it easier for software developers to indicate their interest in working on these request for proposal areas of focus within the Solana ecosystem. The Solana Foundation could then identify if there are any promising candidates that could be suitable for contributing towards any relevant initiative in the ecosystem. Contributor funding proposals could end up bringing in impactful talent that otherwise might not have got involved due to the more time consuming upfront idea proposal process. The idea funding process can make it more difficult for these individuals to just express their interest in working in the ecosystem. A contributor focussed process could provide a more collaborative path for identifying promising talent and matching them with ongoing work that could create impact in the ecosystem.
+Experiment facilitation
+If any ecosystem was interested in experimenting with this suggested funding process but doesn’t want to handle the process fully themselves I am eager to collaborate with them and help wherever I can with setting up and running any of these experiments that are focussed on contributor funding.
+In either event, contributor funding experiments across many ecosystems could be highly beneficial for the wider industry. The outcomes from these experiments can be analysed to better compare the strengths and weaknesses of this suggested approach against the widely adopted idea based funding approach that we see being more widely used across Web3 ecosystems today. Analysing and documenting these experiment outcomes is something that we intend to work on at the Web3 Association!
+Community discussion
+General thoughts &amp; feedback
+There’s likely going to be many opportunities and problems that could be better explored and addressed. If you have any immediate thoughts and feedback please share anything below in a comment!
+Organising a wider discussion
+If there are already weekly or monthly organised discussion events that happen internally or publicly I’d be delighted to join one to listen to peoples different perspective about this funding process suggestion to better understand any of the different viewpoints around this approach. Alternatively I could also help to facilitate a one off discussion instead. Please share below if you would be interested in having a dedicated discussion in the near future about this suggested experiment.
+Direct communication
+If anyone would prefer to chat about this funding process suggestion with me directly then please feel free to reach out to me on Discord - lovegrovegeorge or Telegram - georgelovegrove. Otherwise just throw any questions in the comments below!","[cfl0ws]: Where did you post the proposal and through what process? I’d be curious to see how something like this might fit into the currently under-development governance process.
+
+[lovegrovegeorge]: Hey @cfl0ws, this proposal is applicable to any ecosystem in the Web3 industry so it has been shared in many ecosystems. The proposal isn’t requesting funding and instead is outlining the reasons why a contributor funding model has a lot of opportunity to become a highly effective funding process over the currently most adopted idea funding process.
+Purpose of this proposal was to explore the WHY this funding process is important and why it resolves the many issues that exist with idea based funding. This proposal doesn’t go into too much detail about the HOW as this is dependent on each ecosystem and what tools and processes they have already setup. My key suggestion is to keep it simple with experimenting with this suggestion and start small and build from there. I’ve reached out to all ecosystem teams to see if they want to collaborate on experimenting with this approach and my intentions are to support any ecosystem experiment I can. Any learnings and results I can then share across the industry. Speeding up Web3 adoption through improving treasuries is my focus
+
+",lovegrovegeorge,480,1,2,3,2024-03-18T11:32:08.967Z,2024-03-25T16:15:52.982Z,Governance,11,2024-03-25T16:15:52.982Z
+1011,"Aligning the ""What"" of Governance with the Existing SIMD Process",https://forum.solana.com/t/aligning-the-what-of-governance-with-the-existing-simd-process/1011,"Background and Context
+A group consisting mainly of Solana validators has been working to develop a governance process for the Solana network. The effort kicked off in July 2023 and is organzed by defining -
+Why a governance process is needed
+Who should vote
+What should be voted on
+How the voting should be done
+Recent efforts culminated in a non-binding “signaling” vote related to “Who” should vote in late 2023. Governance was also a track at the inaugural Block Zero, held just before Breakpoint 2023.
+Since that vote, activity related to this effort has mostly paused. The conversations that have ensued since then, in Discord chats and validator calls, relate to the “What should be voted on question”.
+What should be voted on?
+A couple proposals have shaped-up during this earlier effort to define the scope of the governance process. Their details are found here.
+Another approach has been suggested by various participants as well. That approach is to align the governance process with the Solana Improvement Documents (SIMD) process.
+Aligning Governance with the SIMD Process
+The SIMD process is reasonably well-formed and active among the Solana core developer and contributor community. The idea behind aligning the governance process with the SIMD process is that doing so will effectively define the governance process scope.
+Governance process participants would vote on the SIMDs as they surface through the SIMD process. The assumption is that the parameters of the SIMD process are well understood (at least among existing participants) and that this understanding provides an implicit filter for the process, hence defining its scope.
+Aligning the governance process to this scope implies that governance process participants agree in principle to this scope definition, at least for now. However, one way the governance process could further limit scope is to pick and choose which SIMDs to vote on. The risk of doing this is that a loop is formed that brings the group back to its current position of having to further define scope, i.e. to determine which SIMDs are voted on and which aren’t.
+The most straightforward way to use the SIMD process to define scope is to hold a vote on each SIMD as it surfaces. Governance paricipants could also work through the SIMD backlog to resurface issues the participants feel could be particularly beneficial to Solana, e.g. Timely Vote Credits, which is now a year old.
+Conclusion
+Aligning the governance process with the SIMD process would allow a broader set of voices to introduce noticeable feedback into the Solana development process, in a consistent and meaningful way, while minimizing disruption on the current development process.
+This voting process can likely help synchronize the development process among the various client teams as well, if not right away, in the not too distant future. Doing so would also help the governance development process gain momentum in a meaningful way, by providing an answer to the “What” discussion and establishing a regular voting cadence among the governance process participants.",,cfl0ws,862,0,0,1,2024-01-30T23:18:45.265Z,2024-01-30T23:18:45.323Z,Governance,11,2024-01-30T23:18:45.323Z
+597,VOTE! First Governance Advisory Vote by Validators,https://forum.solana.com/t/vote-first-governance-advisory-vote-by-validators/597,"Dear Community,
+following discussions in community and validator calls, on this forum and on Discord, I am now initiating a first advisory vote by validators on a key question of governance:
+“Who should vote in a Solana Governance DAO”
+(Further discussion here and here as well as on Discord here)
+Please feel free to share how you voted and why in this thread
+Option 1: Validators vote, votes weighted by stake
+Option 2: Validators vote &amp; Delegators can override, if a delegator votes it overrides that portion of the validator’s stake
+Option 3: Validators, Delegators &amp; Other Stakeholders (identity and weighting to be determined)
+Voting takes place through tokens deposited to each validator’s identity account. The token has the address BX4ZwH36vMf8T8A4GQ44SSKb8puhXkn7ymJyGi1Ky2GJ and the supply is equivalent to the total active stake in epoch 515. Each validator identity account receives the number of tokens representing their amount of active stake.
+The mint and distribution is done using the SPL Feature Proposal program.
+VOTING INSTRUCTIONS
+(You will need the spl-token cli tool to vote, it is included in the solana-cli install if you use the installer or install with cargo install spl-token-cli)
+To cast your vote you must transfer your tokens to one of four public keys to vote for one of the three options or to abstain:
+Option 1: opt1AMNK6g6UxG4N3sFUtfwmM5dKXbJamKCkcr91jai
+Option 2: opt2i1BogY7cwfp23hTz92iQcZyqeX1m4fNZcEcMCSL
+Option 3: opt3T4MkCfJLFHcScTaNZpWSMDGZqNUZwLGCTHFEPzK
+Abstain: ABShtgkUD7UMB7SF9Ur9oLU4XxudnCezjSF8sqqae97c
+To vote first verify your token balance matches your active stake (in epoch 515) (replace validator-keypair.json with your identity keypair):
+spl-token accounts --owner ~/validator-keypair.json BX4ZwH36vMf8T8A4GQ44SSKb8puhXkn7ymJyGi1Ky2GJ -v
+Then to cast your vote (replace OPTION_PUBKEY with the option pubkeys listed above):
+spl-token transfer --owner ~/validator-keypair.json BX4ZwH36vMf8T8A4GQ44SSKb8puhXkn7ymJyGi1Ky2GJ ALL &lt;OPTION_PUBKEY&gt;
+VOTING PERIOD
+We will look at the balances of these accounts on 20 October 2023 at 12:00 GMT to determine the result of the vote, please vote by then, this is in 10 days from now.
+TALLYING VOTES
+This is an advisory vote, it does not form a binding decision and as such there is no particular threshold that should be met for any action to be taken. At the end time mentioned above the results will be tallied by myself (and anyone else may do so themselves of course) and published in this thread and on sg.laine.one.
+The total supply of the voting token equivalent to active stake is 389,207,145.95. Therefore a simple majority would be 194,603,572.975.
+To check votes cast for a particular option:
+spl-token balance --owner &lt;OPTION_PUBKEY&gt; BX4ZwH36vMf8T8A4GQ44SSKb8puhXkn7ymJyGi1Ky2GJ
+ADDITIONAL READING
+Summary of discussion on “Who votes” Who - Solana Governance Think Tank
+Voting token and supply info: Solscan
+CSV File for token distribution by stake: Who - Solana Governance Think Tank
+Feature Proposal Program Docs: Feature Proposal Program | Solana Program Library Docs
+(we are using this program for its ability to automatically mint a token with the exact active stake and create a distribution to all validators based on stake weight, not to activate an actual on chain feature)","[cfl0ws]: Chainflow’s Vote - Option 3, Validators, Delegators &amp; Other Stakeholders
+Inclusivity is one of Chainflow’s four core values. From our perspective, Option 3 is the most inclusive of the three options. This is why we chose it.
+The choice represents our well-intentioned and best effort to make a decision to move the Solana governance process forward. We recognize it’s based on incomplete information (as most, if not all decisions are) and made within an evolving process.
+We recognize that Option 3 is also probably the most complicated of the three. We feel that these complications can be figured out and handled over time.
+Solana governance is in a very early developmental stage. It feels important to keep the process as open and inclusive as possible at this stage.
+That said, we are open to supporting a more restrictive option, such as Option 2, in the future, if that trade-off is required to take an incremental step forward. We would weigh this decision against a number of factors if and when that time arrives.
+Our experience, however, having participated in governance on many chains over the years, has demonstrated that blockchain decision-making is generally led by engineers. As such, the tendency is to move toward efficiency and simplification. So for us to support Option 2, we would need to see a clear commitment to re-opening the voting process to a more inclusive set of stakeholders in the future.
+
+[zantetsu]: I will be voting for the Validators Vote option.
+My reasons are twofold:
+Validator only voting is the most practical and efficient to implement voting system. A nascent governance system is likely to die outright if saddled with the burden of implementing a complex or impractical voting system. Validator only voting is simple, has been demonstrated already in practice, and has existing infrastructure to support it. In future, after time has passed and a validator only voting system has been used enough times that issues surrounding voting are better understood, other voting systems could be proposed as upgrades to the process. But I think that a staged approach where we take practical, implementable steps first, and then expand to more complex systems if they then appear advantageous later, is the right way.
+Validators will always have an opportunity to engage their stakers and implement their own governance mechanisms within the body of their own stake. So some validators could implement a pre-governance vote method that allows their stakers to provide input, in a whole variety of ways, each validator choosing whatever works best for their stakers. Some may allow stakers complete control over how the validator votes; others may implement a validator choice with staker override method. Still others might have informal methods based on discussion forum feedback with the validator acting as final arbiter on the decision. This plurality of voting methods will allow validators to compete for stake by providing the best voting experience, and validators can individually move faster on finding better voting methods than the overall ecosystem as a whole making monolithic choices can. In addition, this plurality will allow stakers to choose the voting method that they like best by staking with a validator that provides that method. In short, there is no need for a mandatory ecosystem-wide staker-inclusive voting policy when individual validators can allow whatever policy they want to for their own stakers.
+
+[MCF]: MCF - OPT2 - Validators with Delegator override.
+OPT3 - has merit, but would be too complex to implement in reasonable timeframes.
+OPT1 - takes power away from the token holders, so that’s a NO from us.
+https://twitter.com/MCFvalidator/status/1711830346751267244
+
+[laine]: THE RESULTS ARE IN
+With over 170 participants and around 14.3% of stake voting, over 70% has voted for option 1 with option 2 coming in second at 24%.
+govvote752×452 14.9 KB
+The absolute number of votes cast (representative of SOL staked):
+Validators by stake-weight 39557413.31
+Validators &amp; Delegators by stake-weight 13574516.82
+Validators, Delegators &amp; Others 2552960.05
+Abstain 28300.55898
+
+",laine,2273,0,4,5,2023-10-10T10:50:21.118Z,2023-10-20T12:17:22.896Z,Governance,11,2023-10-20T12:17:22.896Z
+486,What does Governance encompass?,https://forum.solana.com/t/what-does-governance-encompass/486,"Governance is a broad term, and for it to be effective on Solana we must be clear on the scope of any governance system that we implement.
+Looking at other chains and ecosystems, we see instances where very minute details are determined by governance, for instance.
+A proposal for an initial scope for governance on Solana could be:
+Changes to the Stake Program, Stake Pool Program, SPL Token programs (legacy and Token2022), Vote Program, etc
+Changes to sysvars or other on-chain parameters (e.g. slot duration, account and block CU limits, base fees)
+Major* changes impacting the consensus protocol
+Proposals for major changes impacting the economics (including inflation, credits/rewards calculations, functionality or restrictions on stake accounts or vote accounts (also covered by the first point))
+Implementation of any sort of slashing mechanism
+Changes to governance itself
+Appointing committees to delegate certain responsibilities too (such as determining the acceptance/denial of a parrticular scope of proposals/SIMDs)
+Appointing a committee/multisig to hold feature activation keypairs
+*Major here would indicate a new feature or functional change, but not a bug or minimal performance fix. A performance fix that requires a large amount of code changes, might be part of governance if this is determined through social consensus/discussion.
+What would not be covered by governance?
+Grants (Governance has no treasury at this stage, Foundation grants are theirs to decide)
+Whether or not to activate a feature (other than perhaps through delegation to a committee that holds such keys and makes such determination in accordance with social consensus amongst core contributors as is currently the case)
+Naming or terminology of things
+Whether or not to adopt a particular version of a client
+Please provide your comments on these lists, whether you agree or disagree with particular points (with reasons) as well as any additional items you think should be on either list.","[MCF]: laine:
+Proposals for major changes impacting the economics (including inflation, credits/rewards calculations, functionality or restrictions on stake accounts or vote accounts (also covered by the first point))
+it would be good to be able to move the inflation rate relative to the fiat token price, that way the community can steer toward the required number of validators and keep that number constant.
+
+[cfl0ws]: For those looking to orient themselves to the discussion to-date, these two proposals have been defined to-date. While they are not mutually exclusive, they represent two slightly different ways of organizing similar information.
+
+",laine,658,0,2,3,2023-08-31T13:29:41.296Z,2023-09-05T14:33:14.723Z,Governance,11,2023-09-05T14:33:14.723Z
