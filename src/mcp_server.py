@@ -1,5 +1,5 @@
 """
-Multiple Context Protocol (MCP) server for Solana Forum Data.
+Model Context Protocol (MCP) server for Solana Forum Data.
 
 This server provides an interface to query the Solana forum data
 using different approaches based on the query type.

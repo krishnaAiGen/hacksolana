@@ -127,7 +127,7 @@ def index():
     """
     docs = {
         'name': 'Solana Forum MCP API',
-        'description': 'API for querying Solana forum data using the Multiple Context Protocol',
+        'description': 'API for querying Solana forum data using the Model Context Protocol',
         'endpoints': {
             '/query': {
                 'methods': ['GET', 'POST'],

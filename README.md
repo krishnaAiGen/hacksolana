@@ -1,10 +1,10 @@
 # SolForum Pulse
 
-A Multiple Context Protocol (MCP) server for querying Solana forum data. This project implements the MCP specification to provide a flexible interface for AI assistants to interact with Solana forum data.
+A Model Context Protocol (MCP) server for querying Solana forum data. This project implements the MCP specification to provide a flexible interface for AI assistants to interact with Solana forum data.
 
 ## What is MCP?
 
-Multiple Context Protocol (MCP) is a specification for building tools that can be used by AI assistants. It provides a standardized way for AI models to interact with external systems and data sources. This project implements an MCP server for Solana forum data, allowing AI assistants to query and analyze forum posts, statistics, and more.
+Model Context Protocol (MCP) is a specification for building tools that can be used by AI assistants. It provides a standardized way for AI models to interact with external systems and data sources. This project implements an MCP server for Solana forum data, allowing AI assistants to query and analyze forum posts, statistics, and more.
 
 The Model Context Protocol allows applications to provide context for LLMs in a standardized way, separating the concerns of providing context from the actual LLM interaction. The MCP Python SDK implements the full MCP specification, making it easy to:
 
@@ -21,7 +21,7 @@ The Model Context Protocol allows applications to provide context for LLMs in a 
 │   ├── __init__.py    # Package initialization
 │   ├── utils/         # Utility functions
 │   │   └── __init__.py # Utils package initialization
-│   ├── mcp_server.py  # Multiple Context Protocol server implementation
+│   ├── mcp_server.py  # Model Context Protocol server implementation
 │   ├── api_server.py  # HTTP API server
 │   └── cli.py         # Command-line interface
 ├── solana_mcp.py      # MCP server wrapper script

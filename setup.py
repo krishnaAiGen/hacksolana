@@ -23,7 +23,7 @@ setup(
     python_requires=">=3.6",
     author="Solana Hackathon Team",
     author_email="example@example.com",
-    description="A Multiple Context Protocol server for Solana forum data",
+    description="A Model Context Protocol server for Solana forum data",
     keywords="solana, mcp, forum, data",
     url="https://github.com/yourusername/hacksolana",
 ) 
